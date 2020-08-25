@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+
+<div class="row page-title-header">
+  
+  <div class="col-12">
+    <div class="page-header">
+      <h4 class="page-title">Talend Jobs Status</h4>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <!-- JOBS -->
+  <div class="col-md-8 align-self-center">
+    <div class="row">
+      
+      <!-- TOTAL JOBS -->
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card card-style border-left-1-1">
+          <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='30mins') }}" class="stretched-link" name="running"></a>
+            <div class="d-flex justify-content-between" type="submit" name="running">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">TOTAL NUMBER OF JOBS</h4>
+              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+            </div>
+            <h2 class="font-weight-semibold mb-0">{{ query_distinct_count }}</h2>
+          </div>
+          <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
+        </div>
+      </div>
+      
+      <!-- LONG RUNNING JOBS -->
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card card-style border-left-1-2">
+          <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='30mins') }}" class="stretched-link" name="running"></a>
+            <div class="d-flex justify-content-between" type="submit" name="running">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOBS (more than 30 mins)</h4>
+              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+            </div>
+            <h2 class="font-weight-semibold mb-0">{{ long_running_count }}</h2>
+          </div>
+          <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
+        </div>
+      </div>
+
+      <!-- RUNNING JOBS -->
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card card-style border-left-1">
+          <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='RUNNING') }}" class="stretched-link" name="running"></a>
+            <div class="d-flex justify-content-between" type="submit" name="running">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOBS</h4>
+              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+            </div>
+            <h2 class="font-weight-semibold mb-0">{{ running }}</h2>
+          </div>
+          <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
+        </div>
+      </div>
+
+      <!-- COMPLETED JOBS -->
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card card-style border-left-2">
+          <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='OK') }}" class="stretched-link" name="completed"></a>
+            <div class="d-flex justify-content-between" type="submit">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED JOBS</h4>
+              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+            </div>
+            <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
+          </div>
+          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-1"></canva> -->
+        </div>
+      </div>
+
+      <!-- ERROR JOBS -->
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card card-style border-left-3">
+          <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='ERROR') }}" class="stretched-link" name="error"></a>
+            <div class="d-flex justify-content-between">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR JOBS</h4>
+              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+            </div>
+            <h2 class="font-weight-semibold mb-0">{{ error }}</h2>
+          </div>
+          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-2"></canva> -->
+        </div>
+      </div>
+
+      <!-- MISFIRED JOBS -->
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card card-style border-left-4">
+          <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='MISFIRED') }}" class="stretched-link" name="misfired"></a>
+            <div class="d-flex justify-content-between">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
+              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+            </div>
+            <h2 class="font-weight-semibold mb-0">{{ misfired }}</h2>
+          </div>
+          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
+        </div>
+      </div>
+      <!-- </form> -->
+    
+    </div>
+  </div>
+
+  <!-- DOUNUT CHART -->
+  <div class="col-md-4 align-self-center">
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">   
+        <div class="card card-border">
+          <!-- <div class="p-4 pr-5 border-bottom bg-light d-flex justify-content-between card-border-header">
+            <h5 class="font-weight-semibold">Overall Status</h5>
+            <div id="doughnut-chart-legend" class="mr-4"></div>
+          </div> -->
+          <div class="card-body">
+            <!-- <canvas class="my-auto" id="doughnutChart" height="200"></canvas> -->
+            <div class="my-auto" id="donutchart" height="200"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Page Title Header Ends-->
+
+<div class="col-md-12 grid-margin">
+  <div class="card shadow mb-4 card-border">
+
+    <div class="card-header py-3 card-border-header">
+      <div class="row-1 align-items-end">
+        <div class="col-11">
+          <h1 class="h3 text-gray-800">LONG RUNNING JOBS</h1>
+        </div>
+        <div class="col-1">
+          <div class="sort-wrapper">
+            <div class="dropdown ml-3 toolbar-item">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <div class="dropdown-menu" aria-labelledby="dropdownexport">
+                <a class="dropdown-item" href="#">Export as PDF</a>
+                <a class="dropdown-item" href="{{ url_for('generate_excel')}}">Export as Excel</a>
+                <a class="dropdown-item" href="{{ url_for('generate_csv')}}">Export as CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-md-13">
+          <form action="/datetime_dashboard" method="post" autocomplete="off"> 
+            Start Date:
+            <input type="text" name="datetimepickermin" id="min" />
+            End Date:
+            <input type="text" name="datetimepickermax" id="max" />
+            <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
+          </form>  
+        </div>
+        <div class="col-md-14">
+          <div class="page-header-toolbar">
+            <div class="dropdown toolbar-item">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownsorting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Day</button>
+              <div class="dropdown-menu" aria-labelledby="dropdownsorting">
+                <a class="dropdown-item" href="#">Last Day</a>
+                <a class="dropdown-item" href="#">Last Month</a>
+                <a class="dropdown-item" href="#">Last Year</a>
+              </div>
+            </div>
+          </div>
+        </div>  
+        <div class="col-md-15 table_filter">
+          <form action="/search_dashboard" method="post" autocomplete="off" id="form"> 
+            <!-- <input type="text" name="tag" id="tag" placeholder="Enter keyword"/>
+            <input type="submit" value="Search" class="btn btn-primary " name=""/> -->
+            <div class="input-group justify-content-end">
+              <input type="text" name="tag" id="tag" > 
+              <div class="input-group-append">
+                <button class="btn btn-outline-primary" id="searchfield" type="submit" value="Search">Search</button>
+                <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{{ url_for('job_long_running')}}">Long Jobs Running > 30mins</a>
+                  <a class="dropdown-item" href="{{ url_for('job_long_running')}}">Load all Jobs (Descending order)</a>
+                  <a class="dropdown-item" href="{{ url_for('job_long_running')}}">Load all Jobs (Ascending order)</a>
+                </div>
+                <!-- <button class="btn btn-outline-primary" href="{{ url_for('dashboard') }}">
+                  <i class="mdi mdi-home-outline"></i>Home                            
+                </button> -->
+                <a class="btn btn-outline-primary" href="{{ url_for('dashboard')}}">
+                  <i class="mdi mdi-home-outline"></i>Home
+                </a>
+                <!-- <i class="mdi mdi-home-outline"></i>
+                <i class="ion ionicons ion-ios-home"></i> -->
+              </div>
+            </div>
+          </form> 
+          <!-- try mo kylie -->
+          
+          
+        </div>
+      </div>
+          
+          
+      <div class="table-responsive">
+        <div class="col-12">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+              <th>Task Labels</th>
+              <th>Duration in minutes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for testing in query.items %}
+              <tr">
+                <td>{{testing.starttime}}</td>
+                <td class="duration">{{testing.duration_mins}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>                    
+      </div>
+      
+      <div class="row">
+        <div></div>
+        {% if prev_num %}
+          <a class="btn btn-info mb-4 btn-space" href="{{ prev_num }}">Previous</a></li>
+        {% else %}
+          <a class="btn disabled mb-4 btn-space" href="#">Previous</a></li>
+        {% endif %}
+
+        {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+          {% if page_num %}
+            {% if query.page == page_num %}
+              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('dashboard', page=page_num)}}">{{ page_num }}</a>
+            {% else %}
+              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('dashboard', page=page_num)}}">{{ page_num }}</a>
+            {% endif %}
+          {% else %}
+              ... 
+          {% endif %}
+        {% endfor %}
+
+        {% if next_num %}
+          <a class="btn btn-info mb-4 btn-space" href="{{ next_num }}">Next</a></li>
+        {% else %}
+          <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
+        {% endif %}
+      </div>
+
+        
+        
+    </div>
+  </div>
+</div>   
+    
+
+
+
+
+{% endblock content %}
+

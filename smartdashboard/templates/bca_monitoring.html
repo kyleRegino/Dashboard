@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<!-- Page Title Header Starts-->
+<div class="row page-title-header">
+    <div class="col-12">
+        <div class="page-header">
+            <h4 class="page-title">BCA Job Monitoring</h4>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 grid-margin">
+    <div class="card shadow mb-4 card-border">
+        <!-- <div class="card-header py-3">
+            <div class="row-1 align-items-end">
+                <div class="col-11">
+                    <h1 class="h3 text-gray-800">Duration Graphs</h1>
+                </div>
+            </div>
+        </div> -->
+        <div class="card-body">
+            <div id="chart"></div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 grid-margin">
+    <div class="card shadow mb-4 card-border">
+
+        <div class="card-header py-3 card-border-header">
+        <div class="row-1 align-items-end">
+            <div class="col-11">
+            <h1 class="h3 text-gray-800">BCA JOBS</h1>
+            </div>
+            <div class="col-1">
+            <div class="sort-wrapper">
+                <div class="dropdown ml-3 toolbar-item">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownexport">
+                    <a class="dropdown-item" href="#">Export as PDF</a>
+                    <a class="dropdown-item" href="#">Export as Excel</a>
+                    <a class="dropdown-item" href="#">Export as CSV</a>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-13">
+                <form action="/dashboard" method="post" autocomplete="off"> 
+                    Start Date:
+                    <input type="text" name="datetimepickermin" id="min" placeholder= {{ mindate }}>
+                    End Date:
+                    <input type="text" name="datetimepickermax" id="max"/>
+                    <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
+                </form>  
+                </div>
+                <div class="col-md-14">
+                <div class="page-header-toolbar">
+                    <div class="dropdown toolbar-item">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownsorting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Day</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownsorting">
+                        <a class="dropdown-item" href="#">Last Day</a>
+                        <a class="dropdown-item" href="#">Last Month</a>
+                        <a class="dropdown-item" href="#">Last Year</a>
+                    </div>
+                    </div>
+                </div>
+                </div>  
+                <div class="col-md-15 table_filter">
+                <form action="/dashboard" method="post" autocomplete="off"> 
+                    <div class="input-group justify-content-end">
+                    <input type="text" name="tag" id="tag" placeholder="Enter keyword" >
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="submit" value="Search">Search</button>
+                        <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" type="submit" value="Search" name="30mins" id="30mins">Jobs Running > 30mins</a>
+                        <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
+                        <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
+                        </div>
+                        <button class="btn btn-outline-primary" href="{{ url_for('bca_monitoring') }}">
+                        <i class="mdi mdi-home-outline"></i>Home                            
+                        </button>
+                    </div>
+                    </div>
+                </form>                                 
+                </div>
+            </div>
+            
+            
+            <div class="table-responsive">
+                <div class="col-12">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                    <th>Run Date</th>                   
+                    <th>Daily PRP Account</th>
+                    <th>Daily PCODES</th>
+                    <th>UsageType</br>Total</th>
+                    <th>UsageType</br> DataDeducts</th>
+                    <th>UsageType</br>SMSDeducts</th>
+                    <th>UsageType</br>VoiceDeducts</th>
+                    <th>UsageType</br>VasDeducts</th>
+                    <th>UsageType</br>Topup</th>
+                    <th>UsageType</br>Expiration</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for query_bca in bca_query.items %}
+                    <tr">
+                    <td>{{query_bca.RunDate}}</td>
+                    <td>{{query_bca.Dly_Prp_Acct}}</td>
+                    <td>{{query_bca.Dly_PCODES}}</td>
+                    <td>{{query_bca.UsageType_Total}}</td>
+                    <td>{{query_bca.UsageType_DataDeducts}}</td>
+                    <td>{{query_bca.UsageType_SMSDeducts}}</td>
+                    <td>{{query_bca.UsageType_VoiceDeducts}}</td>
+                    <td>{{query_bca.UsageType_VasDeducts}}</td>
+                    <td>{{query_bca.UsageType_Topup}}</td>
+                    <td>{{query_bca.UsageType_Expiration}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>                    
+            </div>
+
+            <div class="row">
+                <div></div>
+                {% if bca_query.has_prev %}
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=bca_query.prev_num) }}">Previous</a></li>
+                {% else %}
+                    <a class="btn disabled mb-4 btn-space" href="#">Previous</a></li>
+                {% endif %}
+
+                {% for page_num in bca_query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num %}
+                    {% if bca_query.page == page_num %}
+                        <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                    {% else %}
+                        <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                    {% endif %}
+                    {% else %}
+                        ... 
+                    {% endif %}
+                {% endfor %}
+
+                {% if bca_query.has_next %}
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=bca_query.next_num) }}">Next</a></li>
+                {% else %}
+                    <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
+                {% endif %}
+            </div>
+
+
+
+            
+            
+        </div>
+    </div>
+</div>  
+
+
+
+
+
+{% endblock content %}
+
