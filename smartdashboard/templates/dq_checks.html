@@ -1,6 +1,121 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="row page-title-header">
 
+    <div class="col-12">
+        <div class="page-header">
+            <h4 class="page-title">Manifests VS T1</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!-- JOBS -->
+    <div class="col-md-12 align-self-center">
+        <div class="row">
+            <!-- RUNNING JOBS -->
+            <div class="col-md-2 grid-margin stretch-card">
+                <div class="card card-style">
+                    <div class="card-body pb-0">
+                        <a href="{{ running }}" class="stretched-link"></a>
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">COM</h4>
+                            <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+                        </div>
+                        <h2 class="font-weight-semibold mb-0">0</h2>
+                    </div>
+                    <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
+                </div>
+            </div>
+            
+            <!-- COMPLETED JOBS -->
+            <div class="col-md-2 grid-margin stretch-card">
+                <div class="card card-style">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">VOU</h4>
+                            <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+                        </div>
+                        <h2 class="font-weight-semibold mb-0">0</h2>
+                    </div>
+                    <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-1"></canva> -->
+                </div>
+            </div>
+            
+            
+            <!-- ERROR JOBS -->
+            <div class="col-md-2 grid-margin stretch-card">
+                <div class="card card-style">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">FIRST</h4>
+                            <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+                        </div>
+                        <h2 class="font-weight-semibold mb-0">0</h2>
+                    </div>
+                    <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-2"></canva> -->
+                </div>
+            </div>
+            
+            <!-- MISFIRED JOBS -->
+            <div class="col-md-2 grid-margin stretch-card">
+                <div class="card card-style">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">MON</h4>
+                            <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+                        </div>
+                        <h2 class="font-weight-semibold mb-0">9</h2>
+                    </div>
+                    <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
+                </div>
+            </div>
+
+            <div class="col-md-2 grid-margin stretch-card">
+                <div class="card card-style">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">CM</h4>
+                            <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+                        </div>
+                        <h2 class="font-weight-semibold mb-0">0</h2>
+                    </div>
+                    <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
+                </div>
+            </div>
+
+            <div class="col-md-2 grid-margin stretch-card">
+                <div class="card card-style">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">ADJ</h4>
+                            <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
+                        </div>
+                        <h2 class="font-weight-semibold mb-0">7</h2>
+                    </div>
+                    <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class="col-md-12 grid-margin">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">COM</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="com"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}
 

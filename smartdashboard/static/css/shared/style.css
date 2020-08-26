@@ -10896,6 +10896,14 @@ ul {
   border-left: 20px solid #8862e0 !important; 
   border-radius: 20px !important;
 }
+.border-left-5 {
+  border-left: 20px solid #40c4ff !important; 
+  border-radius: 20px !important;
+}
+.border-left-6 {
+  border-left: 20px solid #546e7a !important; 
+  border-radius: 20px !important;
+}
 
 
 /* Dynamic table for topsku */

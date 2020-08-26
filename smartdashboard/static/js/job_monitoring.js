@@ -127,6 +127,10 @@ $.ajax({
   var options = {
       series: [ data.job_status[0], data.job_status[1], data.job_status[2], data.job_status[3]],
       labels: [data.job_Label[0], data.job_Label[1], data.job_Label[2], data.job_Label[3]],
+      chart: {
+        width: 450,
+        type: 'donut',
+      },
       plotOptions: {
           pie: {
             donut: {
@@ -176,10 +180,7 @@ $.ajax({
       },
       
 
-      chart: {
-          width: 500,
-          type: 'donut', 
-      },
+      
       colors: ['#ffaf00', '#19d895', "#ff6258", "#8862e0"],
       dataLabels: {
           enabled: true,
@@ -232,7 +233,7 @@ $.ajax({
   
 
 
-  var chart = new ApexCharts(document.querySelector("#donutchart_longrunning"), options, options.plotOptions);
+  var chart = new ApexCharts(document.querySelector("#donutchart_longrunning"), options);
   chart.render();
 });
 
