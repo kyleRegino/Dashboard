@@ -10871,29 +10871,29 @@ ul {
 }
 
 .border-left-1-1 {
-  border-left: 20px solid #54C3BE !important;  
+  /* border-left: 20px solid #54C3BE !important;   */
   border-radius: 20px !important;
 }
 
 .border-left-1-2 {
-  border-left: 20px solid #21B7EC !important; 
+  /* border-left: 20px solid #21B7EC !important;  */
   border-radius: 20px !important;
 }
 
 .border-left-1 {
-  border-left: 20px solid #ffaf00 !important; 
+  /* border-left: 20px solid #ffaf00 !important;  */
   border-radius: 20px !important;
 }
 .border-left-2 {
-  border-left: 20px solid #19d895 !important; 
+  /* border-left: 20px solid #19d895 !important;  */
   border-radius: 20px !important;
 }
 .border-left-3 {
-  border-left: 20px solid #ff6258 !important; 
+  /* border-left: 20px solid #ff6258 !important;  */
   border-radius: 20px !important;
 }
 .border-left-4 {
-  border-left: 20px solid #8862e0 !important; 
+  /* border-left: 20px solid #8862e0 !important;  */
   border-radius: 20px !important;
 }
 
