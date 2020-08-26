@@ -21,6 +21,8 @@ db = SQLAlchemy(app)
 Base.prepare(db.engine, reflect=True)
 
 bca_monitoring_table = Base.classes.job_bca_monitoring
+manifest_hive_monitoring = Base.classes.manifest_hive_monitoring
+manifest_oracle_monitoring = Base.classes.manifest_oracle_monitoring
 
 
 session = Session(db.engine)

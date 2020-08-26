@@ -1,11 +1,12 @@
 from flask import render_template, request, url_for, jsonify
 
-from smartdashboard import app,  session, bca_monitoring_table
+from smartdashboard import app,  session, bca_monitoring_table, manifest_hive_monitoring, manifest_oracle_monitoring
 from smartdashboard.models import Job_Monitoring, Job_BCA, Dly_Usagetype, Dly_Prp_Acct, Dly_Pcodes, topsku_prod, topsku_talend
 from smartdashboard.forms import Search
 from smartdashboard.utils import time_to_seconds
 
 from sqlalchemy import or_, and_
+from sqlalchemy.sql import func
 from flask import jsonify, Response
 
 from datetime import datetime
@@ -145,10 +146,7 @@ def status_job(status):
                                             status=status)
 
 
-@app.route('/dq_checks', methods=['GET', 'POST'])
-def dq_checks():
 
-    return render_template('dq_checks.html')
 
 
 @app.route('/bca_monitoring', methods=['GET', 'POST'])
@@ -453,3 +451,100 @@ def lrj_generate_excel():
 
     return Response(output, mimetype="application/openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition":"attachment;filename=Talend_Job_Report.xlsx"})
 
+
+#DQ CHECKS
+@app.route('/dq_checks', methods=['GET', 'POST'])
+def dq_checks():
+    variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="com").scalar()
+    variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="vou").scalar()
+    variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="first").scalar()
+    variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="mon").scalar()
+    variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="cm").scalar()
+    variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="adj").scalar()
+    
+    print(variance_com)
+    print(str(variance_vou))
+    print(str(variance_first))
+    print(str(variance_mon))
+    print(str(variance_cm))
+    print(str(variance_adj))
+
+    return render_template('dq_checks.html', variance_com = variance_com,
+                                                variance_vou = variance_vou,
+                                                variance_first = variance_first,
+                                                variance_mon = variance_mon,
+                                                variance_cm = variance_cm,
+                                                variance_adj = variance_adj)
+
+@app.route('/get_dqchecks_js', methods=['GET'])
+def get_dqchecks_js():
+
+    results = session.query(manifest_hive_monitoring).all()
+    com_manifest = []
+    com_t1 = []
+    com_variance = []
+    vou_manifest = []
+    vou_t1 = []
+    vou_variance = []
+    first_manifest = []
+    first_t1 = []
+    first_variance = []
+    mon_manifest = []
+    mon_t1 = []
+    mon_variance = []
+    cm_manifest = []
+    cm_t1 = []
+    cm_variance = []
+    adj_manifest = []
+    adj_t1 = []
+    adj_variance = []
+
+    for r in results:
+        if r.cdr_type == "com":
+            com_manifest.append(str(r.ocs_manifest))
+            com_t1.append(str(r.t1_hive))
+            com_variance.append(str(r.variance))
+        elif r.cdr_type == "vou":
+            vou_manifest.append(str(r.ocs_manifest))
+            vou_t1.append(str(r.t1_hive))
+            vou_variance.append(str(r.variance))
+        elif r.cdr_type == "first":
+            first_manifest.append(str(r.ocs_manifest))
+            first_t1.append(str(r.t1_hive))
+            first_variance.append(str(r.variance))
+        elif r.cdr_type == "mon":
+            mon_manifest.append(str(r.ocs_manifest))
+            mon_t1.append(str(r.t1_hive))
+            mon_variance.append(str(r.variance))
+        elif r.cdr_type == "cm":
+            cm_manifest.append(str(r.ocs_manifest))
+            cm_t1.append(str(r.t1_hive))
+            cm_variance.append(str(r.variance))
+        elif r.cdr_type == "adj":
+            adj_manifest.append(str(r.ocs_manifest))
+            adj_t1.append(str(r.t1_hive))
+            adj_variance.append(str(r.variance))
+
+    result_set = {
+        "com_manifest": com_manifest,
+        "com_t1": com_t1,
+        "com_variance": com_variance,
+        "vou_manifest": vou_manifest,
+        "vou_t1": vou_t1,
+        "vou_variance": vou_variance,
+        "first_manifest": first_manifest,
+        "first_t1": first_t1,
+        "first_variance": first_variance,
+        "mon_manifest": mon_manifest,
+        "mon_t1": mon_t1,
+        "mon_variance": mon_variance,
+        "cm_manifest": cm_manifest,
+        "cm_t1": cm_t1,
+        "cm_variance": cm_variance,
+        "adj_manifest": adj_manifest,
+        "adj_t1": adj_t1,
+        "adj_variance": adj_variance,
+
+    }
+
+    return jsonify(result_set)

@@ -1,40 +1,269 @@
-var options = {
-    series: [{
-        name: 'Manifests',
-        data: [21579,20771,36944,16279,16463,20933,36944,93038,113429,100320,82590,90566,95418,101506,105251,85105,96865,105343,117583,116228,83028,71661,43399,19413]
-    }, {
-        name: 'T1',
-            data: [19831,19198,37162,18646,16377,19421,30477,55245,142334,105270,77920,92076,94395,101429,107562,84912,92051,106283,115463,120414,87473,67378,56132,23207]
-    }, {
-        name: 'Variance',
-        data: [-1748,-1573,218,2367,-86,-1512,-6467,-37793,28905,4950,-4670,1510,-1023,-77,2311,-193,-4814,940,-2120,4186,4445,-4283,12733,3794]
-    }],
-    chart: {
-        type: 'bar',
-        height: 350
-    },
-    plotOptions: {
-        bar: {
-            horizontal: false,
-            columnWidth: '55%',
-            endingShape: 'rounded'
-        },
-    },
-    dataLabels: {
-        enabled: false
-    },
-    stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-    },
-    xaxis: {
-        categories: [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23],
-    },
-    fill: {
-        opacity: 1
-    },
-};
 
-var chart = new ApexCharts(document.querySelector("#com"), options);
-chart.render();
+$.ajax({
+    url: "/get_dqchecks_js",
+    method: "GET",
+    dataType: "json"
+}).done(function (data) {
+    console.log(data);
+    // COM
+    var options_com = {
+        series: [{
+            name: 'Manifests',
+            data: data["com_manifest"]
+        }, {
+            name: 'T1',
+            data: data["com_t1"]
+        }, {
+            name: 'Variance',
+            data: data["com_variance"]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23],
+        },
+        fill: {
+            opacity: 1
+        },
+    };
+    
+    var chart_com = new ApexCharts(document.querySelector("#com"), options_com);
+    chart_com.render();
+
+    // VOU
+    var options_vou = {
+        series: [{
+            name: 'Manifests',
+            data: data["vou_manifest"]
+        }, {
+            name: 'T1',
+            data: data["vou_t1"]
+        }, {
+            name: 'Variance',
+            data: data["vou_variance"]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23],
+        },
+        fill: {
+            opacity: 1
+        },
+    };
+
+    var chart_vou = new ApexCharts(document.querySelector("#vou"), options_vou);
+    chart_vou.render();
+
+    // FIRST
+    var options_first = {
+        series: [{
+            name: 'Manifests',
+            data: data["first_manifest"]
+        }, {
+            name: 'T1',
+            data: data["first_t1"]
+        }, {
+            name: 'Variance',
+            data: data["first_variance"]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23],
+        },
+        fill: {
+            opacity: 1
+        },
+    };
+
+    var chart_first = new ApexCharts(document.querySelector("#first"), options_first);
+    chart_first.render();
+
+    // MON
+    var options_mon = {
+        series: [{
+            name: 'Manifests',
+            data: data["mon_manifest"]
+        }, {
+            name: 'T1',
+            data: data["mon_t1"]
+        }, {
+            name: 'Variance',
+            data: data["mon_variance"]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23],
+        },
+        fill: {
+            opacity: 1
+        },
+    };
+
+    var chart_mon = new ApexCharts(document.querySelector("#mon"), options_mon);
+    chart_mon.render();
+
+    // CM
+    var options_cm = {
+        series: [{
+            name: 'Manifests',
+            data: data["cm_manifest"]
+        }, {
+            name: 'T1',
+            data: data["cm_t1"]
+        }, {
+            name: 'Variance',
+            data: data["cm_variance"]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23],
+        },
+        fill: {
+            opacity: 1
+        },
+    };
+
+    var chart_cm = new ApexCharts(document.querySelector("#cm"), options_cm);
+    chart_cm.render();
+
+    // ADJ
+    var options_adj = {
+        series: [{
+            name: 'Manifests',
+            data: data["adj_manifest"]
+        }, {
+            name: 'T1',
+            data: data["adj_t1"]
+        }, {
+            name: 'Variance',
+            data: data["adj_variance"]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23],
+        },
+        fill: {
+            opacity: 1
+        },
+    };
+
+    var chart_adj = new ApexCharts(document.querySelector("#adj"), options_adj);
+    chart_adj.render();
+
+});
+
+
+
+
+
+
+
+
+
