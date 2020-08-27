@@ -1,4 +1,3 @@
-
 $.ajax({
     url: "/get_dqchecks_js",
     method: "GET",
@@ -44,7 +43,7 @@ $.ajax({
         },
     };
     
-    var chart_com = new ApexCharts(document.querySelector("#com"), options_com);
+    var chart_com = new ApexCharts(document.querySelector("#com_hive"), options_com);
     chart_com.render();
 
     // VOU
@@ -86,7 +85,7 @@ $.ajax({
         },
     };
 
-    var chart_vou = new ApexCharts(document.querySelector("#vou"), options_vou);
+    var chart_vou = new ApexCharts(document.querySelector("#vou_hive"), options_vou);
     chart_vou.render();
 
     // FIRST
@@ -128,7 +127,7 @@ $.ajax({
         },
     };
 
-    var chart_first = new ApexCharts(document.querySelector("#first"), options_first);
+    var chart_first = new ApexCharts(document.querySelector("#first_hive"), options_first);
     chart_first.render();
 
     // MON
@@ -170,7 +169,7 @@ $.ajax({
         },
     };
 
-    var chart_mon = new ApexCharts(document.querySelector("#mon"), options_mon);
+    var chart_mon = new ApexCharts(document.querySelector("#mon_hive"), options_mon);
     chart_mon.render();
 
     // CM
@@ -212,7 +211,7 @@ $.ajax({
         },
     };
 
-    var chart_cm = new ApexCharts(document.querySelector("#cm"), options_cm);
+    var chart_cm = new ApexCharts(document.querySelector("#cm_hive"), options_cm);
     chart_cm.render();
 
     // ADJ
@@ -225,7 +224,7 @@ $.ajax({
             data: data["adj_t1"]
         }, {
             name: 'Variance',
-            data: data["adj_variance"]
+            data: data["ajd_variance"]
         }],
         chart: {
             type: 'bar',
@@ -254,7 +253,7 @@ $.ajax({
         },
     };
 
-    var chart_adj = new ApexCharts(document.querySelector("#adj"), options_adj);
+    var chart_adj = new ApexCharts(document.querySelector("#adj_hive"), options_adj);
     chart_adj.render();
 
 });

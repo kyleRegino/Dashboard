@@ -65,10 +65,24 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('dq_checks') }}">
-              <i class="menu-icon typcn typcn-shopping-bag"></i>
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="menu-icon typcn typcn-coffee"></i>
               <span class="menu-title">DQ CHECKS</span>
+              <i class="menu-arrow"></i>
             </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('dq_checks')}}">Manifests VS T1-HIVE</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('dq_checks_2')}}">Manifests VS T1-ORACLE</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">TOPSKU</a>
+                </li>
+              </ul>
+            </div>
           </li>
 
           <li class="nav-item">
@@ -77,12 +91,6 @@
               <span class="menu-title">BCA MONITORING</span>
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('topksu_talend') }}">
-              <i class="menu-icon typcn typcn-shopping-bag"></i>
-              <span class="menu-title">TOPSKU Production <br /> vs <br /> Talend-FC </span>
-            </a>
-          </li> -->
         </ul>
       </nav>
       <!-- partial -->
@@ -123,7 +131,8 @@
   <script src="../static/js/apexcharts.js"></script>
   <script src="../static/js/bca_monitoring.js"></script>
   <script src="../static/js/job_monitoring.js"></script>
-  <script src="../static/js/dq.js"></script>
+  <script src="../static/js/dq_manvshive.js"></script>
+  <script src="../static/js/dq_manvsoracle.js"></script>
 
   <!-- End custom js for this page-->
 </body>

@@ -123,3 +123,37 @@ class topsku_talend(db.Model):
         self.brand =  brand
         self.txn_amount =  txn_amount
         self.topup_cnt = topup_cnt
+
+# class manifest_oracle_monitoring(db.Model):
+#     __tablename__ = "manifest_oracle_monitoring"
+#     file_date = db.Column(db.String(10), primary_key=True)
+#     processing_hour = db.Column(db.String(50), primary_key=True)
+#     cdr_type = db.Column(db.String(20), primary_key=True)  
+#     ocs_manifest = db.Column(db.String(20))  
+#     t1_oracle = db.Column(db.String(20))
+#     variance = db.Column(db.String(20))
+
+#     def __repr__(self):
+#         self.file_date =  file_date
+#         self.processing_hour =  processing_hour
+#         self.cdr_type =  cdr_type
+#         self.ocs_manifest =  ocs_manifest
+#         self.t1_oracle = t1_oracle
+#         self.variance = variance
+
+# class manifest_hive_monitoring(db.Model):
+#     __tablename__ = "manifest_hive_monitoring"
+#     file_date = db.Column(db.String(10), primary_key=True)
+#     processing_hour = db.Column(db.String(50), primary_key=True)
+#     cdr_type = db.Column(db.String(20), primary_key=True)  
+#     ocs_manifest = db.Column(db.String(20))  
+#     t1_hive = db.Column(db.String(20))
+#     variance = db.Column(db.String(20))
+
+#     def __repr__(self):
+#         self.file_date =  file_date
+#         self.processing_hour =  processing_hour
+#         self.cdr_type =  cdr_type
+#         self.ocs_manifest =  ocs_manifest
+#         self.t1_hive = t1_hive
+#         self.variance = variance

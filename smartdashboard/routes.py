@@ -145,20 +145,6 @@ def status_job(status):
                                             misfired = query_job_misfired,
                                             status=status)
 
-
-
-
-
-@app.route('/bca_monitoring', methods=['GET', 'POST'])
-def bca_monitoring():
-    page = request.args.get('page', 1, type=int)
-    # results = session.query(bca_monitoring_table).all()
-    bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=50)
-
-
-    return render_template('bca_monitoring.html', bca_query = bca_query)
-    # return render_template('bca_monitoring.html')
-
 @app.route('/topksu_talend', methods=['GET', 'POST'])
 def topksu_talend():
     query_prod = topsku_prod.query.all()
@@ -176,47 +162,6 @@ def topksu_talend():
 
 
 # JS CHARTS
-@app.route('/get_bca_monitoring', methods=['GET'])
-def get_bca_monitoring():
-    results = session.query(bca_monitoring_table).all()
-    dates = []
-    usagetype_total = []
-    prp_acct = []
-    pcodes = []
-    data = []
-    expiration = []
-    topup = []
-    voice = []
-    vas = []
-    sms = []
-    for r in results:
-        dates.append(r.RunDate.strftime("%Y-%m-%d"))
-        usagetype_total.append(time_to_seconds(r.UsageType_Total))
-        prp_acct.append(time_to_seconds(r.Dly_Prp_Acct))
-        pcodes.append(time_to_seconds(r.Dly_PCODES))
-        data.append(time_to_seconds(r.UsageType_DataDeducts))
-        expiration.append(time_to_seconds(r.UsageType_Expiration))
-        topup.append(time_to_seconds(r.UsageType_Topup))
-        voice.append(time_to_seconds(r.UsageType_VoiceDeducts))
-        vas.append(time_to_seconds(r.UsageType_VasDeducts))
-        sms.append(time_to_seconds(r.UsageType_SMSDeducts))
-
-
-    result_set = {
-        "dates": dates,
-        "usagetype_total": usagetype_total,
-        "prp_acct": prp_acct,
-        "pcodes": pcodes,
-        "data_deducts": data,
-        "expiration": expiration,
-        "topup_deducts": topup,
-        "voice_deducts": voice,
-        "vas_deducts": vas,
-        "sms_deducts": sms
-    }
-
-    return jsonify(result_set)
-
 @app.route('/get_job_monitoring', methods=['GET'])
 def get_job_monitoring():
     # results = session.query(job_monitoring_table).all()
@@ -336,6 +281,13 @@ def job_long_running():
     long_running = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
                     .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=50)
 
+    get_time = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
+                    .order_by(Job_Monitoring.starttime.asc()).all()
+    global time
+    for r in get_time:
+        time = str(r.starttime)
+
+
     query_job_running = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'RUNNING', 
                                                     Job_Monitoring.duration_mins >= 30 )).count()
     query_job_ok = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'OK', 
@@ -356,7 +308,8 @@ def job_long_running():
                                                             error = query_job_error,
                                                             misfired = query_job_misfired,
                                                             next_num=long_next_num,
-                                                            prev_num=long_prev_num
+                                                            prev_num=long_prev_num,
+                                                            time = time
                                                             )
 
 @app.route('/get_long_running_jobs', methods=['GET'])
@@ -451,23 +404,55 @@ def lrj_generate_excel():
 
     return Response(output, mimetype="application/openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition":"attachment;filename=Talend_Job_Report.xlsx"})
 
+@app.route('/long_running_jobs_js', methods=['GET'])
+def long_running_jobs_js():
+    job_status = []
+    job_Label = ['RUNNING', 'COMPLETED', 'ERROR', 'MISFIRED']
 
-#DQ CHECKS
+    query_job_running = Job_Monitoring.query.filter(Job_Monitoring.status == 'RUNNING').count()
+    query_job_ok = Job_Monitoring.query.filter(Job_Monitoring.status == 'OK').count()
+    query_job_error = Job_Monitoring.query.filter(Job_Monitoring.status == 'ERROR').count()
+    query_job_misfired = Job_Monitoring.query.filter(Job_Monitoring.status == 'MISFIRED').count()
+
+    job_status.append(query_job_running)
+    job_status.append(query_job_ok)
+    job_status.append(query_job_error)
+    job_status.append(query_job_misfired)
+
+    result_set = {
+        "job_status": job_status,
+        "job_Label": job_Label,
+
+    }
+
+    return jsonify(result_set)
+
+
+
+
+
+
+
+
+
+
+
+#DQ CHECKS - MANIFEST VS TI-HIVE
 @app.route('/dq_checks', methods=['GET', 'POST'])
 def dq_checks():
-    variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="com").scalar()
-    variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="vou").scalar()
-    variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="first").scalar()
-    variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="mon").scalar()
-    variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="cm").scalar()
-    variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type=="adj").scalar()
-    
-    print(variance_com)
-    print(str(variance_vou))
-    print(str(variance_first))
-    print(str(variance_mon))
-    print(str(variance_cm))
-    print(str(variance_adj))
+    variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="com").scalar()
+    variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="vou").scalar()
+    variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="first").scalar()
+    variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="mon").scalar()
+    variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="cm").scalar()
+    variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="adj").scalar()
+
+    # print(variance_com)
+    # print(str(variance_vou))
+    # print(str(variance_first))
+    # print(str(variance_mon))
+    # print(str(variance_cm))
+    # print(str(variance_adj))
 
     return render_template('dq_checks.html', variance_com = variance_com,
                                                 variance_vou = variance_vou,
@@ -545,6 +530,155 @@ def get_dqchecks_js():
         "adj_t1": adj_t1,
         "adj_variance": adj_variance,
 
+    }
+
+    return jsonify(result_set)
+
+#DQ CHECKS - MANIFEST VS TI-ORACLE
+@app.route('/dq_checks_2', methods=['GET', 'POST'])
+def dq_checks_2():
+    variance_com = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="com").scalar()
+    variance_vou = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="vou").scalar()
+    variance_first = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="first").scalar()
+    variance_mon = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="mon").scalar()
+    variance_cm = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="cm").scalar()
+    variance_adj = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="adj").scalar()
+
+    # print(variance_com)
+    # print(str(variance_vou))
+    # print(str(variance_first))
+    # print(str(variance_mon))
+    # print(str(variance_cm))
+    # print(str(variance_adj))
+
+    return render_template('dq_checks_2.html', variance_com = variance_com,
+                                                variance_vou = variance_vou,
+                                                variance_first = variance_first,
+                                                variance_mon = variance_mon,
+                                                variance_cm = variance_cm,
+                                                variance_adj = variance_adj
+                                                )
+
+@app.route('/get_dqchecks2_js', methods=['GET'])
+def get_dqchecks2_js():
+
+    results = session.query(manifest_oracle_monitoring).all()
+    com_manifest = []
+    com_t1 = []
+    com_variance = []
+    vou_manifest = []
+    vou_t1 = []
+    vou_variance = []
+    first_manifest = []
+    first_t1 = []
+    first_variance = []
+    mon_manifest = []
+    mon_t1 = []
+    mon_variance = []
+    cm_manifest = []
+    cm_t1 = []
+    cm_variance = []
+    adj_manifest = []
+    adj_t1 = []
+    adj_variance = []
+
+    for r in results:
+        if r.cdr_type == "com":
+            com_manifest.append(str(r.ocs_manifest))
+            com_t1.append(str(r.t1_oracle))
+            com_variance.append(str(r.variance))
+        elif r.cdr_type == "vou":
+            vou_manifest.append(str(r.ocs_manifest))
+            vou_t1.append(str(r.t1_oracle))
+            vou_variance.append(str(r.variance))
+        elif r.cdr_type == "first":
+            first_manifest.append(str(r.ocs_manifest))
+            first_t1.append(str(r.t1_oracle))
+            first_variance.append(str(r.variance))
+        elif r.cdr_type == "mon":
+            mon_manifest.append(str(r.ocs_manifest))
+            mon_t1.append(str(r.t1_oracle))
+            mon_variance.append(str(r.variance))
+        elif r.cdr_type == "cm":
+            cm_manifest.append(str(r.ocs_manifest))
+            cm_t1.append(str(r.t1_oracle))
+            cm_variance.append(str(r.variance))
+        elif r.cdr_type == "adj":
+            adj_manifest.append(str(r.ocs_manifest))
+            adj_t1.append(str(r.t1_oracle))
+            adj_variance.append(str(r.variance))
+    
+    # results.close()
+
+    result_set = {
+        "com_manifest": com_manifest,
+        "com_t1": com_t1,
+        "com_variance": com_variance,
+        "vou_manifest": vou_manifest,
+        "vou_t1": vou_t1,
+        "vou_variance": vou_variance,
+        "first_manifest": first_manifest,
+        "first_t1": first_t1,
+        "first_variance": first_variance,
+        "mon_manifest": mon_manifest,
+        "mon_t1": mon_t1,
+        "mon_variance": mon_variance,
+        "cm_manifest": cm_manifest,
+        "cm_t1": cm_t1,
+        "cm_variance": cm_variance,
+        "adj_manifest": adj_manifest,
+        "adj_t1": adj_t1,
+        "adj_variance": adj_variance,
+    }
+
+    return jsonify(result_set)
+
+# BCA MONITORING TAB
+@app.route('/bca_monitoring', methods=['GET', 'POST'])
+def bca_monitoring():
+    page = request.args.get('page', 1, type=int)
+    bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=50)
+
+
+    return render_template('bca_monitoring.html', bca_query = bca_query)
+
+@app.route('/get_bca_monitoring', methods=['GET'])
+def get_bca_monitoring():
+    results = session.query(bca_monitoring_table).all()
+    dates = []
+    usagetype_total = []
+    prp_acct = []
+    pcodes = []
+    data = []
+    expiration = []
+    topup = []
+    voice = []
+    vas = []
+    sms = []
+    for r in results:
+        dates.append(r.RunDate.strftime("%Y-%m-%d"))
+        usagetype_total.append(time_to_seconds(r.UsageType_Total))
+        prp_acct.append(time_to_seconds(r.Dly_Prp_Acct))
+        pcodes.append(time_to_seconds(r.Dly_PCODES))
+        data.append(time_to_seconds(r.UsageType_DataDeducts))
+        expiration.append(time_to_seconds(r.UsageType_Expiration))
+        topup.append(time_to_seconds(r.UsageType_Topup))
+        voice.append(time_to_seconds(r.UsageType_VoiceDeducts))
+        vas.append(time_to_seconds(r.UsageType_VasDeducts))
+        sms.append(time_to_seconds(r.UsageType_SMSDeducts))
+
+
+    result_set = {
+        "dates": dates,
+        "usagetype_total": usagetype_total,
+        "prp_acct": prp_acct,
+        "pcodes": pcodes,
+        "data_deducts": data,
+        "expiration": expiration,
+        "topup_deducts": topup,
+        "voice_deducts": voice,
+        "vas_deducts": vas,
+        "sms_deducts": sms
     }
 
     return jsonify(result_set)

@@ -77,7 +77,7 @@ $.ajax({
         },
         colors: ['#77B6EA', '#545454', "#00E676", "#FFEA00", "#FFA06D", "#718792", "#D50000", "#D500F9", "#1A237E", "#4E342E"],
         dataLabels: {
-            enabled: true,
+            enabled: false,
             formatter: function (value) {
                 return new Date(value * 1000).toISOString().substr(11, 8);
             }
