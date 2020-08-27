@@ -24,14 +24,12 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-1">
           <div class="card-body pb-0">
-            <a href="{{ running }}" class="stretched-link"></a>
+            <a href="{{ url_for('status_job', status='RUNNING') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">JOBS STILL RUNNING</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ running }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
         </div>
       </div>
 
@@ -39,13 +37,12 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-2">
           <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='OK') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED LONG RUNNING JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-1"></canva> -->
         </div>
       </div>
 
@@ -54,13 +51,12 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-3">
           <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='ERROR') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ error }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-2"></canva> -->
         </div>
       </div>
 
@@ -68,13 +64,12 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-4">
           <div class="card-body pb-0">
+            <a href="{{ url_for('status_job', status='MISFIRED') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ misfired }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
         </div>
       </div>
     
@@ -86,12 +81,7 @@
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">   
         <div class="card card-border">
-          <!-- <div class="p-4 pr-5 border-bottom bg-light d-flex justify-content-between">
-            <h5 class="font-weight-semibold">Overall Status</h5>
-            <div id="doughnut-chart-legend" class="mr-4"></div>
-          </div> -->
           <div class="card-body">
-            <!-- <canvas class="my-auto" id="doughnutChart" height="200"></canvas> -->
             <div class="my-auto" id="donutchart_longrunning" height="200"></div>
           </div>
         </div>
@@ -129,7 +119,7 @@
 
       <div class="row">
         <div class="col-md-13">
-          <form action="/datetime_dashboard" method="post" autocomplete="off"> 
+          <form action="/lrj_datetime" method="post" autocomplete="off"> 
             Start Date:
             <input type="text" name="datetimepickermin" id="min" />
             End Date:
@@ -138,7 +128,7 @@
           </form>  
         </div>
         <div class="col-md-14">
-          <div class="page-header-toolbar">
+          <!-- <div class="page-header-toolbar">
             <div class="dropdown toolbar-item">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownsorting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Day</button>
               <div class="dropdown-menu" aria-labelledby="dropdownsorting">
@@ -147,12 +137,10 @@
                 <a class="dropdown-item" href="#">Last Year</a>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>  
         <div class="col-md-15 table_filter">
-          <form action="/search_dashboard" method="post" autocomplete="off"> 
-            <!-- <input type="text" name="tag" id="tag" placeholder="Enter keyword"/>
-            <input type="submit" value="Search" class="btn btn-primary " name=""/> -->
+          <form action="/lrj_search" method="post" autocomplete="off"> 
             <div class="input-group justify-content-end">
               <input type="text" name="tag" id="tag">
               <div class="input-group-append">
@@ -161,24 +149,15 @@
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Jobs Running > 30mins</a>
                   <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
                   <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
                 </div>
-                <!-- <button class="btn btn-outline-primary" href="{{ url_for('dashboard') }}">
-                  <i class="mdi mdi-home-outline"></i>Home                            
-                </button> -->
-                <a class="btn btn-outline-primary" href="{{ url_for('dashboard')}}">
+                <a class="btn btn-outline-primary" href="{{ url_for('long_running_job')}}">
                   <i class="mdi mdi-home-outline"></i>Home
                 </a>
-                <!-- <i class="mdi mdi-home-outline"></i>
-                <i class="ion ionicons ion-ios-home"></i> -->
               </div>
             </div>
-          </form> 
-          <!-- try mo kylie -->
-          
-          
+          </form>           
         </div>
       </div>
           
@@ -221,9 +200,9 @@
         {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
           {% if page_num %}
             {% if query.page == page_num %}
-              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('job_long_running', page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('long_running_job', page=page_num)}}">{{ page_num }}</a>
             {% else %}
-              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('job_long_running', page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('long_running_job', page=page_num)}}">{{ page_num }}</a>
             {% endif %}
           {% else %}
               ... 

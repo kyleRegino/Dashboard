@@ -64,21 +64,7 @@ $.ajax({
         colors: ['#ffaf00', '#19d895', "#ff6258", "#8862e0"],
         dataLabels: {
             enabled: true,
-            // formatter: function (val) {
-            //     return val + "%"
-            // }
         },
-        // responsive: [{
-        //     breakpoint: 480,
-        //     options: {
-        //         chart: {
-        //         width: 500
-        //         },
-        //         legend: {
-        //             show: false
-        //         },
-        //     }
-        // }],
         title: {
             text: 'Overall Status',
             align: 'left',
@@ -96,29 +82,15 @@ $.ajax({
         legend: {
           position: 'bottom',
           horizontalAlign: 'center',
-          // offsetY: 0,
-          // height: 230,
-        },
-        // legend: {
-        //     position: 'top',
-        //     horizontalAlign: 'right',
-        //     floating: true,
-        //     offsetY: -25,
-        //     offsetX: 20
-        // },
-        
-        
-        
+        },    
     };
     
-
-
     var chart = new ApexCharts(document.querySelector("#donutchart"), options, options.plotOptions);
     chart.render();
 });
 
 $.ajax({
-  url: "/get_long_running_jobs",
+  url: "/lrj_js",
   method: "GET",
   dataType: "json"
 }).done(function (data) {
@@ -179,26 +151,10 @@ $.ajax({
           }
       },
       
-
-      
       colors: ['#ffaf00', '#19d895', "#ff6258", "#8862e0"],
       dataLabels: {
           enabled: true,
-          // formatter: function (val) {
-          //     return val + "%"
-          // }
       },
-      // responsive: [{
-      //     breakpoint: 480,
-      //     options: {
-      //         chart: {
-      //         width: 500
-      //         },
-      //         legend: {
-      //             show: false
-      //         },
-      //     }
-      // }],
       title: {
           text: 'Overall Status',
           align: 'left',
@@ -216,19 +172,7 @@ $.ajax({
       legend: {
         position: 'bottom',
         horizontalAlign: 'center',
-        // offsetY: 0,
-        // height: 230,
       },
-      // legend: {
-      //     position: 'top',
-      //     horizontalAlign: 'right',
-      //     floating: true,
-      //     offsetY: -25,
-      //     offsetX: 20
-      // },
-      
-      
-      
   };
   
 

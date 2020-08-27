@@ -24,14 +24,11 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-1-1">
           <div class="card-body pb-0">
-            <a href="#" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between" type="submit" name="running">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">TOTAL NUMBER OF JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ query_distinct_count }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
         </div>
       </div>
       
@@ -39,14 +36,12 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-1-2">
           <div class="card-body pb-0">
-            <a href="{{ url_for('job_long_running')}}" class="stretched-link" name="running"></a>
+            <a href="{{ url_for('long_running_job')}}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between" type="submit" name="running">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOBS (more than 30 mins)</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ long_running_count }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
         </div>
       </div>
 
@@ -54,14 +49,11 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-1">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='RUNNING') }}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between" type="submit" name="running">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ running }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
         </div>
       </div>
 
@@ -69,14 +61,11 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-2">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='OK') }}" class="stretched-link" name="completed"></a>
             <div class="d-flex justify-content-between" type="submit">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-1"></canva> -->
         </div>
       </div>
 
@@ -84,14 +73,11 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-3">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='ERROR') }}" class="stretched-link" name="error"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ error }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-2"></canva> -->
         </div>
       </div>
 
@@ -99,17 +85,13 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-4">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='MISFIRED') }}" class="stretched-link" name="misfired"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
-              <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
             </div>
             <h2 class="font-weight-semibold mb-0">{{ misfired }}</h2>
           </div>
-          <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
         </div>
       </div>
-      <!-- </form> -->
     
     </div>
   </div>
@@ -119,12 +101,7 @@
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">   
         <div class="card card-border">
-          <!-- <div class="p-4 pr-5 border-bottom bg-light d-flex justify-content-between card-border-header">
-            <h5 class="font-weight-semibold">Overall Status</h5>
-            <div id="doughnut-chart-legend" class="mr-4"></div>
-          </div> -->
           <div class="card-body">
-            <!-- <canvas class="my-auto" id="doughnutChart" height="200"></canvas> -->
             <div class="my-auto" id="donutchart" height="200"></div>
           </div>
         </div>
@@ -135,7 +112,7 @@
 </div>
 <!-- Page Title Header Ends-->
 
-<div class="col-md-12 grid-margin">
+<!-- <div class="col-md-12 grid-margin">
   <div class="card shadow mb-4 card-border">
 
     <div class="card-header py-3 card-border-header">
@@ -184,8 +161,6 @@
         </div>  
         <div class="col-md-15 table_filter">
           <form action="/search_dashboard" method="post" autocomplete="off" id="form"> 
-            <!-- <input type="text" name="tag" id="tag" placeholder="Enter keyword"/>
-            <input type="submit" value="Search" class="btn btn-primary " name=""/> -->
             <div class="input-group justify-content-end">
               <input type="text" name="tag" id="tag" > 
               <div class="input-group-append">
@@ -194,24 +169,15 @@
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="{{ url_for('job_long_running')}}">Long Jobs Running > 30mins</a>
-                  <a class="dropdown-item" href="{{ url_for('job_long_running')}}">Load all Jobs (Descending order)</a>
-                  <a class="dropdown-item" href="{{ url_for('job_long_running')}}">Load all Jobs (Ascending order)</a>
+                  <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
+                  <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
                 </div>
-                <!-- <button class="btn btn-outline-primary" href="{{ url_for('dashboard') }}">
-                  <i class="mdi mdi-home-outline"></i>Home                            
-                </button> -->
                 <a class="btn btn-outline-primary" href="{{ url_for('dashboard')}}">
                   <i class="mdi mdi-home-outline"></i>Home
                 </a>
-                <!-- <i class="mdi mdi-home-outline"></i>
-                <i class="ion ionicons ion-ios-home"></i> -->
               </div>
             </div>
-          </form> 
-          <!-- try mo kylie -->
-          
-          
+          </form>  
         </div>
       </div>
           
@@ -269,12 +235,9 @@
           <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
         {% endif %}
       </div>
-
-        
-        
     </div>
   </div>
-</div>   
+</div>    -->
     
 
 
