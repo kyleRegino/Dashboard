@@ -55,27 +55,13 @@ def dashboard():
                                             )
 
 
-@app.route('/topksu_talend', methods=['GET', 'POST'])
-def topksu_talend():
-    query_prod = topsku_prod.query.all()
-    query_talend = topsku_talend.query.all()
 
-    for prod in query_prod:
-        # if prod.processing_dttm >= 'currentdatetime' OR prod.processing_dttm <= 
-        if datetime.strptime("13:00:00", "%H:%M:%S") in prod.processing_dttm:
-            print(prod)
-
-    print(query_prod)
-
-    return render_template('topsku_talend.html', query_prod = query_prod, query_talend = query_talend)
 
 
 
 # JS CHARTS
 @app.route('/get_job_monitoring', methods=['GET'])
 def get_job_monitoring():
-    # results = session.query(job_monitoring_table).all()
-
     job_status = []
     job_Label = ['RUNNING', 'COMPLETED', 'ERROR', 'MISFIRED']
 
@@ -675,3 +661,19 @@ def get_bca_monitoring():
     }
 
     return jsonify(result_set)
+
+
+# TOPSKU
+@app.route('/topksu_talend', methods=['GET', 'POST'])
+def topksu_talend():
+    query_prod = topsku_prod.query.all()
+    query_talend = topsku_talend.query.all()
+
+    for prod in query_prod:
+        # if prod.processing_dttm >= 'currentdatetime' OR prod.processing_dttm <= 
+        if datetime.strptime("13:00:00", "%H:%M:%S") in prod.processing_dttm:
+            print(prod)
+
+    print(query_prod)
+
+    return render_template('topsku_talend.html', query_prod = query_prod, query_talend = query_talend)
