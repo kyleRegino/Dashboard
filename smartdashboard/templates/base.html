@@ -33,7 +33,7 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        <a class="navbar-brand brand-logo" href="{{ url_for('dashboard') }}">
+        <a class="navbar-brand brand-logo" href="{{ url_for('dashboard_blueprint.dashboard') }}">
           <img src="../static/images/Smart_Communications-edit-3.png" alt="logo" /> </a>
         <!-- <a class="navbar-brand brand-logo-mini" href="index.html">
           <img src="../static/images/logo-mini.svg" alt="logo" /> </a> -->
@@ -51,14 +51,14 @@
 
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('dashboard') }}">
+            <a class="nav-link" href="{{ url_for('dashboard_blueprint.dashboard') }}">
               <i class="menu-icon typcn typcn-document-text"></i>
               <span class="menu-title">DASHBOARD</span>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('long_running_job') }}">
+            <a class="nav-link" href="{{ url_for('lrj_blueprint.long_running_job') }}">
               <i class="menu-icon typcn typcn-shopping-bag"></i>
               <span class="menu-title">LONG RUNNING JOBS</span>
             </a>
@@ -73,10 +73,10 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('dq_checks')}}">Manifests VS T1-HIVE</a>
+                  <a class="nav-link" href="{{ url_for('dq_blueprint.dq_manvshive')}}">Manifests VS T1-HIVE</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('dq_checks_2')}}">Manifests VS T1-ORACLE</a>
+                  <a class="nav-link" href="{{ url_for('dq_blueprint.dq_manvsoracle')}}">Manifests VS T1-ORACLE</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">TOPSKU</a>
@@ -86,7 +86,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('bca_monitoring') }}">
+            <a class="nav-link" href="{{ url_for('bca_blueprint.bca_monitoring') }}">
               <i class="menu-icon typcn typcn-th-large-outline"></i>
               <span class="menu-title">BCA MONITORING</span>
             </a>
@@ -129,7 +129,7 @@
   <!-- Charts -->
   <script src="../static/js/shared/chart.js"></script>
   <script src="../static/js/apexcharts.js"></script>
-  <script src="../static/js/job_monitoring.js"></script>
+  
 
   {% block scripts %}
   {% endblock %}

@@ -2,7 +2,7 @@ var cdr_types = ["com", "vou", "cm", "adj", "first", "mon"];
 var charts = [];
 function update_data_oracle(cdr_date) {
     $.ajax({
-        url: "/get_dqchecks2_js",
+        url: "/dqchecks_manvsoracle_js",
         method: "POST",
         dataType: "json",
         data: { "cdr_date": cdr_date }
@@ -26,7 +26,7 @@ function update_data_oracle(cdr_date) {
 }
 
 $.ajax({
-    url: "/get_dqchecks2_js",
+    url: "/dqchecks_manvsoracle_js",
     method: "GET",
     dataType: "json"
 }).done(function (data) {

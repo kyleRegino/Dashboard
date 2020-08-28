@@ -27,4 +27,14 @@ manifest_oracle_monitoring = Base.classes.manifest_oracle_monitoring
 
 session = Session(db.engine)
 
-from smartdashboard import routes
+# from smartdashboard import routes
+
+from smartdashboard.dashboard.routes import dashboard_blueprint
+from smartdashboard.long_running_jobs.routes import lrj_blueprint
+from smartdashboard.bca_monitoring.routes import bca_blueprint
+from smartdashboard.dq_checks.routes import dq_blueprint
+
+app.register_blueprint(dashboard_blueprint)
+app.register_blueprint(lrj_blueprint)
+app.register_blueprint(bca_blueprint)
+app.register_blueprint(dq_blueprint)

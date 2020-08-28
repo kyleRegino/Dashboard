@@ -87,7 +87,7 @@
                         <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
                         <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
                         </div>
-                        <button class="btn btn-outline-primary" href="{{ url_for('bca_monitoring') }}">
+                        <button class="btn btn-outline-primary" href="{{ url_for('bca_blueprint.bca_monitoring') }}">
                         <i class="mdi mdi-home-outline"></i>Home                            
                         </button>
                     </div>
@@ -137,7 +137,7 @@
             <div class="row">
                 <div></div>
                 {% if bca_query.has_prev %}
-                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=bca_query.prev_num) }}">Previous</a></li>
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=bca_query.prev_num) }}">Previous</a></li>
                 {% else %}
                     <a class="btn disabled mb-4 btn-space" href="#">Previous</a></li>
                 {% endif %}
@@ -145,9 +145,9 @@
                 {% for page_num in bca_query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num %}
                     {% if bca_query.page == page_num %}
-                        <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                        <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=page_num)}}">{{ page_num }}</a>
                     {% else %}
-                        <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                        <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=page_num)}}">{{ page_num }}</a>
                     {% endif %}
                     {% else %}
                         ... 
@@ -155,7 +155,7 @@
                 {% endfor %}
 
                 {% if bca_query.has_next %}
-                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_monitoring', page=bca_query.next_num) }}">Next</a></li>
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=bca_query.next_num) }}">Next</a></li>
                 {% else %}
                     <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
                 {% endif %}

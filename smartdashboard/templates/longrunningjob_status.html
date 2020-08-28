@@ -25,7 +25,7 @@
       <div class="col-md-6 grid-margin stretch-card" id="running_card">
         <div class="card card-style border-left-1" >
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='RUNNING') }}" class="stretched-link" name="running"></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='RUNNING') }}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between" type="submit" name="running">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOBS</h4>
               <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
@@ -40,7 +40,7 @@
       <div class="col-md-6 grid-margin stretch-card" id="ok_card">
         <div class="card card-style border-left-2">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='OK') }}" class="stretched-link" name="completed" ></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='OK') }}" class="stretched-link" name="completed" ></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED JOBS</h4>
               <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
@@ -56,7 +56,7 @@
       <div class="col-md-6 grid-margin stretch-card" id="error_card">
         <div class="card card-style border-left-3">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='ERROR') }}" class="stretched-link" name="error"></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='ERROR') }}" class="stretched-link" name="error"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR JOBS</h4>
               <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
@@ -71,7 +71,7 @@
       <div class="col-md-6 grid-margin stretch-card" id="misfired_card">
         <div class="card card-style border-left-4">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='MISFIRED') }}" class="stretched-link" name="misfired"></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='MISFIRED') }}" class="stretched-link" name="misfired"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
               <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
@@ -169,7 +169,7 @@
                   <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
                   <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
                 </div>
-                <a class="btn btn-outline-primary" href="{{ url_for('long_running_job')}}">
+                <a class="btn btn-outline-primary" href="{{ url_for('lrj_blueprint.long_running_job')}}">
                   <i class="mdi mdi-home-outline"></i>Home
                 </a>
               </div>
@@ -209,7 +209,7 @@
       <div class="row">
         <div></div>
         {% if query.has_prev %}
-          <a class="btn btn-info mb-4 btn-space" href="{{ url_for('status_job', status=status, page=query.prev_num) }}">Previous</a></li>
+          <a class="btn btn-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.status_job', status=status, page=query.prev_num) }}">Previous</a></li>
         {% else %}
           <a class="btn disabled mb-4 btn-space" href="#">Previous</a></li>
         {% endif %}
@@ -217,9 +217,9 @@
         {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
           {% if page_num %}
             {% if query.page == page_num %}
-              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('status_job', status=status, page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.status_job', status=status, page=page_num)}}">{{ page_num }}</a>
             {% else %}
-              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('status_job', status=status, page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.status_job', status=status, page=page_num)}}">{{ page_num }}</a>
             {% endif %}
           {% else %}
               ... 
@@ -228,7 +228,7 @@
 
 
         {% if query.has_next %}
-          <a class="btn btn-info mb-4 btn-space" href="{{ url_for('status_job', status=status, page=query.next_num) }}">Next</a></li>
+          <a class="btn btn-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.status_job', status=status, page=query.next_num) }}">Next</a></li>
         {% else %}
           <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
         {% endif %}
@@ -245,4 +245,8 @@
 
 
 {% endblock content %}
+
+{% block scripts %}
+<script src="../static/js/job_monitoring.js"></script>
+{% endblock %}
 

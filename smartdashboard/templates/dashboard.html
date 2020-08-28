@@ -36,7 +36,7 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-1-2">
           <div class="card-body pb-0">
-            <a href="{{ url_for('long_running_job')}}" class="stretched-link" name="running"></a>
+            <a href="{{ url_for('lrj_blueprint.long_running_job')}}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between" type="submit" name="running">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOBS (more than 30 mins)</h4>
             </div>
@@ -112,136 +112,13 @@
 </div>
 <!-- Page Title Header Ends-->
 
-<!-- <div class="col-md-12 grid-margin">
-  <div class="card shadow mb-4 card-border">
-
-    <div class="card-header py-3 card-border-header">
-      <div class="row-1 align-items-end">
-        <div class="col-11">
-          <h1 class="h3 text-gray-800">Talend Jobs Status Table</h1>
-        </div>
-        <div class="col-1">
-          <div class="sort-wrapper">
-            <div class="dropdown ml-3 toolbar-item">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
-              <div class="dropdown-menu" aria-labelledby="dropdownexport">
-                <a class="dropdown-item" href="#">Export as PDF</a>
-                <a class="dropdown-item" href="{{ url_for('generate_excel')}}">Export as Excel</a>
-                <a class="dropdown-item" href="{{ url_for('generate_csv')}}">Export as CSV</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="card-body">
-
-      <div class="row">
-        <div class="col-md-13">
-          <form action="/datetime_dashboard" method="post" autocomplete="off"> 
-            Start Date:
-            <input type="text" name="datetimepickermin" id="min" />
-            End Date:
-            <input type="text" name="datetimepickermax" id="max" />
-            <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
-          </form>  
-        </div>
-        <div class="col-md-14">
-          <div class="page-header-toolbar">
-            <div class="dropdown toolbar-item">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownsorting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Day</button>
-              <div class="dropdown-menu" aria-labelledby="dropdownsorting">
-                <a class="dropdown-item" href="#">Last Day</a>
-                <a class="dropdown-item" href="#">Last Month</a>
-                <a class="dropdown-item" href="#">Last Year</a>
-              </div>
-            </div>
-          </div>
-        </div>  
-        <div class="col-md-15 table_filter">
-          <form action="/search_dashboard" method="post" autocomplete="off" id="form"> 
-            <div class="input-group justify-content-end">
-              <input type="text" name="tag" id="tag" > 
-              <div class="input-group-append">
-                <button class="btn btn-outline-primary" id="searchfield" type="submit" value="Search">Search</button>
-                <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
-                  <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
-                </div>
-                <a class="btn btn-outline-primary" href="{{ url_for('dashboard')}}">
-                  <i class="mdi mdi-home-outline"></i>Home
-                </a>
-              </div>
-            </div>
-          </form>  
-        </div>
-      </div>
-          
-          
-      <div class="table-responsive">
-        <div class="col-12">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-              <th>Job Start Time</th>
-              <th>Duration in minutes</th>
-              <th>Task Labels</th>
-              <th>Job ID</th>
-              <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for testing in query.items %}
-              <tr">
-                <td>{{testing.starttime}}</td>
-                <td class="duration">{{testing.duration_mins}}</td>
-                <td>{{testing.tasklabel}} </td>
-                <td>{{testing.id}}</td>
-                <td  ><label class="status">{{testing.status}}</label></td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>                    
-      </div>
-      
-      <div class="row">
-        <div></div>
-        {% if prev_num %}
-          <a class="btn btn-info mb-4 btn-space" href="{{ prev_num }}">Previous</a></li>
-        {% else %}
-          <a class="btn disabled mb-4 btn-space" href="#">Previous</a></li>
-        {% endif %}
-
-        {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-          {% if page_num %}
-            {% if query.page == page_num %}
-              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('dashboard', page=page_num)}}">{{ page_num }}</a>
-            {% else %}
-              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('dashboard', page=page_num)}}">{{ page_num }}</a>
-            {% endif %}
-          {% else %}
-              ... 
-          {% endif %}
-        {% endfor %}
-
-        {% if next_num %}
-          <a class="btn btn-info mb-4 btn-space" href="{{ next_num }}">Next</a></li>
-        {% else %}
-          <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>    -->
     
 
 
 
 
 {% endblock content %}
+{% block scripts %}
+<script src="../static/js/job_monitoring.js"></script>
+{% endblock %}
 
