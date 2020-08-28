@@ -3,13 +3,14 @@ from flask import render_template, request, url_for, jsonify
 from smartdashboard import app,  session, bca_monitoring_table, manifest_hive_monitoring, manifest_oracle_monitoring
 from smartdashboard.models import Job_Monitoring, Job_BCA, Dly_Usagetype, Dly_Prp_Acct, Dly_Pcodes, topsku_prod, topsku_talend
 from smartdashboard.forms import Search
-from smartdashboard.utils import time_to_seconds
+from smartdashboard.utils import time_to_seconds, init_list
 
 from sqlalchemy import or_, and_
 from sqlalchemy.sql import func
 from flask import jsonify, Response
 
 from datetime import datetime
+from datetime import date
 
 import io, csv
 
@@ -433,12 +434,13 @@ def status_job(status):
 #DQ CHECKS - MANIFEST VS TI-HIVE
 @app.route('/dq_checks', methods=['GET', 'POST'])
 def dq_checks():
-    variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="com").scalar()
-    variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="vou").scalar()
-    variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="first").scalar()
-    variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="mon").scalar()
-    variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="cm").scalar()
-    variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.cdr_type =="adj").scalar()
+
+    variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="com",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="vou",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="first",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="mon",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="cm",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="adj",manifest_hive_monitoring.file_date == date.today())).scalar()
 
     # print(variance_com)
     # print(str(variance_vou))
@@ -454,54 +456,58 @@ def dq_checks():
                                                 variance_cm = variance_cm,
                                                 variance_adj = variance_adj)
 
-@app.route('/get_dqchecks_js', methods=['GET'])
+@app.route('/get_dqchecks_js', methods=['GET','POST'])
 def get_dqchecks_js():
+    if request.method == "POST":
+        query_date = request.form["cdr_date"]
+    else:
+        query_date = date.today()
 
-    results = session.query(manifest_hive_monitoring).all()
-    com_manifest = []
-    com_t1 = []
-    com_variance = []
-    vou_manifest = []
-    vou_t1 = []
-    vou_variance = []
-    first_manifest = []
-    first_t1 = []
-    first_variance = []
-    mon_manifest = []
-    mon_t1 = []
-    mon_variance = []
-    cm_manifest = []
-    cm_t1 = []
-    cm_variance = []
-    adj_manifest = []
-    adj_t1 = []
-    adj_variance = []
+    results = session.query(manifest_hive_monitoring).filter(manifest_hive_monitoring.file_date == query_date)
+    com_manifest = init_list()
+    com_t1 = init_list()
+    com_variance = init_list()
+    vou_manifest = init_list()
+    vou_t1 = init_list()
+    vou_variance = init_list()
+    first_manifest = init_list()
+    first_t1 = init_list()
+    first_variance = init_list()
+    mon_manifest = init_list()
+    mon_t1 = init_list()
+    mon_variance = init_list()
+    cm_manifest = init_list()
+    cm_t1 = init_list()
+    cm_variance = init_list()
+    adj_manifest = init_list()
+    adj_t1 = init_list()
+    adj_variance = init_list()
 
     for r in results:
         if r.cdr_type == "com":
-            com_manifest.append(str(r.ocs_manifest))
-            com_t1.append(str(r.t1_hive))
-            com_variance.append(str(r.variance))
+            com_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            com_t1[r.processing_hour] = (str(r.t1_hive))
+            com_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "vou":
-            vou_manifest.append(str(r.ocs_manifest))
-            vou_t1.append(str(r.t1_hive))
-            vou_variance.append(str(r.variance))
+            vou_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            vou_t1[r.processing_hour] = (str(r.t1_hive))
+            vou_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "first":
-            first_manifest.append(str(r.ocs_manifest))
-            first_t1.append(str(r.t1_hive))
-            first_variance.append(str(r.variance))
+            first_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            first_t1[r.processing_hour] = (str(r.t1_hive))
+            first_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "mon":
-            mon_manifest.append(str(r.ocs_manifest))
-            mon_t1.append(str(r.t1_hive))
-            mon_variance.append(str(r.variance))
+            mon_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            mon_t1[r.processing_hour] = (str(r.t1_hive))
+            mon_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "cm":
-            cm_manifest.append(str(r.ocs_manifest))
-            cm_t1.append(str(r.t1_hive))
-            cm_variance.append(str(r.variance))
+            cm_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            cm_t1[r.processing_hour] = (str(r.t1_hive))
+            cm_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "adj":
-            adj_manifest.append(str(r.ocs_manifest))
-            adj_t1.append(str(r.t1_hive))
-            adj_variance.append(str(r.variance))
+            adj_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            adj_t1[r.processing_hour] = (str(r.t1_hive))
+            adj_variance[r.processing_hour] = (str(r.variance))
 
     result_set = {
         "com_manifest": com_manifest,
@@ -527,15 +533,37 @@ def get_dqchecks_js():
 
     return jsonify(result_set)
 
+@app.route('/dq_checks_search_hive', methods=['POST'])
+def dq_checks_search_hive():
+    if request.method == "POST":
+        query_date = request.form["date"]
+        variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="com",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="vou",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="first",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="mon",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="cm",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="adj",manifest_hive_monitoring.file_date == query_date)).scalar()
+
+    result_set = {
+        "variance_com": str(variance_com),
+        "variance_vou": str(variance_vou),
+        "variance_first": str(variance_first),
+        "variance_mon": str(variance_mon),
+        "variance_cm": str(variance_cm),
+        "variance_adj": str(variance_adj)
+    }
+
+    return jsonify(result_set)
+
 #DQ CHECKS - MANIFEST VS TI-ORACLE
 @app.route('/dq_checks_2', methods=['GET', 'POST'])
 def dq_checks_2():
-    variance_com = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="com").scalar()
-    variance_vou = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="vou").scalar()
-    variance_first = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="first").scalar()
-    variance_mon = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="mon").scalar()
-    variance_cm = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="cm").scalar()
-    variance_adj = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.cdr_type =="adj").scalar()
+    variance_com = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="com",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_vou = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="vou",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_first = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="first",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_mon = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="mon",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_cm = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="cm",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_adj = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="adj",manifest_oracle_monitoring.file_date == date.today())).scalar()
 
     # print(variance_com)
     # print(str(variance_vou))
@@ -552,54 +580,58 @@ def dq_checks_2():
                                                 variance_adj = variance_adj
                                                 )
 
-@app.route('/get_dqchecks2_js', methods=['GET'])
+@app.route('/get_dqchecks2_js', methods=['GET','POST'])
 def get_dqchecks2_js():
-
-    results = session.query(manifest_oracle_monitoring).all()
-    com_manifest = []
-    com_t1 = []
-    com_variance = []
-    vou_manifest = []
-    vou_t1 = []
-    vou_variance = []
-    first_manifest = []
-    first_t1 = []
-    first_variance = []
-    mon_manifest = []
-    mon_t1 = []
-    mon_variance = []
-    cm_manifest = []
-    cm_t1 = []
-    cm_variance = []
-    adj_manifest = []
-    adj_t1 = []
-    adj_variance = []
+    if request.method == "POST":
+        query_date = request.form["cdr_date"]
+    else:
+        query_date = date.today()
+    
+    results = session.query(manifest_oracle_monitoring).filter(manifest_oracle_monitoring.file_date == query_date)
+    com_manifest = init_list()
+    com_t1 = init_list()
+    com_variance = init_list()
+    vou_manifest = init_list()
+    vou_t1 = init_list()
+    vou_variance = init_list()
+    first_manifest = init_list()
+    first_t1 = init_list()
+    first_variance = init_list()
+    mon_manifest = init_list()
+    mon_t1 = init_list()
+    mon_variance = init_list()
+    cm_manifest = init_list()
+    cm_t1 = init_list()
+    cm_variance = init_list()
+    adj_manifest = init_list()
+    adj_t1 = init_list()
+    adj_variance = init_list()
 
     for r in results:
         if r.cdr_type == "com":
-            com_manifest.append(str(r.ocs_manifest))
-            com_t1.append(str(r.t1_oracle))
-            com_variance.append(str(r.variance))
+            com_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            com_t1[r.processing_hour] = (str(r.t1_oracle))
+            com_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "vou":
-            vou_manifest.append(str(r.ocs_manifest))
-            vou_t1.append(str(r.t1_oracle))
-            vou_variance.append(str(r.variance))
+            vou_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            vou_t1[r.processing_hour] = (str(r.t1_oracle))
+            vou_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "first":
-            first_manifest.append(str(r.ocs_manifest))
-            first_t1.append(str(r.t1_oracle))
-            first_variance.append(str(r.variance))
+            first_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            first_t1[r.processing_hour] = (str(r.t1_oracle))
+            first_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "mon":
-            mon_manifest.append(str(r.ocs_manifest))
-            mon_t1.append(str(r.t1_oracle))
-            mon_variance.append(str(r.variance))
+            mon_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            mon_t1[r.processing_hour] = (str(r.t1_oracle))
+            mon_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "cm":
-            cm_manifest.append(str(r.ocs_manifest))
-            cm_t1.append(str(r.t1_oracle))
-            cm_variance.append(str(r.variance))
+            cm_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            cm_t1[r.processing_hour] = (str(r.t1_oracle))
+            cm_variance[r.processing_hour] = (str(r.variance))
         elif r.cdr_type == "adj":
-            adj_manifest.append(str(r.ocs_manifest))
-            adj_t1.append(str(r.t1_oracle))
-            adj_variance.append(str(r.variance))
+            adj_manifest[r.processing_hour] = (str(r.ocs_manifest))
+            adj_t1[r.processing_hour] = (str(r.t1_oracle))
+            adj_variance[r.processing_hour] = (str(r.variance))
     
     # results.close()
 
@@ -622,6 +654,28 @@ def get_dqchecks2_js():
         "adj_manifest": adj_manifest,
         "adj_t1": adj_t1,
         "adj_variance": adj_variance,
+    }
+
+    return jsonify(result_set)
+
+@app.route('/dq_checks_search_oracle', methods=['POST'])
+def dq_checks_search_oracle():
+    if request.method == "POST":
+        query_date = request.form["date"]
+        variance_com = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="com",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_vou = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="vou",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_first = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="first",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_mon = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="mon",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_cm = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="cm",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_adj = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="adj",manifest_oracle_monitoring.file_date == query_date)).scalar()
+
+    result_set = {
+        "variance_com": str(variance_com),
+        "variance_vou": str(variance_vou),
+        "variance_first": str(variance_first),
+        "variance_mon": str(variance_mon),
+        "variance_cm": str(variance_cm),
+        "variance_adj": str(variance_adj)
     }
 
     return jsonify(result_set)
