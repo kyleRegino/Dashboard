@@ -31,7 +31,10 @@ $(document).ready(function() {
         }); 
     });
 
-
+    jQuery('#cdr_date').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
 
 
 }) 

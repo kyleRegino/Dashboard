@@ -23,7 +23,7 @@
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">COM</h4>
                             <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
                         </div>
-                        <h2 class="font-weight-semibold mb-0">{{variance_com}}</h2>
+                        <h2 id="variance_com" class="font-weight-semibold mb-0">{{variance_com}}</h2>
                     </div>
                     <!-- <canvas class="mt-n4" height="90" id="total-revenue"></canva> -->
                 </div>
@@ -37,7 +37,7 @@
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">VOU</h4>
                             <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
                         </div>
-                        <h2 class="font-weight-semibold mb-0">{{variance_vou}}</h2>
+                        <h2 id="variance_vou" class="font-weight-semibold mb-0">{{variance_vou}}</h2>
                     </div>
                     <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-1"></canva> -->
                 </div>
@@ -52,7 +52,7 @@
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">FIRST</h4>
                             <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
                         </div>
-                        <h2 class="font-weight-semibold mb-0">{{variance_first}}</h2>
+                        <h2 id="variance_first" class="font-weight-semibold mb-0">{{variance_first}}</h2>
                     </div>
                     <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-2"></canva> -->
                 </div>
@@ -66,7 +66,7 @@
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">MON</h4>
                             <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
                         </div>
-                        <h2 class="font-weight-semibold mb-0">{{variance_mon}}</h2>
+                        <h2 id="variance_mon" class="font-weight-semibold mb-0">{{variance_mon}}</h2>
                     </div>
                     <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
                 </div>
@@ -79,7 +79,7 @@
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">CM</h4>
                             <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
                         </div>
-                        <h2 class="font-weight-semibold mb-0">{{variance_cm}}</h2>
+                        <h2 id="variance_cm" class="font-weight-semibold mb-0">{{variance_cm}}</h2>
                     </div>
                     <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
                 </div>
@@ -92,12 +92,26 @@
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">ADJ</h4>
                             <!-- <h2 class="font-weight-semibold mb-0">+1.37%</h2> -->
                         </div>
-                        <h2 class="font-weight-semibold mb-0">{{variance_adj}}</h2>
+                        <h2 id="variance_adj" class="font-weight-semibold mb-0">{{variance_adj}}</h2>
                     </div>
                     <!-- <canvas class="mt-n4" height="90" id="stats-line-graph-3"></canva> -->
                 </div>
             </div>
             
+        </div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class="col-md-4 grid-margin">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-body">
+                <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
+                    Date:
+                    <input type="text" name="cdr_date_hive" id="cdr_date" required>
+                    <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -213,3 +227,7 @@
 
 {% endblock content %}
 
+{% block scripts %}
+<script src="../static/js/dq_manvshive.js"></script>
+<script src="../static/js/submit_cdr.js"></script>
+{% endblock %}
