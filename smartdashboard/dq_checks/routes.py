@@ -80,6 +80,7 @@ def dqchecks_manvshive_js():
             adj_t1[r.processing_hour] = (str(r.t1_hive))
             adj_variance[r.processing_hour] = (str(r.variance))
 
+
     result_set = {
         "com_manifest": com_manifest,
         "com_t1": com_t1,

@@ -31,16 +31,15 @@
           </div>
         </div>
       </div>
-      
-      <!-- LONG RUNNING JOBS -->
+
+      <!-- COMPLETED JOBS -->
       <div class="col-md-6 grid-margin stretch-card">
-        <div class="card card-style border-left-1-2">
+        <div class="card card-style border-left-2">
           <div class="card-body pb-0">
-            <a href="{{ url_for('lrj_blueprint.long_running_job')}}" class="stretched-link" name="running"></a>
-            <div class="d-flex justify-content-between" type="submit" name="running">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOBS (more than 30 mins)</h4>
+            <div class="d-flex justify-content-between" type="submit">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED JOBS</h4>
             </div>
-            <h2 class="font-weight-semibold mb-0">{{ long_running_count }}</h2>
+            <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
           </div>
         </div>
       </div>
@@ -53,18 +52,6 @@
               <h4 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOBS</h4>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ running }}</h2>
-          </div>
-        </div>
-      </div>
-
-      <!-- COMPLETED JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
-        <div class="card card-style border-left-2">
-          <div class="card-body pb-0">
-            <div class="d-flex justify-content-between" type="submit">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED JOBS</h4>
-            </div>
-            <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
           </div>
         </div>
       </div>
@@ -89,6 +76,19 @@
               <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ misfired }}</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- LONG RUNNING JOBS -->
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card card-style border-left-1-2">
+          <div class="card-body pb-0">
+            <a href="{{ url_for('lrj_blueprint.long_running_job')}}" class="stretched-link" name="running"></a>
+            <div class="d-flex justify-content-between" type="submit" name="running">
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOBS (more than 30 mins)</h4>
+            </div>
+            <h2 class="font-weight-semibold mb-0">{{ long_running_count }}</h2>
           </div>
         </div>
       </div>

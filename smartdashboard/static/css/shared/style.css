@@ -1098,6 +1098,12 @@ pre {
     flex: 0 0 50%;
     max-width: 48.4%; }
 
+  .col-md-16 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 21%;
+    flex: 0 0 21%;
+    max-width: 21%; }
+
   .order-md-first {
     -webkit-box-ordinal-group: 0;
     -ms-flex-order: -1;
@@ -10911,22 +10917,6 @@ ul {
   border-radius: 20px !important;
 }
 
-
-/* Dynamic table for topsku */
-.outer {position:relative}
-.inner {
-  overflow-x:scroll;
-  overflow-y:visible;
-  /* width:400px; 
-  margin-left:100px; */
-}
-.fix {
-  /* position: absolute; */
-  *position: relative; /*ie7*/
-  margin-left: -100px;
-  width: 100px;
-}
-
 .disabledbutton {
   pointer-events: none;
   opacity: 0.4;
@@ -10944,6 +10934,7 @@ ul {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   font-weight: 900 !important;
 }
+
 
   
 

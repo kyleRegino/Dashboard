@@ -12,118 +12,26 @@
     </div>
 </div>
 
-<!-- Body -->
-<div class="col-md-12 grid-margin">
-    <div class="card shadow mb-4">
-
-        <div class="card-header py-3">
-            <div class="row-1 align-items-end">
-                <div class="col-11">
-                <h1 class="h3 text-gray-800">PROD vs TALENDFC</h1>
-                </div>
-                <div class="col-1">
-                <div class="sort-wrapper">
-                    <div class="dropdown ml-3 toolbar-item">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownexport">
-                        <a class="dropdown-item" href="#">Export as PDF</a>
-                        <a class="dropdown-item" href="#">Export as Exel</a>
-                        <a class="dropdown-item" href="#">Export as CSV</a>
-                    </div>
+<div class='row'>
+    <div class="col-md-12 grid-margin">
+        <div class="card shadow mb-4 card-border">
+            <!-- <div class="card-header py-3">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">TOPSKU</h1>
                     </div>
                 </div>
-                </div>
+            </div> -->
+            <div class="card-body ">
+                <div id="topsku"></div>
             </div>
-        </div>
-        
-        <div class="card-body">
-
-            <div class="row">
-                <div class="col-md-13">
-                    <form action="/dashboard" method="post" autocomplete="off"> 
-                    Start Date:
-                    <input type="text" name="datetimepickermin" id="min" placeholder= {{ mindate }}>
-                    End Date:
-                    <input type="text" name="datetimepickermax" id="max" />
-                    <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
-                    </form>  
-                </div>
-                <div class="col-md-14">
-                    <div class="page-header-toolbar">
-                    <div class="dropdown toolbar-item">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownsorting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Day</button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownsorting">
-                        <a class="dropdown-item" href="#">Last Day</a>
-                        <a class="dropdown-item" href="#">Last Month</a>
-                        <a class="dropdown-item" href="#">Last Year</a>
-                        </div>
-                    </div>
-                    </div>
-                </div>  
-                <div class="col-md-15 table_filter">
-                    <form action="/search_dashboard" method="post" autocomplete="off"> 
-                        <div class="input-group justify-content-end">
-                            <input type="text" name="tag" id="tag" placeholder= {{tag}} >
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary" type="submit" value="Search">Search</button>
-                                <a class="btn btn-outline-primary" href="{{ url_for('topksu_talend')}}">
-                                    <i class="mdi mdi-home-outline"></i>Home
-                                </a>
-                            </div>
-                        </div>
-                    </form>  
-                </div>
-            </div>
-            
-            
-            <div class="table-responsive">
-                <div class="col-12">
-                    <div class="outer">
-                        <div class="inner">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                    <th class="fix">Location</th>
-                                    <th class="fix">Brand</th>
-                                    <th>0500H</th>
-                                    <th>0900H</th>
-                                    <th>1300H</th>
-                                    <th>1700H</th>
-                                    <th>2100H</th>
-                                    <th>0100H</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for prod in query_prod %}
-                                    <tr">
-                                        <!-- Prod -->
-                                        <td class="fix">PROD</td>
-                                        
-                                        <td >{{prod.brand}}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    
-                                    </tr>
-                                    {% endfor %}
-                                    
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>    
-                </div>                    
-            </div>
-        
-            
-            
-            
         </div>
     </div>
-</div>  
+</div>
 
 
 {% endblock content %}
+
+{% block scripts %}
+<script src="../static/js/topsku.js"></script>
+{% endblock %}

@@ -23,6 +23,7 @@ Base.prepare(db.engine, reflect=True)
 bca_monitoring_table = Base.classes.job_bca_monitoring
 manifest_hive_monitoring = Base.classes.manifest_hive_monitoring
 manifest_oracle_monitoring = Base.classes.manifest_oracle_monitoring
+top_sku_talendfc = Base.classes.top_sku_talendfc
 
 
 session = Session(db.engine)
@@ -33,8 +34,10 @@ from smartdashboard.dashboard.routes import dashboard_blueprint
 from smartdashboard.long_running_jobs.routes import lrj_blueprint
 from smartdashboard.bca_monitoring.routes import bca_blueprint
 from smartdashboard.dq_checks.routes import dq_blueprint
+from smartdashboard.topsku.routes import topsku_blueprint
 
 app.register_blueprint(dashboard_blueprint)
 app.register_blueprint(lrj_blueprint)
 app.register_blueprint(bca_blueprint)
 app.register_blueprint(dq_blueprint)
+app.register_blueprint(topsku_blueprint)
