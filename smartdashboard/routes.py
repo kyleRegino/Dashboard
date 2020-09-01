@@ -30,7 +30,6 @@ def topksu_talend():
 
     print(query_prod)
 
-<<<<<<< HEAD
     return render_template('topsku_talend.html', query_prod = query_prod, query_talend = query_talend)
 
 
@@ -691,6 +690,3 @@ def get_bca_monitoring():
     }
 
     return jsonify(result_set)
-=======
-    return render_template('topsku_talend.html', query_prod = query_prod, query_talend = query_talend)
->>>>>>> 66170de72d8da198a3edb2282e31b1df1ce730bf
