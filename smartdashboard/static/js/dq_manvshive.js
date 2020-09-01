@@ -4,7 +4,7 @@ var lines = [];
 var variance_chart = null;
 function update_data_hive(cdr_date){
     $.ajax({
-        url: "/get_dqchecks_js",
+        url: "/dqchecks_manvshive_js",
         method: "POST",
         dataType: "json",
         data: {"cdr_date": cdr_date}
@@ -34,8 +34,9 @@ function update_data_hive(cdr_date){
     });
 }
 
+
 $.ajax({
-    url: "/get_dqchecks_js",
+    url: "/dqchecks_manvshive_js",
     method: "GET",
     dataType: "json"
 }).done(function (data) {

@@ -2,7 +2,7 @@ $("#cdr_date_form_hive").submit(function(event){
     event.preventDefault();
     var cdr_date = $("#cdr_date").val();
     $.ajax({
-        url: "/dq_checks_search_hive",
+        url: "/dqchecks_manvshive_search",
         method: "POST",
         data: { "date": cdr_date}
     }).done(function(data){
@@ -21,7 +21,7 @@ $("#cdr_date_form_oracle").submit(function (event) {
     event.preventDefault();
     var cdr_date = $("#cdr_date").val();
     $.ajax({
-        url: "/dq_checks_search_oracle",
+        url: "/dqchecks_manvsoracle_search",
         method: "POST",
         data: { "date": cdr_date }
     }).done(function (data) {

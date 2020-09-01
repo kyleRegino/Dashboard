@@ -24,7 +24,7 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-1">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='RUNNING') }}" class="stretched-link"></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='RUNNING') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">JOBS STILL RUNNING</h4>
             </div>
@@ -37,7 +37,7 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-2">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='OK') }}" class="stretched-link"></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='OK') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED LONG RUNNING JOBS</h4>
             </div>
@@ -51,7 +51,7 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-3">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='ERROR') }}" class="stretched-link"></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='ERROR') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR JOBS</h4>
             </div>
@@ -64,7 +64,7 @@
       <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-4">
           <div class="card-body pb-0">
-            <a href="{{ url_for('status_job', status='MISFIRED') }}" class="stretched-link"></a>
+            <a href="{{ url_for('lrj_blueprint.status_job', status='MISFIRED') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
               <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
             </div>
@@ -152,7 +152,7 @@
                   <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
                   <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
                 </div>
-                <a class="btn btn-outline-primary" href="{{ url_for('long_running_job')}}">
+                <a class="btn btn-outline-primary" href="{{ url_for('lrj_blueprint.long_running_job')}}">
                   <i class="mdi mdi-home-outline"></i>Home
                 </a>
               </div>
@@ -200,9 +200,9 @@
         {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
           {% if page_num %}
             {% if query.page == page_num %}
-              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('long_running_job', page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.long_running_job', page=page_num)}}">{{ page_num }}</a>
             {% else %}
-              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('long_running_job', page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.long_running_job', page=page_num)}}">{{ page_num }}</a>
             {% endif %}
           {% else %}
               ... 
@@ -290,4 +290,8 @@
 
 
 {% endblock content %}
+
+{% block scripts %}
+<script src="../static/js/job_monitoring.js"></script>
+{% endblock %}
 
