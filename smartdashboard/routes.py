@@ -634,7 +634,6 @@ def get_dqchecks2_js():
             adj_variance[r.processing_hour] = (str(r.variance))
     
     # results.close()
-
     result_set = {
         "com_manifest": com_manifest,
         "com_t1": com_t1,

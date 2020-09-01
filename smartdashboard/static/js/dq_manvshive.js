@@ -1,5 +1,7 @@
 var cdr_types = ["com", "vou", "cm", "adj", "first", "mon"];
 var charts = [];
+var lines = [];
+var variance_chart = null;
 function update_data_hive(cdr_date){
     $.ajax({
         url: "/get_dqchecks_js",
@@ -7,6 +9,7 @@ function update_data_hive(cdr_date){
         dataType: "json",
         data: {"cdr_date": cdr_date}
     }).done(function (data) {
+        lines = [];
         for (var i = 0; i < charts.length; i++) {
             var manifest = cdr_types[i] + "_manifest";
             var t1 = cdr_types[i] + "_t1";
@@ -21,7 +24,13 @@ function update_data_hive(cdr_date){
                 name: 'Variance',
                 data: data[variance]
             }]);
+            lines.push({
+                name: cdr_types[i] + ' variance',
+                data: data[variance],
+                type: 'line'
+            });
         }
+        variance_chart.updateSeries(lines);
     });
 }
 
@@ -70,7 +79,7 @@ $.ajax({
                 // colors: ['transparent']
             },
             xaxis: {
-                categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
             },
             fill: {
                 opacity: 1
@@ -79,7 +88,42 @@ $.ajax({
         var chart = new ApexCharts(document.querySelector(queryselect), options);
         charts.push(chart);
         chart.render();
+        lines.push({
+            name: c + ' variance',
+            data: data[variance],
+            type: 'line'
+        });
     }
+    var options = {
+        series: lines,
+        chart: {
+            type: 'line',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            // colors: ['transparent']
+        },
+        xaxis: {
+            categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+        },
+        fill: {
+            opacity: 1
+        },
+    };
+    variance_chart = new ApexCharts(document.querySelector("#variances_hive"), options);
+    variance_chart.render();
 });
 
 
