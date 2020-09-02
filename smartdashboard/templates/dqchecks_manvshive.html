@@ -15,10 +15,9 @@
     <div class="col-md-12 align-self-center">
         <div class="row">
             <!-- RUNNING JOBS -->
-            <div class="col-md-2 grid-margin stretch-card">
+            <div class="col-md-2 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
-                        <a href="{{ running }}" class="stretched-link"></a>
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">COM</h4>
                         </div>
@@ -28,7 +27,7 @@
             </div>
             
             <!-- COMPLETED JOBS -->
-            <div class="col-md-2 grid-margin stretch-card">
+            <div class="col-md-2 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -41,7 +40,7 @@
             
             
             <!-- ERROR JOBS -->
-            <div class="col-md-2 grid-margin stretch-card">
+            <div class="col-md-2 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -53,7 +52,7 @@
             </div>
             
             <!-- MISFIRED JOBS -->
-            <div class="col-md-2 grid-margin stretch-card">
+            <div class="col-md-2 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -64,7 +63,7 @@
                 </div>
             </div>
 
-            <div class="col-md-2 grid-margin stretch-card">
+            <div class="col-md-2 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -75,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="col-md-2 grid-margin stretch-card">
+            <div class="col-md-2 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -91,15 +90,67 @@
 </div>
 
 <div class='row'>
-    <div class="col-md-12 grid-margin">
-        <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
-            Date:
-            <input type="text" name="cdr_date_hive" id="cdr_date" size="12" required>
-            <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
-            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
-                <i class="mdi mdi-home-outline"></i>Home
-            </a> 
-        </form>      
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
+                            Date:
+                            <input type="text" name="cdr_date_hive" id="cdr_date" size="12" required>
+                            <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
+                            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
+                                <i class="mdi mdi-home-outline"></i>Home
+                            </a> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">DATA</h4>
+                        </div>
+                        <h2 id="variance_data" class="font-weight-semibold mb-0">{{variance_data}}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">VOICE</h4>
+                        </div>
+                        <h2 id="variance_voice" class="font-weight-semibold mb-0">{{variance_voice}}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">SMS</h4>
+                        </div>
+                        <h2 id="variance_sms" class="font-weight-semibold mb-0">{{variance_sms}}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">CLR</h4>
+                        </div>
+                        <h2 id="variance_clr" class="font-weight-semibold mb-0">{{variance_clr}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -230,6 +281,77 @@
     </div>
 </div>
 
+<!-- DATA -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">DATA</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="data_hive"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VOICE -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">VOICE</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="voice_hive"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SMS -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">SMS</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="sms_hive"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CLR -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">CLR</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="clr_hive"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}
 

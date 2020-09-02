@@ -12,6 +12,10 @@ $("#cdr_date_form_hive").submit(function(event){
         $("#variance_adj").text(data.variance_adj);
         $("#variance_first").text(data.variance_first);
         $("#variance_mon").text(data.variance_mon);
+        $("#variance_data").text(data.variance_data);
+        $("#variance_voice").text(data.variance_voice);
+        $("#variance_sms").text(data.variance_sms);
+        $("#variance_clr").text(data.variance_clr);
         update_data_hive(cdr_date);
         update_colors();
     });
@@ -32,6 +36,10 @@ $("#cdr_date_form_oracle").submit(function (event) {
         $("#variance_adj").text(data.variance_adj);
         $("#variance_first").text(data.variance_first);
         $("#variance_mon").text(data.variance_mon);
+        $("#variance_data").text(data.variance_data);
+        $("#variance_voice").text(data.variance_voice);
+        $("#variance_sms").text(data.variance_sms);
+        $("#variance_clr").text(data.variance_clr);
         update_data_oracle(cdr_date);
         update_colors();
     });
