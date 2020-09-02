@@ -81,8 +81,11 @@
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">   
         <div class="card card-border">
-          <div class="card-body">
-            <div class="my-auto" id="donutchart_longrunning" height="200"></div>
+          <div class="card-header py-3 card-border-header ">
+            <h1 class="h3 text-gray-800">Overall Status </h1>
+          </div>
+          <div class="card-body  justify-content-center">
+            <div class="my-auto" id="donutchart_longrunning" height="100"></div>
           </div>
         </div>
       </div>
@@ -94,14 +97,14 @@
 <div class="col-md-12 grid-margin">
   <div class="card shadow mb-4 card-border">
 
-    <div class="card-header py-3 card-border-header">
-      <div class="row-1 align-items-end">
-        <div class="col-11">
+    <div class="card-header py-3 card-border-header ">
+      <div class="row-1 d-flex align-items-end ">
+        <div class="col-sm-6">
           <h1 class="h3 text-gray-800">Long Running Jobs</h1>
         </div>
-        <div class="col-1">
-          <div class="sort-wrapper">
-            <div class="dropdown ml-3 toolbar-item">
+        <div class="col-sm-6 d-flex justify-content-end">
+          <div class="sort-wrapper d-flex justify-content-end">
+            <div class="dropdown toolbar-item">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
               <div class="dropdown-menu" aria-labelledby="dropdownexport">
                 <a class="dropdown-item" href="#">Export as PDF</a>
@@ -117,31 +120,19 @@
     <div class="card-body">
 
       <div class="row">
-        <div class="col-md-13">
+        <div class="col-md-7 date-1">
           <form action="/lrj_datetime" method="post" autocomplete="off"> 
             Start Date:
-            <input type="text" name="datetimepickermin" id="min" />
+            <input type="text" name="datetimepickermin" id="min" size="12" />
             End Date:
-            <input type="text" name="datetimepickermax" id="max" />
+            <input type="text" name="datetimepickermax" id="max" size="12" />
             <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
           </form>  
         </div>
-        <div class="col-md-14">
-          <!-- <div class="page-header-toolbar">
-            <div class="dropdown toolbar-item">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownsorting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Day</button>
-              <div class="dropdown-menu" aria-labelledby="dropdownsorting">
-                <a class="dropdown-item" href="#">Last Day</a>
-                <a class="dropdown-item" href="#">Last Month</a>
-                <a class="dropdown-item" href="#">Last Year</a>
-              </div>
-            </div>
-          </div> -->
-        </div>  
-        <div class="col-md-15 table_filter">
+        <div class="col-md-5 date-2 table_filter d-flex justify-content-end">
           <form action="/lrj_search" method="post" autocomplete="off"> 
             <div class="input-group justify-content-end">
-              <input type="text" name="tag" id="tag">
+              <input type="text" name="tag" id="tag" size="15">
               <div class="input-group-append">
                 <button class="btn btn-outline-primary" type="submit" value="Search">Search</button>
                 <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

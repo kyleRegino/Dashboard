@@ -58,7 +58,7 @@ $.ajax({
         
 
         chart: {
-            width: 500,
+            width: "100%",
             type: 'donut', 
         },
         colors: ['#ffaf00', '#19d895', "#ff6258", "#8862e0"],
@@ -100,7 +100,7 @@ $.ajax({
       series: [ data.job_status[0], data.job_status[1], data.job_status[2], data.job_status[3]],
       labels: [data.job_Label[0], data.job_Label[1], data.job_Label[2], data.job_Label[3]],
       chart: {
-        width: 450,
+        width: "100%",
         type: 'donut',
       },
       plotOptions: {
@@ -136,7 +136,7 @@ $.ajax({
                   show: true,
                   showAlways: false,
                   label: 'Total',
-                  fontSize: '22px',
+                  fontSize: '150%',
                   fontFamily: 'Helvetica, Arial, sans-serif',
                   fontWeight: 600,
                   color: '#373d3f',
@@ -155,20 +155,20 @@ $.ajax({
       dataLabels: {
           enabled: true,
       },
-      title: {
-          text: 'Overall Status',
-          align: 'left',
-          // margin: 10,
-          offsetX: 0,
-          offsetY: 0,
-          floating: false,
-          style: {
-            fontSize:  '30px',
-            fontWeight:  'bold',
-            fontFamily: undefined,
-            color:  '#263238'
-          },
-      },      
+      // title: {
+      //     text: 'Overall Status',
+      //     align: 'left',
+      //     // margin: 10,
+      //     offsetX: 0,
+      //     offsetY: -170,
+      //     floating: false,
+      //     style: {
+      //       fontSize:  '200%',
+      //       fontWeight:  'bold',
+      //       fontFamily: undefined,
+      //       color:  '#263238'
+      //     },
+      // },      
       legend: {
         position: 'bottom',
         horizontalAlign: 'center',

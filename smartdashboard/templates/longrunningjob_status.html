@@ -82,12 +82,11 @@
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">   
         <div class="card">
-          <div class="p-4 pr-5 border-bottom bg-light d-flex justify-content-between">
-            <h5 class="font-weight-semibold">Overall Status</h5>
-            <div id="doughnut-chart-legend" class="mr-4"></div>
+          <div class="card-header py-3 card-border-header ">
+            <h1 class="h3 text-gray-800">Overall Status </h1>
           </div>
           <div class="card-body d-flex justify-content-center">
-            <div class="my-auto" id="donutchart" height="200"></div>
+            <div class="my-auto" id="donutchart_longrunning" height="200"></div>
           </div>
         </div>
       </div>
@@ -101,12 +100,12 @@
   <div class="card shadow mb-4 card-border">
 
     <div class="card-header py-3 card-border-header">
-      <div class="row-1 align-items-end">
-        <div class="col-11" id="find_status">
+      <div class="row-1 d-flex align-items-end">
+        <div class="col-sm-6" id="find_status">
           <h1 class="h3 text-gray-800" id="current_status">{{ status }} JOBS</h1>
         </div>
-        <div class="col-1">
-          <div class="sort-wrapper">
+        <div class="col-sm-6 d-flex justify-content-end">
+          <div class="sort-wrapper d-flex justify-content-end">
             <div class="dropdown ml-3 toolbar-item">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
               <div class="dropdown-menu" aria-labelledby="dropdownexport">
@@ -123,7 +122,7 @@
     <div class="card-body">
 
       <div class="row">
-        <div class="col-md-13">
+        <div class="col-md-7 date-1">
           <form action="/lrj_datetime" method="post" autocomplete="off"> 
             Start Date:
             <input type="text" name="datetimepickermin" id="min" />
@@ -132,19 +131,7 @@
             <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
           </form>  
         </div>
-        <div class="col-md-14">
-          <!-- <div class="page-header-toolbar">
-            <div class="dropdown toolbar-item">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownsorting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Day</button>
-              <div class="dropdown-menu" aria-labelledby="dropdownsorting">
-                <a class="dropdown-item" href="#">Last Day</a>
-                <a class="dropdown-item" href="#">Last Month</a>
-                <a class="dropdown-item" href="#">Last Year</a>
-              </div>
-            </div>
-          </div> -->
-        </div>  
-        <div class="col-md-15 table_filter">
+        <div class="col-md-5 date-2 table_filter d-flex justify-content-end">
           <form action="/lrj_search" method="post" autocomplete="off" id="form"> 
             <div class="input-group justify-content-end">
               <input type="text" name="tag" id="tag" > 
