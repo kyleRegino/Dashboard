@@ -1,5 +1,6 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_Monitoring
+from datetime import date
 
 dashboard_blueprint = Blueprint('dashboard_blueprint', __name__)
 
@@ -30,6 +31,8 @@ def dashboard():
         print(min)
         print(max)
 
+    thedate = date.today()
+
     return render_template("dashboard.html", query = query_string,
                                             running = query_job_running,
                                             ok = query_job_ok,
@@ -38,7 +41,8 @@ def dashboard():
                                             query_distinct_count = query_distinct_count,
                                             long_running_count = long_running_count,
                                             next_num=next_num,
-                                            prev_num=prev_num
+                                            prev_num=prev_num,
+                                            date=thedate
                                             )
 
 @dashboard_blueprint.route('/get_job_monitoring', methods=['GET'])

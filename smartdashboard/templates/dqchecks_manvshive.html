@@ -91,24 +91,16 @@
 </div>
 
 <div class='row'>
-    <div class="col-md-16 grid-margin">
-        <!-- <div class="card shadow mb-4 card-border">
-            <div class="card-body"> -->
-                <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
-                    Date:
-                    <input type="text" name="cdr_date_hive" id="cdr_date" required>
-                    <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
-                </form>
-                
-            <!-- </div>
-        </div> -->
+    <div class="col-md-12 grid-margin">
+        <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
+            Date:
+            <input type="text" name="cdr_date_hive" id="cdr_date" size="12" required>
+            <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
+            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
+                <i class="mdi mdi-home-outline"></i>Home
+            </a> 
+        </form>      
     </div>
-    <div class="col-md-14 grid-margin">
-        <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
-            <i class="mdi mdi-home-outline"></i>Home
-        </a>
-    </div>
-    
 </div>
 
 
