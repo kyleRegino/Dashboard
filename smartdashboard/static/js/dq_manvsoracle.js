@@ -1,4 +1,4 @@
-var cdr_types = ["com", "vou", "cm", "adj", "first", "mon"];
+var cdr_types = ["com", "vou", "cm", "adj", "first", "mon", "data", "voice", "sms", "clr"];
 var charts = [];
 var lines = [];
 var variance_chart = null;
