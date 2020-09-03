@@ -1,3 +1,8 @@
+$('#cdr_date').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
 $("#cdr_date_form_hive").submit(function(event){
     event.preventDefault();
     var cdr_date = $("#cdr_date").val();
