@@ -1,204 +1,122 @@
+var cdr_types = ["home", "smart bro prepaid", "smart prepaid", "sun bwl flp", "sun bwl prepaid"];
+var series_hour = [];
+var series_day = [];
+
 $.ajax({
     url: "/topsku_js",
     method: "GET",
     dataType: "json"
 }).done(function (data) {
-    var options = {
-        series: [{
-        name: 'Home',
-        type: 'column',
-        data: data["home"]
-      }, {
-        name: 'Smart Bro Prepaid',
-        type: 'column',
-        data: data["smart_bro_prepaid"]
-      }, {
-        name: 'Smart Prepaid',
-        type: 'column',
-        data: data["smart_prepaid"]
-      }, {
-        name: 'Sun BW FLP',
-        type: 'column',
-        data: data["sun_bwl_flp"]
-      }, {
-        name: 'Sun BW Prepaid',
-        type: 'column',
-        data: data["sun_bwl_prepaid"]
-      }, {
-        name: 'Revenue',
-        type: 'line',
-        data: [20, 29, 37, 36, 44, 45]
-      }],
-        chart: {
-          height: 350,
-          type: 'line',
-          stacked: false,
-          // toolbar: {
-          //     show: true,
-          //     autoSelected: 'zoom'
-          // }
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '20%',
-          endingShape: 'rounded'
-        },
-      },
-      dataLabels: {
-        enabled: false,
-        // enabledOnSeries: [2]
-      },
-      stroke: {
-        show: true,
-        width: [0, 0, 0, 0, 0, 5]
-      },
-      title: {
-        text: 'Amount per Brand every 4hrs',
-        align: 'left',
-        offsetX: 110
-      },
-      xaxis: {
-        categories: ['0500H', '0900H', '1300H', '1700H', '2100H', '0100H'],
-      },
-      yaxis: [
-        {
-            seriesName: 'Home',
-            // axisTicks: {
-            //   show: true
-            // },
-            // axisBorder: {
-            //   show: true,
-            // },
-            // labels: {
-            //     style: {
-            //       colors: '#008FFB',
-            //     }
-            // },
-            // title: {
-            //   text: "Columns"
-            // },
-            tooltip: {
-                enabled: true
-              }
-          },
-          {
-            seriesName: 'Home',
-            show: false,
-            axisTicks: {
-                show: true
-              },
-              axisBorder: {
-                show: true,
-              },
-              labels: {
-                  style: {
-                    colors: '#008FFB',
-                  }
-              },
-              title: {
-                text: "Columns"
-              },
-              tooltip: {
-                  enabled: true
-                }
-          }, 
-          {
-            seriesName: 'Home',
-            show: false,
-            axisTicks: {
-                show: true
-              },
-              axisBorder: {
-                show: true,
-              },
-              labels: {
-                  style: {
-                    colors: '#008FFB',
-                  }
-              },
-              title: {
-                text: "Columns"
-              },
-              tooltip: {
-                  enabled: true
-                }
-          }, 
-          {
-            seriesName: 'Home',
-            show: false,
-            axisTicks: {
-                show: true
-              },
-              axisBorder: {
-                show: true,
-              },
-              labels: {
-                  style: {
-                    colors: '#008FFB',
-                  }
-              },
-              title: {
-                text: "Columns"
-              },
-              tooltip: {
-                  enabled: true
-                }
-          }, 
-          {
-            seriesName: 'Home',
-            show: false,
-            axisTicks: {
-                show: true
-              },
-              axisBorder: {
-                show: true,
-              },
-              labels: {
-                  style: {
-                    colors: '#008FFB',
-                  }
-              },
-              title: {
-                text: "Columns"
-              },
-              tooltip: {
-                  enabled: true
-                }
-          }, {
-            opposite: true,
-            seriesName: 'Revenue',
-            axisTicks: {
-              show: true
-            },
-            axisBorder: {
-              show: true,
-            },
-            labels: {
-                style: {
-                  colors: '#FEB019',
-                },
-            },
-            title: {
-              text: "Line"
-            }
-          }
-      ],
-      tooltip: {
-        fixed: {
-          enabled: true,
-          position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
-          offsetY: 30,
-          offsetX: 60
-        },
-      },
-      legend: {
-        horizontalAlign: 'left',
-        offsetX: 40
-      },
-    };
 
+  for (c of cdr_types){
+    var brand = c;
+    series_hour.push({
+        name: brand,
+        data: data[brand],
+        type: 'column'
+    });
+  }
+  series_hour.push({
+    name: 'Total per Hour',
+    data: data['total_hour'],
+    type: 'line'
 
-    var chart = new ApexCharts(document.querySelector("#topsku"), options);
-    chart.render();
+  })
+  console.log(series_hour)
+
+  var options_hour = {
+    series: series_hour,
+    chart: {
+      height: 350,
+      type: 'line',
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '10%',
+        endingShape: 'rounded'
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: [0, 0, 0, 0, 0, 5],
+      curve: 'smooth'
+    },
+    grid: {
+      borderColor: '#e7e7e7',
+      row: {
+        colors: ['#f3f3f3', 'transparent'], 
+        opacity: 0.5
+      },
+    },
+    fill: {
+      opacity: 1
+    },
+    title: {
+      text: 'Amount per Brand every 4hrs',
+      align: 'left',
+      offsetX: 110
+    },
+    xaxis: {
+      categories: ['0500H', '0900H', '1300H', '1700H', '2100H', '0100H'],
+    },
+  };
+  var chart = new ApexCharts(document.querySelector("#topsku"), options_hour);
+  chart.render();
+
+  // PER DAY
+  var options_day = {
+    series: [{
+      name: 'Total Amount per Day',
+      data: data['total_day'],
+      type: 'bar'
+    }],
+    chart: {
+      height: 350,
+      type: 'line',
+    },
+    plotOptions: {
+      bar: {
+        // horizontal: false,
+        columnWidth: '5%',
+        endingShape: 'rounded'
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      curve: 'smooth'
+    },
+    grid: {
+      borderColor: '#e7e7e7',
+      row: {
+        colors: ['#f3f3f3', 'transparent'], 
+        opacity: 0.5
+      },
+    },
+    fill: {
+      opacity: 1
+    },
+    title: {
+      text: 'Amount of Brands Weekly',
+      align: 'left',
+      offsetX: 110
+    },
+    xaxis: {
+      categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    },
+  };
+  var day = new ApexCharts(document.querySelector("#topsku_day"), options_day);
+  day.render();
+  
+  
 });
+
+
+

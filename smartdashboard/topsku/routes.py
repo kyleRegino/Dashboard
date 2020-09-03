@@ -3,6 +3,7 @@ from smartdashboard import session, top_sku_talendfc
 from smartdashboard.utils import init_list
 from datetime import date
 from sqlalchemy.sql import func
+from sqlalchemy import or_, and_
 
 topsku_blueprint = Blueprint('topsku_blueprint', __name__)
 
@@ -23,7 +24,8 @@ def topsku_js():
     smart_prepaid = []
     sun_bwl_flp = []
     sun_bwl_prepaid = []
-    total = []
+    total_hour = []
+    total_day = []
 
     for r in results:
         if r.brand == "HOME":
@@ -37,16 +39,29 @@ def topsku_js():
         elif r.brand == "SUN BW PREPAID":
             sun_bwl_prepaid.append(str(r.txn_amount))
 
-    total_brands = session.query(func.sum(top_sku_talendfc.txn_amount)).scalar() 
-    # total_brands = session.query(func.sum(top_sku_talendfc.txn_amount)).scalar().filter(and_(top_sku_talendfc.processing_dthr =="0500H", top_sku_talendfc.file_date == date.today())).scalar()
-    print(total_brands)
+    #per hour run
+    total_hour_query = session.query(top_sku_talendfc).with_entities(top_sku_talendfc.processing_dthr).distinct()
+    for hour in total_hour_query:
+        hours = session.query(func.sum(top_sku_talendfc.txn_amount)).filter(top_sku_talendfc.processing_dthr == hour).scalar()
+        total_hour.append(hours)
+
+    print(total_hour)
+
+    #per day run
+    total_day_query = session.query(top_sku_talendfc).with_entities(top_sku_talendfc.txn_date).distinct()
+    for day in total_day_query:
+        days = session.query(func.sum(top_sku_talendfc.txn_amount)).filter(top_sku_talendfc.txn_date == day).scalar()
+        total_day.append(days)
+    print(total_day)
 
     result_set = {
         "home": home,
-        "smart_bro_prepaid": smart_bro_prepaid,
-        "smart_prepaid": smart_prepaid,
-        "sun_bwl_flp": sun_bwl_flp,
-        "sun_bwl_prepaid": sun_bwl_prepaid,
+        "smart bro prepaid": smart_bro_prepaid,
+        "smart prepaid": smart_prepaid,
+        "sun bwl flp": sun_bwl_flp,
+        "sun bwl prepaid": sun_bwl_prepaid,
+        "total_hour": total_hour,
+        "total_day": total_day
     }
 
     return jsonify(result_set)

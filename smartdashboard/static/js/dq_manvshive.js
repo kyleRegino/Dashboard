@@ -77,7 +77,15 @@ $.ajax({
             stroke: {
                 show: true,
                 width: 2,
+                curve: 'smooth'
                 // colors: ['transparent']
+            },
+            grid: {
+                borderColor: '#e7e7e7',
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
             },
             xaxis: {
                 categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
@@ -114,7 +122,15 @@ $.ajax({
         stroke: {
             show: true,
             width: 2,
+            curve: 'smooth'
             // colors: ['transparent']
+        },
+        grid: {
+            borderColor: '#e7e7e7',
+            row: {
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+            },
         },
         xaxis: {
             categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],

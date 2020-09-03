@@ -1103,6 +1103,16 @@ pre {
     -ms-flex: 0 0 21%;
     flex: 0 0 21%;
     max-width: 21%; }
+  
+  .col-md-17 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 20%; 
+    position: relative;
+    width: 100%;
+    padding-right: 9.5px;
+    padding-left: 9.5px;}
 
   .order-md-first {
     -webkit-box-ordinal-group: 0;
@@ -10877,6 +10887,17 @@ ul {
   margin-bottom: 20px;
   margin-top: 5px; */
 }
+
+.row-2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -12.5px;
+  margin-left: -12.5px; 
+  /* margin-bottom: 20px; */
+  margin-top: 10px;}
 .card-border {
   border-radius: 15px !important;
 }

@@ -9,11 +9,9 @@
 </div>
 
 <div class="row">
-    <!-- JOBS -->
     <div class="col-md-12 align-self-center">
         <div class="row">
-            <!-- RUNNING JOBS -->
-            <div class="col-md-2 stretch-card">
+            <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -24,8 +22,7 @@
                 </div>
             </div>
             
-            <!-- COMPLETED JOBS -->
-            <div class="col-md-2 stretch-card">
+            <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -37,8 +34,7 @@
             </div>
             
             
-            <!-- ERROR JOBS -->
-            <div class="col-md-2 stretch-card">
+            <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -49,8 +45,7 @@
                 </div>
             </div>
             
-            <!-- MISFIRED JOBS -->
-            <div class="col-md-2 stretch-card">
+            <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -61,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="col-md-2 stretch-card">
+            <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -70,9 +65,16 @@
                         <h2 id="variance_cm" class="font-weight-semibold mb-0">{{variance_cm}}</h2>
                     </div>
                 </div>
-            </div>
+            </div>  
+        </div>
+    </div>
+</div>
 
-            <div class="col-md-2 stretch-card">
+<div class='row'>
+    <div class="col-md-12">
+        <div class="row">
+            
+            <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
@@ -82,8 +84,51 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-17 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">DATA</h4>
+                        </div>
+                        <h2 id="variance_data" class="font-weight-semibold mb-0">{{variance_data}}</h2>
+                    </div>
+                </div>
+            </div>
             
-        </div>
+            <div class="col-md-17 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">VOICE</h4>
+                        </div>
+                        <h2 id="variance_voice" class="font-weight-semibold mb-0">{{variance_voice}}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-17 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">SMS</h4>
+                        </div>
+                        <h2 id="variance_sms" class="font-weight-semibold mb-0">{{variance_sms}}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-17 stretch-card">
+                <div class="card card-style card-border">
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title font-weight-semibold mb-0 text-muted">CLR</h4>
+                        </div>
+                        <h2 id="variance_clr" class="font-weight-semibold mb-0">{{variance_clr}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>    
     </div>
 </div>
 
@@ -104,51 +149,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-2 stretch-card">
-                <div class="card card-style card-border">
-                    <div class="card-body pb-0">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title font-weight-semibold mb-0 text-muted">DATA</h4>
-                        </div>
-                        <h2 id="variance_data" class="font-weight-semibold mb-0">{{variance_data}}</h2>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-2 stretch-card">
-                <div class="card card-style card-border">
-                    <div class="card-body pb-0">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title font-weight-semibold mb-0 text-muted">VOICE</h4>
-                        </div>
-                        <h2 id="variance_voice" class="font-weight-semibold mb-0">{{variance_voice}}</h2>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-2 stretch-card">
-                <div class="card card-style card-border">
-                    <div class="card-body pb-0">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title font-weight-semibold mb-0 text-muted">SMS</h4>
-                        </div>
-                        <h2 id="variance_sms" class="font-weight-semibold mb-0">{{variance_sms}}</h2>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-2 stretch-card">
-                <div class="card card-style card-border">
-                    <div class="card-body pb-0">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title font-weight-semibold mb-0 text-muted">CLR</h4>
-                        </div>
-                        <h2 id="variance_clr" class="font-weight-semibold mb-0">{{variance_clr}}</h2>
-                    </div>
-                </div>
-            </div>
-        </div>    
+        </div>
     </div>
 </div>
 

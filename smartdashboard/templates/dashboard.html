@@ -9,7 +9,7 @@
   
   <div class="col-12">
     <div class="page-header">
-      <h4 class="page-title">Talend Jobs Status as of {{ date }}</h4>
+      <h4 class="page-title">Talend Job Tasks Status as of {{ date }}</h4>
     </div>
   </div>
 </div>
@@ -17,87 +17,105 @@
 
 <div class="row">
   <!-- JOBS -->
-  <div class="col-md-8 align-self-center">
+  <div class="col-md-6 align-self-center">
     <div class="row">
       
       <!-- TOTAL JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-style border-left-1-1">
           <div class="card-body pb-0">
-            <div class="d-flex justify-content-between" type="submit" name="running">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">TOTAL NUMBER OF JOBS</h4>
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title font-weight-semibold mb-0 text-muted">TOTAL NUMBER OF JOB TASKS</h5>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ query_distinct_count }}</h2>
           </div>
         </div>
       </div>
 
-      <!-- COMPLETED JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
-        <div class="card card-style border-left-2">
-          <div class="card-body pb-0">
-            <div class="d-flex justify-content-between" type="submit">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED JOBS</h4>
-            </div>
-            <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
-          </div>
-        </div>
-      </div>
-
       <!-- RUNNING JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-style border-left-1">
           <div class="card-body pb-0">
-            <div class="d-flex justify-content-between" type="submit" name="running">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOBS</h4>
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOB TASKS</h5>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ running }}</h2>
           </div>
         </div>
       </div>
 
-      <!-- ERROR JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
-        <div class="card card-style border-left-3">
-          <div class="card-body pb-0">
-            <div class="d-flex justify-content-between">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR JOBS</h4>
-            </div>
-            <h2 class="font-weight-semibold mb-0">{{ error }}</h2>
-          </div>
-        </div>
-      </div>
-
-      <!-- MISFIRED JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
-        <div class="card card-style border-left-4">
-          <div class="card-body pb-0">
-            <div class="d-flex justify-content-between">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
-            </div>
-            <h2 class="font-weight-semibold mb-0">{{ misfired }}</h2>
-          </div>
-        </div>
-      </div>
-
       <!-- LONG RUNNING JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-style border-left-1-2">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.long_running_job')}}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between" type="submit" name="running">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOBS (more than 30 mins)</h4>
+              <h5 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOB TASK AS OF THIS MOMENT</h5>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ long_running_count }}</h2>
           </div>
         </div>
       </div>
-    
+
+      <!-- table -->
+      <div class="col-md-12 grid-margin">
+        <div class="card shadow mb-4 card-border">
+          
+          <div class="card-body"> 
+            <!-- <h3 class="h3 text-gray-800">Long Running Jobs</h3>    -->
+            <div class="table-responsive">
+              <div class="col-12">
+                <table class="table " id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                    <th>Task Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for testing in query.items %}
+                    <tr">
+                      <td>{{testing[0]}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>                    
+            </div>
+            
+            <div class="row-2">
+              {% if prev_num %}
+                <a class="btn btn-info btn-space" href="{{ prev_num }}">Previous</a></li>
+              {% else %}
+                <a class="btn disabled btn-space" href="#">Previous</a></li>
+              {% endif %}
+      
+              {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                {% if page_num %}
+                  {% if query.page == page_num %}
+                    <a class="btn btn-outline-info btn-space" href="{{ url_for('lrj_blueprint.long_running_job', page=page_num)}}">{{ page_num }}</a>
+                  {% else %}
+                    <a class="btn btn-info btn-space" href="{{ url_for('lrj_blueprint.long_running_job', page=page_num)}}">{{ page_num }}</a>
+                  {% endif %}
+                {% else %}
+                    ... 
+                {% endif %}
+              {% endfor %}
+      
+              {% if next_num %}
+                <a class="btn btn-info btn-space" href="{{ next_num }}">Next</a></li>
+              {% else %}
+                <a class="btn disabled btn-space" href="#">Next</a></li>
+              {% endif %}
+            </div>
+          </div>     
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- DOUNUT CHART -->
-  <div class="col-md-4 align-self-center">
+  <div class="col-md-6 align-self-center">
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">   
         <div class="card card-border">
@@ -106,12 +124,11 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
-<div class="row">
+<div class="row" id="synced-charts">
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-6 grid-margin">
@@ -130,7 +147,7 @@
             <div class="d-flex align-items-end">
               <h3 class="mb-0 font-weight-semibold">Manifest vs T1-Oracle</h3>
             </div>
-            <div id="variances_oracle"></div>
+            <div id="variances_oracle_dashboard"></div>
           </div>
         </div>
       </div>
@@ -147,7 +164,7 @@
 {% endblock content %}
 {% block scripts %}
 <script src="../static/js/job_monitoring.js"></script>
-<script src="../static/js/dq_manvsoracle.js"></script>
+<!-- <script src="../static/js/dq_manvsoracle.js"></script> -->
 <script src="../static/js/dashboard.js"></script>
 {% endblock %}
 
