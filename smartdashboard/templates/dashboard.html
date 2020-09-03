@@ -110,6 +110,33 @@
     </div>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6 grid-margin">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-end">
+              <h3 class="mb-0 font-weight-semibold">Manifest vs T1-Hive</h3>
+            </div>
+            <div id="variances_hive_dashboard"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 grid-margin">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-end">
+              <h3 class="mb-0 font-weight-semibold">Manifest vs T1-Oracle</h3>
+            </div>
+            <div id="variances_oracle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Page Title Header Ends-->
 
     
@@ -120,5 +147,7 @@
 {% endblock content %}
 {% block scripts %}
 <script src="../static/js/job_monitoring.js"></script>
+<script src="../static/js/dq_manvsoracle.js"></script>
+<script src="../static/js/dashboard.js"></script>
 {% endblock %}
 

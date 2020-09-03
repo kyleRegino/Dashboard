@@ -126,10 +126,3 @@ $.ajax({
     variance_chart = new ApexCharts(document.querySelector("#variances_hive"), options);
     variance_chart.render();
 });
-
-
-
-
-
-
-
