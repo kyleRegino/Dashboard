@@ -111,7 +111,8 @@ $.ajax({
             },
         },
         markers: {
-            size: 1
+            size: 1,
+            color: '#263238'
         },
         xaxis: {
             categories: data["dates"],

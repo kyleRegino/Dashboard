@@ -1,13 +1,199 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard import session, manifest_hive_monitoring, manifest_oracle_monitoring
-from smartdashboard.utils import init_list
+from smartdashboard.utils import init_list, format_date
 
 from sqlalchemy import or_, and_
 from sqlalchemy.sql import func
 
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 dq_blueprint = Blueprint('dq_blueprint', __name__)
+
+# MANIFEST VS T1 OVERVIEW
+@dq_blueprint.route('/dq_overview')
+def dq_overview():
+    return render_template('dqchecks_overview.html')
+
+@dq_blueprint.route('/dqchecks_overview_hive_js', methods=['GET', 'POST'])
+def dqchecks_overview_hive_js():
+    if request.method == "POST":
+        start_date = request.form["start_date"]
+        end_date = request.form["end_date"]
+        period_select = request.form["period"]
+    elif request.method == "GET":
+        date_today = date.today()
+        start_date = date_today - relativedelta(months=4)
+        end_date = date_today
+        period_select = "day"
+
+    if period_select == "day":
+        period = manifest_hive_monitoring.file_date
+    elif period_select == "month":
+        period = func.month(manifest_hive_monitoring.file_date)
+    elif period_select == "year":
+        period = func.year(manifest_hive_monitoring.file_date)
+    
+    dates = session.query(period).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period).all()
+    variances = session.query(period,manifest_hive_monitoring.cdr_type,func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period,manifest_hive_monitoring.cdr_type).all()
+    len_date = len(dates)
+
+    date_list = init_list(len_date)
+    variance_com = init_list(len_date)
+    variance_vou = init_list(len_date)
+    variance_first = init_list(len_date)
+    variance_mon = init_list(len_date)
+    variance_cm = init_list(len_date)
+    variance_adj = init_list(len_date)
+    variance_data = init_list(len_date)
+    variance_voice = init_list(len_date)
+    variance_sms = init_list(len_date)
+    variance_clr = init_list(len_date)
+
+
+    for i, d in enumerate(dates):
+        date_list[i] = format_date(d[0],period_select)
+        for v in variances:
+            if v.cdr_type == "com" and v[0] == d[0]:
+                variance_com[i] = str(v[2])
+            elif v.cdr_type == "vou" and v[0] == d[0]:
+                variance_vou[i] = str(v[2])
+            elif v.cdr_type == "first" and v[0] == d[0]:
+                variance_first[i] = str(v[2])
+            elif v.cdr_type == "mon" and v[0] == d[0]:
+                variance_mon[i] = str(v[2])
+            elif v.cdr_type == "cm" and v[0] == d[0]:
+                variance_cm[i] = str(v[2])
+            elif v.cdr_type == "adj" and v[0] == d[0]:
+                variance_adj[i] = str(v[2])
+            elif v.cdr_type == "data" and v[0] == d[0]:
+                variance_data[i] = str(v[2])
+            elif v.cdr_type == "voice" and v[0] == d[0]:
+                variance_voice[i] = str(v[2])
+            elif v.cdr_type == "sms" and v[0] == d[0]:
+                variance_sms[i] = str(v[2])
+            elif v.cdr_type == "clr" and v[0] == d[0]:
+                variance_clr[i] = str(v[2])
+
+    ### EXPERIMENTAL CODE IN CASE OF SLOWDOWN
+    # for i, d in enumerate(dates):
+    #     date_list[i] = format_date(d[0],period_select)
+    # for v in variances:
+    #     if v.cdr_type == "com":
+    #         variance_com[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "vou":
+    #         variance_vou[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "first":
+    #         variance_first[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "mon":
+    #         variance_mon[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "cm":
+    #         variance_cm[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "adj":
+    #         variance_adj[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "data":
+    #         variance_data[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "voice":
+    #         variance_voice[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "sms":
+    #         variance_sms[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    #     elif v.cdr_type == "clr":
+    #         variance_clr[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+    
+    
+    result_set = {
+        "date_list": date_list,
+        "variance_com": variance_com,
+        "variance_vou": variance_vou,
+        "variance_first": variance_first,
+        "variance_mon": variance_mon,
+        "variance_cm": variance_cm,
+        "variance_adj": variance_adj,
+        "variance_data": variance_data,
+        "variance_voice": variance_voice,
+        "variance_sms": variance_sms,
+        "variance_clr": variance_clr,
+        }
+
+    return jsonify(result_set)
+
+@dq_blueprint.route('/dqchecks_overview_oracle_js', methods=['GET', 'POST'])
+def dqchecks_overview_oracle_js():
+    if request.method == "POST":
+        start_date = request.form["start_date"]
+        end_date = request.form["end_date"]
+        period_select = request.form["period"]
+    elif request.method == "GET":
+        date_today = date.today()
+        start_date = date_today - relativedelta(months=4)
+        end_date = date_today
+        period_select = "day"
+
+    if period_select == "day":
+        period = manifest_oracle_monitoring.file_date
+    elif period_select == "month":
+        period = func.month(manifest_oracle_monitoring.file_date)
+    elif period_select == "year":
+        period = func.year(manifest_oracle_monitoring.file_date)
+    
+    dates = session.query(period).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(period).all()
+    variances = session.query(period,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(period,manifest_oracle_monitoring.cdr_type).all()
+    len_date = len(dates)
+
+    date_list = init_list(len_date)
+    variance_com = init_list(len_date)
+    variance_vou = init_list(len_date)
+    variance_first = init_list(len_date)
+    variance_mon = init_list(len_date)
+    variance_cm = init_list(len_date)
+    variance_adj = init_list(len_date)
+    variance_data = init_list(len_date)
+    variance_voice = init_list(len_date)
+    variance_sms = init_list(len_date)
+    variance_clr = init_list(len_date)
+
+
+    for i, d in enumerate(dates):
+        date_list[i] = format_date(d[0],period_select)
+        for v in variances:
+            if v.cdr_type == "com" and v[0] == d[0]:
+                variance_com[i] = str(v[2])
+            elif v.cdr_type == "vou" and v[0] == d[0]:
+                variance_vou[i] = str(v[2])
+            elif v.cdr_type == "first" and v[0] == d[0]:
+                variance_first[i] = str(v[2])
+            elif v.cdr_type == "mon" and v[0] == d[0]:
+                variance_mon[i] = str(v[2])
+            elif v.cdr_type == "cm" and v[0] == d[0]:
+                variance_cm[i] = str(v[2])
+            elif v.cdr_type == "adj" and v[0] == d[0]:
+                variance_adj[i] = str(v[2])
+            elif v.cdr_type == "data" and v[0] == d[0]:
+                variance_data[i] = str(v[2])
+            elif v.cdr_type == "voice" and v[0] == d[0]:
+                variance_voice[i] = str(v[2])
+            elif v.cdr_type == "sms" and v[0] == d[0]:
+                variance_sms[i] = str(v[2])
+            elif v.cdr_type == "clr" and v[0] == d[0]:
+                variance_clr[i] = str(v[2])
+    
+    
+    result_set = {
+        "date_list": date_list,
+        "variance_com": variance_com,
+        "variance_vou": variance_vou,
+        "variance_first": variance_first,
+        "variance_mon": variance_mon,
+        "variance_cm": variance_cm,
+        "variance_adj": variance_adj,
+        "variance_data": variance_data,
+        "variance_voice": variance_voice,
+        "variance_sms": variance_sms,
+        "variance_clr": variance_clr,
+        }
+
+    return jsonify(result_set)
+
 
 # MANIFEST VS HIVE
 @dq_blueprint.route('/dq_manvshive')

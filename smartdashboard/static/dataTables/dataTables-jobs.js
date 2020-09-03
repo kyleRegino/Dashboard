@@ -30,12 +30,5 @@ $(document).ready(function() {
          maxDateTime:true,
         }); 
     });
-
-    jQuery('#cdr_date').datetimepicker({
-        timepicker: false,
-        format: 'Y-m-d'
-    });
-
-
 }) 
 
