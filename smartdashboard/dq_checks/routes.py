@@ -10,11 +10,12 @@ from dateutil.relativedelta import relativedelta
 
 dq_blueprint = Blueprint('dq_blueprint', __name__)
 
-# MANIFEST VS T1 OVERVIEW
+
 @dq_blueprint.route('/dq_overview')
 def dq_overview():
     return render_template('dqchecks_overview.html')
 
+# MANIFEST VS T1 OVERVIEW
 @dq_blueprint.route('/dqchecks_overview_hive_js', methods=['GET', 'POST'])
 def dqchecks_overview_hive_js():
     if request.method == "POST":
