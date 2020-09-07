@@ -9,7 +9,7 @@
   
   <div class="col-12">
     <div class="page-header">
-      <h4 class="page-title">Long Running Jobs as of {{time}}</h4>
+      <h4 class="page-title">Long Running Jobs as of {{ time.starttime }}</h4>
     </div>
   </div>
 </div>
@@ -34,7 +34,7 @@
       </div>
 
       <!-- COMPLETED JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <!-- <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-2">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='OK') }}" class="stretched-link"></a>
@@ -44,11 +44,11 @@
             <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
       <!-- ERROR JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <!-- <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-3">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='ERROR') }}" class="stretched-link"></a>
@@ -58,10 +58,10 @@
             <h2 class="font-weight-semibold mb-0">{{ error }}</h2>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- MISFIRED JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <!-- <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-4">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='MISFIRED') }}" class="stretched-link"></a>
@@ -71,7 +71,7 @@
             <h2 class="font-weight-semibold mb-0">{{ misfired }}</h2>
           </div>
         </div>
-      </div>
+      </div> -->
     
     </div>
   </div>
@@ -171,7 +171,7 @@
                 <td class="duration">{{testing.duration_mins}}</td>
                 <td>{{testing.tasklabel}} </td>
                 <td>{{testing.id}}</td>
-                <td  ><label class="status">{{testing.status}}</label></td>
+                <td><label class="status">{{testing.status}}</label></td>
               </tr>
               {% endfor %}
             </tbody>

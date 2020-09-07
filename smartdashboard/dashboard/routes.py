@@ -1,5 +1,6 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_Monitoring
+from smartdashboard import session, manifest_hive_monitoring, manifest_oracle_monitoring
 from datetime import date
 from datetime import datetime
 from sqlalchemy import or_, and_
@@ -14,12 +15,15 @@ def dashboard():
     query_distinct_count = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().count()
     long_running_count = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')).count()
 
-    # get_time = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
-    #                 .order_by(Job_Monitoring.starttime.asc()).all()
-    # global time
-    # for r in get_time:
-    #     time = str(r.starttime)
-    # print(time)
+    time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
+    time_lrj = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
+                    .order_by(Job_Monitoring.starttime.desc()).first()
+    time_hive = session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
+    time_oracle = session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
+
+    # print(str(time_overall.starttime))
+    # print(str(time_hive.file_date))
+    # print(str(time_oracle.file_date))
 
     query_distinct = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().paginate(page=page, per_page=10)
     next_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.next_num) \
@@ -27,17 +31,16 @@ def dashboard():
     prev_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.prev_num) \
         if query_distinct.has_prev else None
 
-    thedate = date.today()
-    thedates = datetime.now()
-    print(thedates)
-
     return render_template("dashboard.html", query = query_distinct,
                                             running = query_job_running,
                                             query_distinct_count = query_distinct_count,
                                             long_running_count = long_running_count,
                                             next_num=next_num,
                                             prev_num=prev_num,
-                                            date=thedate
+                                            time_overall=time_overall,
+                                            time_lrj=time_lrj,
+                                            time_oracle=time_oracle,
+                                            time_hive=time_hive
                                             )
 
 @dashboard_blueprint.route('/get_job_monitoring', methods=['GET'])

@@ -10,12 +10,12 @@ class Job_Monitoring(db.Model):
     id = db.Column(db.String(200), primary_key=True)
     status = db.Column(db.String(10))
 
-    def __repr__(self):
-        self.starttime = starttime
-        self.duration_mins = duration_mins
-        self.tasklabel = tasklabel
-        self.id = id
-        self.status = status
+    # def __repr__(self):
+    #     self.starttime = starttime
+    #     self.duration_mins = duration_mins
+    #     self.tasklabel = tasklabel
+    #     self.id = id
+    #     self.status = status
 
 class Job_BCA(db.Model):
     __tablename__ = "job_bca_monitoring"

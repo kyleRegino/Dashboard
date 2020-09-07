@@ -16,13 +16,13 @@ $.ajax({
             data: data[variance]
         });
     }
-    console.log(series_hive)
+    // console.log(series_hive)
 
     var options = {
         series: series_hive,
         chart: {
             type: 'line',
-            height: '200%',
+            height: 350,
             width: '100%'
         },
         dataLabels: {
@@ -65,13 +65,13 @@ $.ajax({
             data: data[variance]
         });
     }
-    console.log(series_oracle)
+    // console.log(series_oracle)
 
     var options = {
         series: series_oracle,
         chart: {
             type: 'line',
-            height: '200%',
+            height: 350,
             width: '100%'
         },
         dataLabels: {

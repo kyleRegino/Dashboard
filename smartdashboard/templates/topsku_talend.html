@@ -15,15 +15,28 @@
 <div class='row'>
     <div class="col-md-12 grid-margin">
         <div class="card shadow mb-4 card-border">
-            <!-- <div class="card-header py-3">
+            <div class="card-header py-3 card-border-header">
                 <div class="row-1 align-items-end">
                     <div class="col-11">
-                        <h1 class="h3 text-gray-800">TOPSKU</h1>
+                        <h1 class="h3 text-gray-800">Amount per Brand every 4hrs of DATE</h1>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <div class="card-body ">
-                <div id="topsku"></div>
+                <div class="row">
+                    <div class="col-md-7 date-1">
+                        <form action="" method="post" id="hive_overview_form" autocomplete="off">
+                            Date:
+                            <input type="text" name="datetimepickermin" id="min_hive" value="{{ minDate }}" required>
+                            <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="topsku"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -32,15 +45,28 @@
 <div class='row'>
     <div class="col-md-12 grid-margin">
         <div class="card shadow mb-4 card-border">
-            <!-- <div class="card-header py-3">
+            <div class="card-header py-3 card-border-header">
                 <div class="row-1 align-items-end">
                     <div class="col-11">
-                        <h1 class="h3 text-gray-800">TOPSKU</h1>
+                        <h1 class="h3 text-gray-800">Data Trend based on Total Amount per Week</h1>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <div class="card-body ">
-                <div id="topsku_day"></div>
+                <div class="row">
+                    <div class="col-md-7 date-1">
+                        <form action="" method="post" id="hive_overview_form" autocomplete="off">
+                            Date:
+                            <input type="text" name="datetimepickermin" id="min_hive" value="{{ minDate }}" required>
+                            <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="topsku_day"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

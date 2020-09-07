@@ -14,15 +14,11 @@ lrj_blueprint = Blueprint('lrj_blueprint', __name__)
 def long_running_job():
     page = request.args.get('page', 1, type=int)
 
-    long_running = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
+    long_running = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')) \
                     .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=50)
 
     get_time = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
-                    .order_by(Job_Monitoring.starttime.asc()).all()
-    global time
-    for r in get_time:
-        time = str(r.starttime)
-
+                    .order_by(Job_Monitoring.starttime.desc()).first()
 
     query_job_running = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'RUNNING', 
                                                     Job_Monitoring.duration_mins >= 30 )).count()
@@ -45,7 +41,7 @@ def long_running_job():
                                                             misfired = query_job_misfired,
                                                             next_num=long_next_num,
                                                             prev_num=long_prev_num,
-                                                            time = time
+                                                            time = get_time
                                                             )
 
 @lrj_blueprint.route('/lrj_generate_csv', methods=['GET', 'POST'])

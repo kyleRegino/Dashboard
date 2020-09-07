@@ -51,7 +51,6 @@ def dqchecks_overview_hive_js():
     variance_sms = init_list(len_date)
     variance_clr = init_list(len_date)
 
-
     for i, d in enumerate(dates):
         date_list[i] = format_date(d[0],period_select)
         for v in variances:
@@ -303,6 +302,8 @@ def dqchecks_manvshive_js():
             clr_manifest[r.processing_hour] = (str(r.ocs_manifest))
             clr_t1[r.processing_hour] = (str(r.t1_hive))
             clr_variance[r.processing_hour] = (str(r.variance))
+
+    
 
 
     result_set = {
