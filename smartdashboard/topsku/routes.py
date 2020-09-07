@@ -1,9 +1,10 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard import session, top_sku_talendfc
-from datetime import date
+from datetime import date, datetime, timedelta
 from sqlalchemy.sql import func
 from sqlalchemy import or_, and_
-from smartdashboard.utils import format_date, init_list
+from smartdashboard.utils import format_date, init_list, insert_sku
+import pprint
 
 topsku_blueprint = Blueprint('topsku_blueprint', __name__)
 
@@ -11,74 +12,63 @@ topsku_blueprint = Blueprint('topsku_blueprint', __name__)
 def topsku():
     return render_template('topsku_talend.html')
 
-@topsku_blueprint.route('/topsku_js', methods=['GET','POST'])
-def topsku_js():
+@topsku_blueprint.route('/topsku_day_js', methods=['GET','POST'])
+def topsku_day_js():
     if request.method == "POST":
-        query_date = request.form["cdr_date"]
+        query_date = request.form["sku_date"]
     else:
         query_date = date.today()
 
-    dates = session.query(top_sku_talendfc.processing_dthr).filter(top_sku_talendfc.txn_date == query_date).group_by(top_sku_talendfc.processing_dthr).all()
-    amounts = session.query(top_sku_talendfc.processing_dthr, top_sku_talendfc.brand, top_sku_talendfc.txn_amount).filter(top_sku_talendfc.txn_date == query_date).all()
-    len_date = len(dates)
+    lookup = session.query(top_sku_talendfc.txn_date,top_sku_talendfc.processing_dthr,top_sku_talendfc.brand, func.sum(top_sku_talendfc.txn_amount), func.sum(top_sku_talendfc.topup_cnt)).filter(top_sku_talendfc.txn_date == query_date).group_by(top_sku_talendfc.txn_date,top_sku_talendfc.processing_dthr,top_sku_talendfc.brand).all()
     
-    date_list = init_list(len_date)
-    home = init_list(len_date)
-    smart_bro_prepaid = init_list(len_date)
-    smart_prepaid = init_list(len_date)
-    sun_bwl_flp = init_list(len_date)
-    sun_bwl_prepaid = init_list(len_date)
-    sun_flp = init_list(len_date)
-    sun_prepaid = init_list(len_date)
-    tnt = init_list(len_date)
+    sku_dict = { "totals": {
+                    "total_amt_hr": init_list(6,0),
+                    "total_cnt_hr": init_list(6,0)
+                    },
+                 "brands": { }
+        }
+    for l in lookup:
+        if l.brand not in sku_dict["brands"].keys():
+            sku_dict["brands"][l.brand] = {
+                "amount": init_list(6,0),
+                "count": init_list(6,0)
+            }
+            insert_sku(sku_dict["brands"][l.brand], l.processing_dthr, l[3], l[4])
+        else:
+            insert_sku(sku_dict["brands"][l.brand], l.processing_dthr, l[3], l[4])
+
+    for k in sku_dict["brands"].keys():
+        for i in range(6):
+            sku_dict["totals"]["total_amt_hr"][i] += float(0 if sku_dict["brands"][k]["amount"][i] is None else sku_dict["brands"][k]["amount"][i])
+            sku_dict["totals"]["total_cnt_hr"][i] += int(0 if sku_dict["brands"][k]["count"][i] is None else sku_dict["brands"][k]["count"][i])
     
-    total_hour = []
-    total_day = []
+    return jsonify(sku_dict)
 
-    for i, d in enumerate(dates):
-        for v in amounts:
-            if v.brand == "HOME" and v[0] == d[0]:
-                home[i] = str(v[2])
-            elif v.brand == "SMART BRO PREPAID" and v[0] == d[0]:
-                smart_bro_prepaid[i] = str(v[2])
-            elif v.brand == "SMART PREPAID" and v[0] == d[0]:
-                smart_prepaid[i] = str(v[2])
-            elif v.brand == "SUN BW FLP" and v[0] == d[0]:
-                sun_bwl_flp[i] = str(v[2])
-            elif v.brand == "SUN BW PREPAID" and v[0] == d[0]:
-                sun_bwl_prepaid[i] = str(v[2])
-            elif v.brand == "SUN FLP" and v[0] == d[0]:
-                sun_flp[i] = str(v[2])
-            elif v.brand == "SUN PREPAID" and v[0] == d[0]:
-                sun_prepaid[i] = str(v[2])
-            elif v.brand == "TNT" and v[0] == d[0]:
-                tnt[i] = str(v[2])
+@topsku_blueprint.route('/topsku_week_js', methods=['GET','POST'])
+def topsku_week_js():
+    if request.method == "POST":
+        start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+        end_date = datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
+    else:
+        today = date.today()
+        start_date = today - timedelta(days=today.weekday()+1)
+        end_date = start_date + timedelta(days=6)
 
-    #per hour run
-    total_hour_query = session.query(top_sku_talendfc).filter(top_sku_talendfc.txn_date == query_date).with_entities(top_sku_talendfc.processing_dthr).distinct()
-    for hour in total_hour_query:
-        hours = session.query(func.sum(top_sku_talendfc.txn_amount)).filter(top_sku_talendfc.processing_dthr == hour).scalar()
-        total_hour.append(hours)
+    dates = [start_date + timedelta(days=x) for x in range(0, (end_date-start_date).days+1)]
+    lookup = session.query(top_sku_talendfc.txn_date,func.sum(top_sku_talendfc.txn_amount),func.sum(top_sku_talendfc.topup_cnt)).filter(and_(top_sku_talendfc.txn_date >= start_date, top_sku_talendfc.txn_date <= end_date)).group_by(top_sku_talendfc.txn_date).all()
 
-    #per day run
-    total_day_query = session.query(top_sku_talendfc).with_entities(top_sku_talendfc.txn_date).distinct()
-    for day in total_day_query:
-        days = session.query(func.sum(top_sku_talendfc.txn_amount)).filter(top_sku_talendfc.txn_date == day).scalar()
-        total_day.append(days)
-    # print(total_day)
+    sku_dict = { "dates": [ d.strftime("%Y-%m-%d") for d in dates ],
+                 "amounts": init_list(len(dates)),
+                 "counts": init_list(len(dates))
+            }
+   
+    for l in lookup:
+        print(dates.index(l.txn_date))
+        try:
+            sku_dict["amounts"][dates.index(l.txn_date)] = str(l[1])
+            sku_dict["counts"][dates.index(l.txn_date)] = str(l[2])
+        except:
+            continue
 
-    result_set = {
-        "home": home,
-        "smart bro prepaid": smart_bro_prepaid,
-        "smart prepaid": smart_prepaid,
-        "sun bw flp": sun_bwl_flp,
-        "sun bw prepaid": sun_bwl_prepaid,
-        "sun flp": sun_flp,
-        "sun prepaid": sun_prepaid,
-        "tnt": tnt,
-        "total_hour": total_hour,
-        "total_day": total_day
-    }
-
-    return jsonify(result_set)
-
+   
+    return jsonify(sku_dict)

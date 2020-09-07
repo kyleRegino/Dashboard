@@ -25,16 +25,16 @@
             <div class="card-body ">
                 <div class="row">
                     <div class="col-md-7 date-1">
-                        <form action="" method="post" id="hive_overview_form" autocomplete="off">
+                        <form action="" method="post" id="sku_day_form" autocomplete="off">
                             Date:
-                            <input type="text" name="datetimepickermin" id="min_hive" value="{{ minDate }}" required>
+                            <input type="text" name="datetimepickermin" id="sku_date" value="{{ minDate }}" required>
                             <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
                         </form>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div id="topsku"></div>
+                        <div id="topsku_day"></div>
                     </div>
                 </div>
             </div>
@@ -55,16 +55,18 @@
             <div class="card-body ">
                 <div class="row">
                     <div class="col-md-7 date-1">
-                        <form action="" method="post" id="hive_overview_form" autocomplete="off">
-                            Date:
-                            <input type="text" name="datetimepickermin" id="min_hive" value="{{ minDate }}" required>
+                        <form action="" method="post" id="sku_week_form" autocomplete="off">
+                            Start Date:
+                            <input type="text" name="datetimepickermin" id="sku_min" value="{{ minDate }}" required>
+                            End Date:
+                            <input type="text" name="datetimepickermax" id="sku_max" value="{{ maxDate }}" required>
                             <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
                         </form>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div id="topsku_day"></div>
+                        <div id="topsku_week"></div>
                     </div>
                 </div>
             </div>
@@ -76,5 +78,6 @@
 {% endblock content %}
 
 {% block scripts %}
-<script src="../static/js/topsku.js"></script>
+<script src="../static/js/topsku_day.js"></script>
+<script src="../static/js/topsku_week.js"></script>
 {% endblock %}

@@ -4,6 +4,7 @@ from sqlalchemy import or_, and_
 from sqlalchemy.sql import func
 import io, csv
 from openpyxl import Workbook
+from smartdashboard.utils import number_formatter
 
 from datetime import datetime
 from datetime import date
@@ -35,7 +36,7 @@ def long_running_job():
         if long_running.has_prev else None
 
     return render_template("longrunningjobs.html", query=long_running,
-                                                            running = query_job_running,
+                                                            running = number_formatter(query_job_running),
                                                             ok = query_job_ok,
                                                             error = query_job_error,
                                                             misfired = query_job_misfired,

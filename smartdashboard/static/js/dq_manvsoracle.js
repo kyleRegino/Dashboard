@@ -115,6 +115,7 @@ $.ajax({
                 endingShape: 'rounded'
             },
         },
+        colors: ["#2979FF", "#90CAF9", "#C5E1A5", "#AA00FF", "#CE93D8", "#4E342E", "#FFC107", "#A1887F", "#76FF03", "#546E7A"],
         dataLabels: {
             enabled: false,
         },

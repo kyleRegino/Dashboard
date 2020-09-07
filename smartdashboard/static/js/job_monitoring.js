@@ -181,6 +181,56 @@ $.ajax({
   chart.render();
 });
 
+$.ajax({
+  url: "/lrj_js",
+  method: "GET",
+  dataType: "json"
+}).done(function (data) {
+  // console.log(data.job_status[0]);
+  console.log(data);
+  var options = {
+    series: [ { data: [data.job_status[0], data.job_status[1], data.job_status[2], data.job_status[3]] } ],
+    chart: {
+      height: 200,
+      width: "100%",
+      type: 'bar',
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '70%'
+      },
+    },
+    colors: ['#77B6EA', '#545454', "#00E676", "#FFEA00", "#FFA06D", "#718792", "#D50000", "#D500F9", "#1A237E", "#4E342E"],
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      curve: 'smooth'
+    },
+    grid: {
+      borderColor: '#e7e7e7',
+      row: {
+        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+        opacity: 0.5
+      },
+    },
+    fill: {
+      opacity: 1
+    },
+    xaxis: {
+      categories: [data.job_Label[0], data.job_Label[1], data.job_Label[2], data.job_Label[3]],
+    },
+  };
+
+
+
+  var chart = new ApexCharts(document.querySelector("#barchart_longrunning"), options);
+  chart.render();
+});
+
 
 
 

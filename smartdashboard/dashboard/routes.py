@@ -4,6 +4,7 @@ from smartdashboard import session, manifest_hive_monitoring, manifest_oracle_mo
 from datetime import date
 from datetime import datetime
 from sqlalchemy import or_, and_
+from smartdashboard.utils import number_formatter
 
 dashboard_blueprint = Blueprint('dashboard_blueprint', __name__)
 
@@ -25,16 +26,16 @@ def dashboard():
     # print(str(time_hive.file_date))
     # print(str(time_oracle.file_date))
 
-    query_distinct = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().paginate(page=page, per_page=10)
+    query_distinct = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().paginate(page=page, per_page=8)
     next_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.next_num) \
             if query_distinct.has_next else None
     prev_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.prev_num) \
         if query_distinct.has_prev else None
 
     return render_template("dashboard.html", query = query_distinct,
-                                            running = query_job_running,
-                                            query_distinct_count = query_distinct_count,
-                                            long_running_count = long_running_count,
+                                            running = number_formatter(query_job_running),
+                                            query_distinct_count = number_formatter(query_distinct_count),
+                                            long_running_count = number_formatter(long_running_count),
                                             next_num=next_num,
                                             prev_num=prev_num,
                                             time_overall=time_overall,

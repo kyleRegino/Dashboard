@@ -42,7 +42,6 @@ function update_data_oracle(start_date, end_date, period) {
         }
     }).done(function (data) {
         lines_oracle = [];
-        console.log(data);
         for (c of cdr_types) {
             var variance = "variance_" + c;
             lines_oracle.push({
@@ -87,7 +86,7 @@ $.ajax({
                 endingShape: 'rounded'
             },
         },
-        colors: ['#77B6EA', '#84FFFF', "#00E676", "#FFEA00", "#FFA06D", "#718792", "#D50000", "#D500F9", "#1A237E", "#4E342E", "#FFCDD2"],
+        colors: ["#2979FF", "#90CAF9", "#C5E1A5", "#AA00FF", "#CE93D8", "#4E342E", "#FFC107", "#A1887F", "#76FF03", "#546E7A"],
         dataLabels: {
             enabled: false,
         },
