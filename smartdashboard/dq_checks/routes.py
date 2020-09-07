@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard import session, manifest_hive_monitoring, manifest_oracle_monitoring
-from smartdashboard.utils import init_list, format_date
+from smartdashboard.utils import init_list, format_date, number_formatter
 
 from sqlalchemy import or_, and_
 from sqlalchemy.sql import func
@@ -210,16 +210,17 @@ def dq_manvshive():
     variance_sms = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="sms",manifest_hive_monitoring.file_date == date.today())).scalar()
     variance_clr = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="clr",manifest_hive_monitoring.file_date == date.today())).scalar()
 
-    return render_template('dqchecks_manvshive.html', variance_com = variance_com,
-                                                variance_vou = variance_vou,
-                                                variance_first = variance_first,
-                                                variance_mon = variance_mon,
-                                                variance_cm = variance_cm,
-                                                variance_adj = variance_adj,
-                                                variance_data = variance_data,
-                                                variance_voice = variance_voice,
-                                                variance_sms = variance_sms,
-                                                variance_clr = variance_clr)
+    return render_template('dqchecks_manvshive.html', variance_com = number_formatter(variance_com),
+                                                variance_vou = number_formatter(variance_vou),
+                                                variance_first = number_formatter(variance_first),
+                                                variance_mon = number_formatter(variance_mon),
+                                                variance_cm = number_formatter(variance_cm),
+                                                variance_adj = number_formatter(variance_adj),
+                                                variance_data = number_formatter(variance_data),
+                                                variance_voice = number_formatter(variance_voice),
+                                                variance_sms = number_formatter(variance_sms),
+                                                variance_clr = number_formatter(variance_clr)
+                                                )
 
 @dq_blueprint.route('/dqchecks_manvshive_js', methods=['GET','POST'])
 def dqchecks_manvshive_js():
@@ -357,16 +358,16 @@ def dqchecks_manvshive_search():
         variance_clr = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="clr",manifest_hive_monitoring.file_date == query_date)).scalar()
 
     result_set = {
-        "variance_com": str(variance_com),
-        "variance_vou": str(variance_vou),
-        "variance_first": str(variance_first),
-        "variance_mon": str(variance_mon),
-        "variance_cm": str(variance_cm),
-        "variance_adj": str(variance_adj),
-        "variance_data": str(variance_data),
-        "variance_voice": str(variance_voice),
-        "variance_sms": str(variance_sms),
-        "variance_clr": str(variance_clr)
+        "variance_com": number_formatter(variance_com),
+        "variance_vou": number_formatter(variance_vou),
+        "variance_first": number_formatter(variance_first),
+        "variance_mon": number_formatter(variance_mon),
+        "variance_cm": number_formatter(variance_cm),
+        "variance_adj": number_formatter(variance_adj),
+        "variance_data": number_formatter(variance_data),
+        "variance_voice": number_formatter(variance_voice),
+        "variance_sms": number_formatter(variance_sms),
+        "variance_clr": number_formatter(variance_clr)
     }
 
     return jsonify(result_set)
@@ -385,16 +386,17 @@ def dq_manvsoracle():
     variance_sms = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="sms",manifest_oracle_monitoring.file_date == date.today())).scalar()
     variance_clr = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="clr",manifest_oracle_monitoring.file_date == date.today())).scalar()
 
-    return render_template('dqchecks_manvsoracle.html', variance_com = variance_com,
-                                                variance_vou = variance_vou,
-                                                variance_first = variance_first,
-                                                variance_mon = variance_mon,
-                                                variance_cm = variance_cm,
-                                                variance_adj = variance_adj,
-                                                variance_data = variance_data,
-                                                variance_voice = variance_voice,
-                                                variance_sms = variance_sms,
-                                                variance_clr = variance_clr)
+    return render_template('dqchecks_manvsoracle.html', variance_com = number_formatter(variance_com),
+                                                variance_vou = number_formatter(variance_vou),
+                                                variance_first = number_formatter(variance_first),
+                                                variance_mon = number_formatter(variance_mon),
+                                                variance_cm = number_formatter(variance_cm),
+                                                variance_adj = number_formatter(variance_adj),
+                                                variance_data = number_formatter(variance_data),
+                                                variance_voice = number_formatter(variance_voice),
+                                                variance_sms = number_formatter(variance_sms),
+                                                variance_clr = number_formatter(variance_clr)
+                                                )
 
 @dq_blueprint.route('/dqchecks_manvsoracle_js', methods=['GET','POST'])
 def dqchecks_manvsoracle_js():
@@ -528,16 +530,16 @@ def dqchecks_manvsoracle_search():
         variance_clr = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="clr",manifest_oracle_monitoring.file_date == query_date)).scalar()
 
     result_set = {
-        "variance_com": str(variance_com),
-        "variance_vou": str(variance_vou),
-        "variance_first": str(variance_first),
-        "variance_mon": str(variance_mon),
-        "variance_cm": str(variance_cm),
-        "variance_adj": str(variance_adj),
-        "variance_data": str(variance_data),
-        "variance_voice": str(variance_voice),
-        "variance_sms": str(variance_sms),
-        "variance_clr": str(variance_clr)
+        "variance_com": number_formatter(variance_com),
+        "variance_vou": number_formatter(variance_vou),
+        "variance_first": number_formatter(variance_first),
+        "variance_mon": number_formatter(variance_mon),
+        "variance_cm": number_formatter(variance_cm),
+        "variance_adj": number_formatter(variance_adj),
+        "variance_data": number_formatter(variance_data),
+        "variance_voice": number_formatter(variance_voice),
+        "variance_sms": number_formatter(variance_sms),
+        "variance_clr": number_formatter(variance_clr)
     }
 
     return jsonify(result_set)

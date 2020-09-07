@@ -15,13 +15,13 @@
 </div>
 
 
-<div class="row">
+<div class="row justify-content-center" style="text-align:center;margin:0">
   <!-- JOBS -->
   <div class="col-md-8 align-self-center">
-    <div class="row">
+    <div class="row justify-content-center">
 
       <!-- RUNNING JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <div class="col-md-3 stretch-card">
         <div class="card card-style border-left-1">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='RUNNING') }}" class="stretched-link"></a>
@@ -75,17 +75,18 @@
     
     </div>
   </div>
-
+</div>
   <!-- DOUNUT CHART -->
-  <div class="col-md-4 align-self-center">
+<div class="row justify-content-center" style="text-align:center;margin:0">
+  <div class="col-md-6">
     <div class="row">
-      <div class="col-md-12 grid-margin stretch-card">   
+      <div class="col-md-12 stretch-card">   
         <div class="card card-border">
           <div class="card-header py-3 card-border-header ">
             <h1 class="h3 text-gray-800">Overall Status </h1>
           </div>
-          <div class="card-body  justify-content-center">
-            <div class="my-auto" id="donutchart_longrunning" height="100"></div>
+          <div class="card-body justify-content-center">
+            <div class="my-auto" id="barchart_longrunning" height="100"></div>
           </div>
         </div>
       </div>
