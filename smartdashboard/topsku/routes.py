@@ -63,7 +63,6 @@ def topsku_week_js():
             }
    
     for l in lookup:
-        print(dates.index(l.txn_date))
         try:
             sku_dict["amounts"][dates.index(l.txn_date)] = str(l[1])
             sku_dict["counts"][dates.index(l.txn_date)] = str(l[2])
