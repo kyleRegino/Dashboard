@@ -24,6 +24,7 @@ $('#max_hive').datetimepicker({
 
 $("#hive_overview_form").submit(function (event) {
     event.preventDefault();
+    console.log(event.name);
     var start_date = $("#min_hive").val();
     var end_date = $("#max_hive").val();
     var period = $("#period_hive").val();

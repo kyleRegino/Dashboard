@@ -22,7 +22,11 @@ $("#cdr_date_form_hive").submit(function(event){
         $("#variance_sms").text(data.variance_sms);
         $("#variance_clr").text(data.variance_clr);
         update_data_hive(cdr_date);
-        update_colors();
+        var today = new Date();
+        var date_today = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        if (cdr_date != date_today){
+            update_colors();
+        }
     });
 
 });
@@ -46,7 +50,11 @@ $("#cdr_date_form_oracle").submit(function (event) {
         $("#variance_sms").text(data.variance_sms);
         $("#variance_clr").text(data.variance_clr);
         update_data_oracle(cdr_date);
-        update_colors();
+        var today = new Date();
+        var date_today = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        if (cdr_date != date_today) {
+            update_colors();
+        }
     });
 
 });
@@ -90,6 +98,6 @@ function update_colors(){
     }
 }
 
-$("document").ready(function () {
-    update_colors();
-});
+// $("document").ready(function () {
+//     update_colors();
+// });
