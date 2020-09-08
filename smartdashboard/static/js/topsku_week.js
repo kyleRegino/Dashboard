@@ -124,6 +124,9 @@ $.ajax({
                 labels: {
                     style: {
                         colors: '#008FFB',
+                    },
+                    formatter: function (x) {
+                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                     }
                 },
                 title: {
@@ -150,6 +153,9 @@ $.ajax({
                     style: {
                         colors: '#FEB019',
                     },
+                    formatter: function (x) {
+                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                    }
                 },
                 title: {
                     text: "Transaction Counts",

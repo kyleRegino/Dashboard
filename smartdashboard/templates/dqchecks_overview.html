@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row page-title-header">
-
     <div class="col-12">
         <div class="page-header">
             <h4 class="page-title">Manifests VS T1 Overview</h4>
@@ -9,6 +8,7 @@
     </div>
 
 </div>
+
 
 <!-- Hive Variance -->
 <div class='row'>
@@ -34,7 +34,8 @@
                                 <option value="month">Month</option>
                                 <option value="year">Year</option>
                             </select>
-                            <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
+                            <input type="submit" id="search" value="Go" class="btn btn-primary " name="hive_graph" />
+                            <input type="submit" id="generate_excel" value="Go" class="btn btn-primary " name="hive_excel" />
                         </form>
                     </div>
                 </div>
@@ -56,7 +57,7 @@
             <div class="card-header py-3 card-border-header">
                 <div class="row-1 align-items-end">
                     <div class="col-11">
-                        <h1 class="h3 text-gray-800">Oracle Variances per CDR Over Period</h1>
+                        <h1 class="h3 text-gray-800">FC Variances per CDR Over Period</h1>
                     </div>
                 </div>
             </div>
