@@ -121,5 +121,30 @@ $.ajax({
 });
 
 $('#oracle_table').DataTable({
-    ajax: '/dqchecks_oracle_table'
+    ajax: '/dqchecks_oracle_table',
+    dataSrc: 'data',
+    columns: [
+        { data: 'file date' },
+        { data: 'cdr' },
+        { data: 'manifest count' },
+        { data: 't1 count' },
+        { data: 'variance' }
+    ],
+    initComplete: function () {
+        var column = this.api().column(1);
+        console.log(column)
+        var select = $("#cdr_select_oracle").on('change', function () {
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            column
+                .search(val ? '^' + val + '$' : '', true, false)
+                .draw();
+        });
+        select.append('<option value=""> ALL </option>')
+        column.data().unique().sort().each(function (d, j) {
+            select.append('<option value="' + d + '">' + d + '</option>')
+        });
+    }
 });

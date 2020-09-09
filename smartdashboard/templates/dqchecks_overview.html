@@ -105,18 +105,15 @@
                         <form action="/" method="post" id="variance_table_form"
                             autocomplete="off">
                             Start Date:
-                            <input type="text" name="start_date" id="min_oracle" value="{{ minDate }}" required>
+                            <input type="text" name="start_date" id="min_oracle_table" value="{{ minDate }}" required>
                             End Date:
-                            <input type="text" name="end_date" id="max_oracle" value="{{ maxDate }}" required>
-                            <!-- <select name="period" id="period_oracle" required>
-                                <option value="day">Day</option>
-                                <option value="month">Month</option>
-                                <option value="year">Year</option>
-                            </select> -->
-                            <input type="button" id="search_date_oracle" value="Go" class="btn btn-primary " name="" />
-                            <input type="submit" id="generate_excel_oracle" value="Generate Excel" class="btn btn-primary"
-                                style="background-color:#558B2F" name="hive_excel" />
+                            <input type="text" name="end_date" id="max_oracle_table" value="{{ maxDate }}" required>
+                            CDR:
+                            <select name="cdr" id="cdr_select_oracle">
+                            
+                            </select>
                         </form>
+                        
                     </div>
                 </div>
                 <div class="row">
@@ -148,8 +145,6 @@
 {% endblock content %}
 
 {% block scripts %}
-<script src="../static/js/jqeury.dataTables.min.js"></script>
 <script src="../static/js/dq_overview_hive.js"></script>
 <script src="../static/js/dq_overview_oracle.js"></script>
-<script src="../static/dataTables/dataTables_dq.js"></script>
 {% endblock %}

@@ -293,20 +293,24 @@ def dqchecks_oracle_table():
     #     end_date = request.form["end_date"]
     #     period_select = request.form["period"]
 
-    lookup = db.session.query(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.ocs_manifest),func.sum(manifest_oracle_monitoring.t1_oracle),func.sum(manifest_oracle_monitoring.variance)).all()
+    lookup = db.session.query(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.ocs_manifest),func.sum(manifest_oracle_monitoring.t1_oracle),func.sum(manifest_oracle_monitoring.variance)).group_by(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type)
 
     cdr_dict = {}
     data = []
     for l in lookup:
         data.append({
-            "file date": l.file_date,
+            "file date": l.file_date.strftime("%Y-%m-%d"),
             "cdr": l.cdr_type,
-            "manifest count": l[2],
-            "t1 count": l[3],
-            "variance": l[4]
+            "manifest count": str(l[2]),
+            "t1 count": str(l[3]),
+            "variance": str(l[4])
         })
-            
-    return data
+    result_set = {
+        "data": data
+    }
+ 
+
+    return jsonify(result_set)
 
 @dq_blueprint.route('/dqchecks_exce_oracle_excel', methods=['POST'])
 def dqchecks_exce_oracle_excel():
