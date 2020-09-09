@@ -7,7 +7,7 @@ $('#min_oracle').datetimepicker({
     format: 'Y-m-d',
     onShow: function (ct) {
         this.setOptions({
-            maxDate: jQuery('#max_hive').val() ? jQuery('#max_hive').val() : false
+            maxDate: jQuery('#max_oracle').val() ? jQuery('#max_oracle').val() : false
         })
     }
 });
@@ -18,6 +18,26 @@ $('#max_oracle').datetimepicker({
     onShow: function (ct) {
         this.setOptions({
             minDate: jQuery('#min_oracle').val() ? jQuery('#min_oracle').val() : false
+        })
+    }
+});
+
+$('#min_oracle_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#max_oracle_table').val() ? jQuery('#max_oracle_table').val() : false
+        })
+    }
+});
+
+$('#max_oracle_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#min_oracle_table').val() ? jQuery('#min_oracle_table').val() : false
         })
     }
 });
@@ -120,31 +140,49 @@ $.ajax({
     oracle_variance_chart.render();
 });
 
-$('#oracle_table').DataTable({
-    ajax: '/dqchecks_oracle_table',
-    dataSrc: 'data',
-    columns: [
-        { data: 'file date' },
-        { data: 'cdr' },
-        { data: 'manifest count' },
-        { data: 't1 count' },
-        { data: 'variance' }
-    ],
-    initComplete: function () {
-        var column = this.api().column(1);
-        console.log(column)
-        var select = $("#cdr_select_oracle").on('change', function () {
-            var val = $.fn.dataTable.util.escapeRegex(
-                $(this).val()
-            );
-
-            column
-                .search(val ? '^' + val + '$' : '', true, false)
-                .draw();
-        });
-        select.append('<option value=""> ALL </option>')
-        column.data().unique().sort().each(function (d, j) {
-            select.append('<option value="' + d + '">' + d + '</option>')
-        });
-    }
+$("#variance_table_form").submit(function(event) {
+    event.preventDefault();
+    var start_date = $("#min_oracle_table").val();
+    var end_date = $("#max_oracle_table").val();
+    var oracle_table = $('#oracle_table').DataTable().clear().destroy();
+    generate_table_oracle(start_date, end_date);
 });
+
+function generate_table_oracle(start_date,end_date) {
+    $('#oracle_table').DataTable({
+        ajax: {
+            url:'/dqchecks_oracle_table',
+            type: 'POST',
+            dataType: "json",
+            data: {
+                "start_date": start_date,
+                "end_date": end_date
+            },
+            dataSrc: 'data',
+        },
+        columns: [
+            { data: 'file date' },
+            { data: 'cdr' },
+            { data: 'manifest count' },
+            { data: 't1 count' },
+            { data: 'variance' }
+        ],
+        initComplete: function () {
+            var column = this.api().column(1);
+            var select = $("#cdr_select_oracle").on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex(
+                    $(this).val()
+                );
+
+                column
+                    .search(val ? '^' + val + '$' : '', true, false)
+                    .draw();
+            });
+            select.append('<option value=""> ALL </option>')
+            column.data().unique().sort().each(function (d, j) {
+                select.append('<option value="' + d + '">' + d + '</option>')
+            });
+        }
+    });
+};
+generate_table_oracle(null, null);
