@@ -144,7 +144,7 @@ $("#variance_table_form").submit(function(event) {
     event.preventDefault();
     var start_date = $("#min_oracle_table").val();
     var end_date = $("#max_oracle_table").val();
-    var oracle_table = $('#oracle_table').DataTable().clear().destroy();
+    $('#oracle_table').DataTable().clear().destroy();
     generate_table_oracle(start_date, end_date);
 });
 
