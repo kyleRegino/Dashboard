@@ -103,6 +103,14 @@ def dqchecks_overview_hive_js():
     #         variance_sms[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
     #     elif v.cdr_type == "clr":
     #         variance_clr[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
+
+    #TABLE
+    oracle_query = db.session.query(manifest_hive_monitoring.file_date, 
+                                    manifest_hive_monitoring.cdr_type, 
+                                    func.sum(manifest_hive_monitoring.ocs_manifest), 
+                                    func.sum(manifest_hive_monitoring.t1_oracle), 
+                                    func.sum(manifest_hive_monitoring.variance))\
+        .group_by(period,manifest_hive_monitoring.cdr_type).all()
     
     
     result_set = {
