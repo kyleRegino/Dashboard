@@ -24,7 +24,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12 date-1">
-                        <form action="/dqchecks_exce_hive_excel" method="post" id="hive_overview_form" autocomplete="off">
+                        <form action="/dqchecks_hive_excel" method="post" id="hive_overview_form" autocomplete="off">
                             Start Date:
                             <input type="text" name="start_date" id="min_hive" required>
                             End Date:
@@ -34,8 +34,8 @@
                                 <option value="month">Month</option>
                                 <option value="year">Year</option>
                             </select>
-                            <input type="button" id="search_date" value="Go" class="btn btn-primary " name="hive_graph" />
-                            <input type="submit" id="generate_excel" value="Generate Excel" class="btn btn-primary" style="background-color:#558B2F" name="hive_excel" />
+                            <input type="button" id="search_date_hive" value="Go" class="btn btn-primary " name="hive_graph" />
+                            <input type="submit" id="generate_excel_hive" value="Generate Excel" class="btn btn-primary" style="background-color:#558B2F" name="hive_excel" />
                         </form>
                     </div>
                 </div>
@@ -63,18 +63,19 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-7 date-1">
-                        <form action="" method="post" id="oracle_overview_form" autocomplete="off">
+                    <div class="col-md-12 date-1">
+                        <form action="/dqchecks_oracle_excel" method="post" id="oracle_overview_form" autocomplete="off">
                             Start Date:
-                            <input type="text" name="datetimepickermin" id="min_oracle" value="{{ minDate }}" required>
+                            <input type="text" name="start_date" id="min_oracle" value="{{ minDate }}" required>
                             End Date:
-                            <input type="text" name="datetimepickermax" id="max_oracle" value="{{ maxDate }}" required>
+                            <input type="text" name="end_date" id="max_oracle" value="{{ maxDate }}" required>
                             <select name="period" id="period_oracle" required>
                                 <option value="day">Day</option>
                                 <option value="month">Month</option>
                                 <option value="year">Year</option>
                             </select>
-                            <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
+                            <input type="button" id="search_date_oracle" value="Go" class="btn btn-primary " name="" />
+                            <input type="submit" id="generate_excel_oracle" value="Generate Excel" class="btn btn-primary" style="background-color:#558B2F" name="hive_excel" />
                         </form>
                     </div>
                 </div>
@@ -88,11 +89,66 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">Variance Table</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 date-1">
+                        <form action="/" method="post" id="variance_table_form"
+                            autocomplete="off">
+                            Start Date:
+                            <input type="text" name="start_date" id="min_oracle" value="{{ minDate }}" required>
+                            End Date:
+                            <input type="text" name="end_date" id="max_oracle" value="{{ maxDate }}" required>
+                            <!-- <select name="period" id="period_oracle" required>
+                                <option value="day">Day</option>
+                                <option value="month">Month</option>
+                                <option value="year">Year</option>
+                            </select> -->
+                            <input type="button" id="search_date_oracle" value="Go" class="btn btn-primary " name="" />
+                            <input type="submit" id="generate_excel_oracle" value="Generate Excel" class="btn btn-primary"
+                                style="background-color:#558B2F" name="hive_excel" />
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="oracle_table" class="display" style="width:100%">
+                            <thead>
+                                <th>Date</th>
+                                <th>CDR</th>
+                                <th>Manifest Count</th>
+                                <th>FC Count</th>
+                                <th>Variance</th>
+                            </thead>
+                            <tfoot>
+                                <th>Date</th>
+                                <th>CDR</th>
+                                <th>Manifest Count</th>
+                                <th>FC Count</th>
+                                <th>Variance</th>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock content %}
 
 {% block scripts %}
+<script src="../static/js/jqeury.dataTables.min.js"></script>
 <script src="../static/js/dq_overview_hive.js"></script>
 <script src="../static/js/dq_overview_oracle.js"></script>
 {% endblock %}

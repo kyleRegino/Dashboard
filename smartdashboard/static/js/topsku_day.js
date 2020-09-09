@@ -1,13 +1,11 @@
 var series_amount = []
 var series_count = [];
-var series_hour = [];
-var series_day = [];
-var chart_day ;
-var init_brand = 0;
-var max_brand;
 var y_axis_amount = [];
 var color_pallete = ['#5b9bd5', '#ed7d31', '#ffd966', '#2b2d4f', '#00b050', '#bf9000', '#d6dce5', '#ffff00', '#99ff66', '#ffa500'];
 var colors = [];
+var chart_day;
+var max_brand = 0;
+var init_brand = 0;
 
 $('#sku_date').datetimepicker({
   timepicker: false,
@@ -20,150 +18,35 @@ $("#sku_day_form").submit(function(event){
   update_day_sku(sku_date);
 });
 
-
-function update_day_sku(sku_date) {
-  $.ajax({
-    url: "/topsku_day_js",
-    method: "POST",
-    dataType: "json",
-    data: { "sku_date": sku_date }
-  }).done(function (data) {
-    series_amount = [];
-    series_hour = [];
-    y_axis_amount = [];
-    var i = 0
-    // PER HOUR
-    Object.keys(data["brands"]).forEach(function (brand) {
-      series_amount.push({
-        name: brand,
-        data: data["brands"][brand]["amount"],
-        type: 'bar'
-      });
-      series_count.push({
-        name: brand,
-        data: data["brands"][brand]["count"],
-        type: 'bar'
-      });
-      colors.push(color_pallete[i]);
-      brand_max = Math.max(data["brands"][brand]["amount"]);
-      if (init_brand < brand_max) {
-        init_brand = brand_max
-        max_brand = brand
-      }
-      i++;
-    });
-    for (var i = 0; i < series_amount.length; i++) {
-      if (i == 0) {
-        show_y = true
-      }
-      else {
-        show_y = false
-      }
-      y_axis_amount.push({
-        seriesName: max_brand,
-        show: show_y,
-        opposite: false,
-        axisTicks: {
-          show: true,
-        },
-        axisBorder: {
-          show: true,
-          color: '#00429d'
-        },
-        labels: {
-          style: {
-            colors: '#00429d',
-          },
-          formatter: function (x) {
-            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-          }
-        },
-        title: {
-          text: "Total Amounts Per Brand Over Hour",
-          style: {
-            color: '#00429d',
-            fontSize: '0.8em',
-          }
-        }
-      })
-    }
-    series_amount.push({
-      name: "Total Amounts Per Hour",
-      data: data["totals"]["total_amt_hr"],
-      type: 'line'
-    });
-    series_count.push({
-      name: "Total Counts Per Hour",
-      data: data["totals"]["total_cnt_hr"],
-      type: 'line'
-    });
-    y_axis_amount.push({
-      seriesName: "Total Amounts Per Hour",
-      opposite: true,
-      axisTicks: {
-        show: true,
-      },
-      axisBorder: {
-        show: true,
-        color: '#FEB019'
-      },
-      labels: {
-        style: {
-          colors: '#FEB019',
-        },
-        formatter: function (x) {
-          return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        }
-      },
-      title: {
-        text: "Total Amounts Over Hour",
-        style: {
-          color: '#FEB019',
-          fontSize: '0.8em',
-        }
-      }
-    });
-    colors.push("#FEB019")
-    chart_day.updateOptions({
-      yaxis: y_axis_amount
-    }
-    );
-    chart_day.updateSeries(series_amount);
-
+function series_amount_push(brand, brand_amount) {
+  series_amount.push({
+    name: brand,
+    data: brand_amount,
+    type: 'bar'
   });
 }
 
-$.ajax({
-    url: "/topsku_day_js",
-    method: "GET",
-    dataType: "json"
-}).done(function (data) {
-  var i = 0;
-  // PER HOUR
-  Object.keys(data["brands"]).forEach(function (brand) {
-    series_amount.push({
-      name: brand,
-      data: data["brands"][brand]["amount"],
-      type: 'bar'
-    });
-    series_count.push({
-      name: brand,
-      data: data["brands"][brand]["count"],
-      type: 'bar'
-    });
-    brand_max = Math.max(data["brands"][brand]["amount"]);
-    if (init_brand < brand_max) {
-      init_brand = brand_max
-      max_brand = brand
-    }
-    colors.push(color_pallete[i]);
-    i++;
+function series_count_push(brand, brand_count) {
+  series_count.push({
+    name: brand,
+    data: brand_count,
+    type: 'bar'
   });
-  for(var i=0;i<series_amount.length;i++){
-    if (i == 0){
+}
+
+function compute_max_brand(brand_max, brand) {
+  if (init_brand < brand_max) {
+    init_brand = brand_max
+    max_brand = brand
+  }
+}
+
+function create_yaxis() {
+  for (var i = 0; i < series_amount.length; i++) {
+    if (i == 0) {
       show_y = true
     }
-    else{
+    else {
       show_y = false
     }
     y_axis_amount.push({
@@ -194,11 +77,20 @@ $.ajax({
       }
     })
   }
+}
+
+function push_totals(total_amt, total_cnt) {
   series_amount.push({
     name: "Total Amounts Per Hour",
-    data: data["totals"]["total_amt_hr"],
-    type: 'line',
+    data: total_amt,
+    type: 'line'
   });
+  series_count.push({
+    name: "Total Counts Per Hour",
+    data: total_cnt,
+    type: 'line'
+  });
+
   y_axis_amount.push({
     seriesName: "Total Amounts Per Hour",
     opposite: true,
@@ -225,12 +117,67 @@ $.ajax({
       }
     }
   });
-  series_count.push({
-    name: "Total Counts Per Hour",
-    data: data["totals"]["total_cnt_hr"],
-    type: 'line'
+}
+
+function update_day_sku(sku_date) {
+  $.ajax({
+    url: "/topsku_day_js",
+    method: "POST",
+    dataType: "json",
+    data: { "sku_date": sku_date }
+  }).done(function (data) {
+    series_amount = [];
+    series_hour = [];
+    y_axis_amount = [];
+    colors = [];
+    init_brand = 0;
+    max_brand = 0;
+    var i = 0
+    // PER HOUR
+    Object.keys(data["brands"]).forEach(function (brand) {
+      var brand_amount = data["brands"][brand]["amount"];
+      var brand_count = data["brands"][brand]["count"];
+      series_amount_push(brand, brand_amount);
+      series_count_push(brand, brand_count);
+      compute_max_brand(brand_amount, brand);
+      colors.push(color_pallete[i]);
+      i++;
+    });
+    create_yaxis();
+    total_amt = data["totals"]["total_amt_hr"];
+    total_cnt = data["totals"]["total_cnt_hr"];
+    push_totals(total_amt, total_cnt);
+    colors.push("#000000")
+    chart_day.updateOptions({
+      yaxis: y_axis_amount,
+      colors: colors
+    }
+    );
+    chart_day.updateSeries(series_amount);
   });
-  colors.push("#FEB019")
+}
+
+$.ajax({
+    url: "/topsku_day_js",
+    method: "GET",
+    dataType: "json"
+}).done(function (data) {
+  var i = 0;
+  // PER HOUR
+  Object.keys(data["brands"]).forEach(function (brand) {
+    var brand_amount = data["brands"][brand]["amount"];
+    var brand_count = data["brands"][brand]["count"];
+    series_amount_push(brand, brand_amount);
+    series_count_push(brand, brand_count);
+    compute_max_brand(brand_amount, brand);
+    colors.push(color_pallete[i]);
+    i++;
+  });
+  create_yaxis();
+  total_amt = data["totals"]["total_amt_hr"];
+  total_cnt = data["totals"]["total_cnt_hr"];
+  push_totals(total_amt, total_cnt);
+  colors.push("#000000")
   var options = {
     chart: {
       height: 350,

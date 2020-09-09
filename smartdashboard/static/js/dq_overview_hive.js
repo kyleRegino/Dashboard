@@ -23,8 +23,8 @@ $('#max_hive').datetimepicker({
     }
 });
 
-$("#search_date").click(function(){
-    if ($("#search_date")[0].checkValidity()) {
+$("#search_date_hive").click(function(){
+    if ($("#search_date_hive")[0].checkValidity()) {
         var start_date = $("#min_hive").val();
         var end_date = $("#max_hive").val();
         var period = $("#period_hive").val();
@@ -34,13 +34,19 @@ $("#search_date").click(function(){
         else{
             alert("Form is not completed.")
         }
-        
     }
     else {
-        $("#search_date")[0].reportValidity();
+        $("#search_date_hive")[0].reportValidity();
     }
 });
 
+function push_lines_hive(cdr, data_cdr) {
+    lines_hive.push({
+        name: cdr + ' variance',
+        data: data_cdr,
+        type: 'line'
+    });
+}
 
 function update_data_hive(start_date,end_date,period) {
     $.ajax({
@@ -54,11 +60,8 @@ function update_data_hive(start_date,end_date,period) {
         lines_hive = [];
         for (c of cdr_types) {
             var variance = "variance_" + c;
-            lines_hive.push({
-                name: c + ' variance',
-                data: data[variance],
-                type: 'line'
-            });
+            var data_cdr = data[variance]
+            push_lines_hive(c, data_cdr);
         }
         hive_variance_chart.updateOptions({
             xaxis: {
@@ -77,11 +80,8 @@ $.ajax({
 }).done(function (data) {
     for (c of cdr_types) {
         var variance = "variance_" + c;
-        lines_hive.push({
-            name: c + ' variance',
-            data: data[variance],
-            type: 'line'
-        });
+        var data_cdr = data[variance]
+        push_lines_hive(c, data_cdr);
     }
     var options = {
         series: lines_hive,
@@ -103,6 +103,7 @@ $.ajax({
         stroke: {
             show: true,
             width: 2,
+            curve: 'smooth',
         },
         xaxis: {
             categories: data["date_list"],

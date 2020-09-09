@@ -69,6 +69,7 @@ $.ajax({
                     endingShape: 'rounded'
                 },
             },
+            colors: ["#283593", "#F57C00", "#8BC34A"],
             dataLabels: {
                 enabled: true,
                 enabledOnSeries: [2]

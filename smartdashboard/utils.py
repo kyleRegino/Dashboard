@@ -42,5 +42,5 @@ def insert_sku(lookup, hour, amt, cnt):
         lookup["count"][5] = str(cnt)
 
 def number_formatter(num):
-    return '{0:,}'.format(num) if num != None else "Null"
+    return '{0:,}'.format(num) if num != None else "None"
         

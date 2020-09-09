@@ -22,13 +22,30 @@ $('#max_oracle').datetimepicker({
     }
 });
 
-$("#oracle_overview_form").submit(function (event) {
-    event.preventDefault();
-    var start_date = $("#min_oracle").val();
-    var end_date = $("#max_oracle").val();
-    var period = $("#period_oracle").val();
-    update_data_oracle(start_date, end_date, period);
+$("#search_date_oracle").click(function () {
+    if ($("#search_date_hive")[0].checkValidity()) {
+        var start_date = $("#min_oracle").val();
+        var end_date = $("#max_oracle").val();
+        var period = $("#period_oracle").val();
+        if (start_date != "" && end_date != "" && period != "") {
+            update_data_oracle(start_date, end_date, period);
+        }
+        else {
+            alert("Form is not completed.")
+        }
+    }
+    else {
+        $("#search_date_hive")[0].reportValidity();
+    }
 });
+
+function push_lines_oracle(cdr, data_cdr) {
+    lines_oracle.push({
+        name: cdr + ' variance',
+        data: data_cdr,
+        type: 'line'
+    });
+}
 
 function update_data_oracle(start_date, end_date, period) {
     $.ajax({
@@ -44,11 +61,8 @@ function update_data_oracle(start_date, end_date, period) {
         lines_oracle = [];
         for (c of cdr_types) {
             var variance = "variance_" + c;
-            lines_oracle.push({
-                name: c + ' variance',
-                data: data[variance],
-                type: 'line'
-            });
+            var data_cdr = data[variance]
+            push_lines_oracle(c, data_cdr);
         }
         oracle_variance_chart.updateOptions({
             xaxis: {
@@ -67,11 +81,8 @@ $.ajax({
 }).done(function (data) {
     for (c of cdr_types) {
         var variance = "variance_" + c;
-        lines_oracle.push({
-            name: c + ' variance',
-            data: data[variance],
-            type: 'line'
-        });
+        var data_cdr = data[variance]
+        push_lines_oracle(c, data_cdr);
     }
     var options = {
         series: lines_oracle,
@@ -93,6 +104,7 @@ $.ajax({
         stroke: {
             show: true,
             width: 2,
+            curve: 'smooth',
         },
         xaxis: {
             categories: data["date_list"],
@@ -106,4 +118,8 @@ $.ajax({
     };
     oracle_variance_chart = new ApexCharts(document.querySelector("#variances_oracle"), options);
     oracle_variance_chart.render();
+});
+
+$('#oracle_table').DataTable({
+    ajax: '/dqchecks_oracle_table'
 });

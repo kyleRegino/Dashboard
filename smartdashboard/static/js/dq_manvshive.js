@@ -61,7 +61,33 @@ $.ajax({
             }],
             chart: {
                 type: 'line',
-                height: 350
+                height: 350,
+                toolbar: {
+                    show: true,
+                    offsetX: 0,
+                    offsetY: 0,
+                    tools: {
+                        download: true,
+                        selection: true,
+                        zoom: true,
+                        zoomin: true,
+                        zoomout: true,
+                        pan: true,
+                        customIcons: []
+                    },
+                    export: {
+                        csv: {
+                            filename: "hallo",
+                            columnDelimiter: ',',
+                            headerCategory: 'category',
+                            headerValue: 'value',
+                            dateFormatter(timestamp) {
+                                return new Date(timestamp).toDateString()
+                            }
+                        }
+                    },
+                    autoSelected: 'zoom'
+                },
             },
             plotOptions: {
                 bar: {
@@ -70,6 +96,7 @@ $.ajax({
                     endingShape: 'rounded'
                 },
             },
+            colors: ["#283593", "#F57C00", "#8BC34A"],
             dataLabels: {
                 enabled: true,
                 enabledOnSeries: [2]
@@ -107,7 +134,17 @@ $.ajax({
         series: lines,
         chart: {
             type: 'line',
-            height: 350
+            height: 350,
+            toolbar: {
+                export: {
+                    csv: {
+                        filename: "hallo",
+                        columnDelimiter: ',',
+                        headerCategory: 'hour',
+                        headerValue: 'hour',
+                    }
+                },
+            },
         },
         plotOptions: {
             bar: {
@@ -124,7 +161,6 @@ $.ajax({
             show: true,
             width: 2,
             curve: 'smooth'
-            // colors: ['transparent']
         },
         grid: {
             borderColor: '#e7e7e7',
@@ -138,6 +174,9 @@ $.ajax({
         },
         fill: {
             opacity: 1
+        },
+        markers: {
+            size: 3
         },
     };
     variance_chart = new ApexCharts(document.querySelector("#variances_hive"), options);
