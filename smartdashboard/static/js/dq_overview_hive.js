@@ -118,3 +118,32 @@ $.ajax({
     hive_variance_chart = new ApexCharts(document.querySelector("#variances_hive"), options);
     hive_variance_chart.render();
 });
+
+$('#hive_table').DataTable({
+    ajax: '/dqchecks_hive_table',
+    dataSrc: 'data',
+    columns: [
+        { data: 'file date' },
+        { data: 'cdr' },
+        { data: 'manifest count' },
+        { data: 't1 count' },
+        { data: 'variance' }
+    ],
+    initComplete: function () {
+        var column = this.api().column(1);
+        console.log(column)
+        var select = $("#cdr_select_hive").on('change', function () {
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            column
+                .search(val ? '^' + val + '$' : '', true, false)
+                .draw();
+        });
+        select.append('<option value=""> ALL </option>')
+        column.data().unique().sort().each(function (d, j) {
+            select.append('<option value="' + d + '">' + d + '</option>')
+        });
+    }
+}); 

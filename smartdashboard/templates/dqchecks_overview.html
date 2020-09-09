@@ -89,6 +89,53 @@
     </div>
 </div>
 
+<!-- Hive Table -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">Hive Variance Table</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 date-1">
+                        <form action="/" method="post" id="variance_table_form"
+                            autocomplete="off">
+                            Start Date:
+                            <input type="search" class="form-control" name="start_date" id="min_oracle_table" value="{{ minDate }}" required>
+                            End Date:
+                            <input type="search" class="form-control" name="end_date" id="max_oracle_table" value="{{ maxDate }}" required>
+                            CDR:
+                            <select name="cdr" id="cdr_select_hive">
+                            
+                            </select>
+                        </form>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="hive_table" class="table table-bordered" style="width:100%">
+                            <thead>
+                                <th>Date</th>
+                                <th>CDR</th>
+                                <th>Manifest Count</th>
+                                <th>FC Count</th>
+                                <th>Variance</th>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Oracle table -->
 <div class="row">
     <div class="col-md-12">
         <div class="card shadow mb-4 card-border">

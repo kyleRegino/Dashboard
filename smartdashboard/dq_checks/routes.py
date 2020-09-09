@@ -19,7 +19,7 @@ dq_blueprint = Blueprint('dq_blueprint', __name__)
 def dq_overview():
     return render_template('dqchecks_overview.html')
 
-# MANIFEST VS T1 OVERVIEW
+# DQ-OVERVIEW HIVE
 @dq_blueprint.route('/dqchecks_overview_hive_js', methods=['GET', 'POST'])
 def dqchecks_overview_hive_js():
     if request.method == "POST":
@@ -103,14 +103,6 @@ def dqchecks_overview_hive_js():
     #         variance_sms[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
     #     elif v.cdr_type == "clr":
     #         variance_clr[date_list.index(format_date(v.file_date,period_select))] = str(v[2])
-
-    #TABLE
-    oracle_query = db.session.query(manifest_hive_monitoring.file_date, 
-                                    manifest_hive_monitoring.cdr_type, 
-                                    func.sum(manifest_hive_monitoring.ocs_manifest), 
-                                    func.sum(manifest_hive_monitoring.t1_oracle), 
-                                    func.sum(manifest_hive_monitoring.variance))\
-        .group_by(period,manifest_hive_monitoring.cdr_type).all()
     
     
     result_set = {
@@ -216,7 +208,38 @@ def dqchecks_hive_excel():
 
     return Response(output, mimetype="application/openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition":"attachment;filename={}.xlsx".format(filename)})
 
+@dq_blueprint.route('/dqchecks_hive_table', methods=['GET'])
+def dqchecks_hive_table():
+    # if request.method == "POST":
+    #     start_date = request.form["start_date"]
+    #     end_date = request.form["end_date"]
+    #     period_select = request.form["period"]
 
+    lookup = db.session.query(manifest_hive_monitoring.file_date,
+                                manifest_hive_monitoring.cdr_type,
+                                func.sum(manifest_hive_monitoring.ocs_manifest),
+                                func.sum(manifest_hive_monitoring.t1_hive),
+                                func.sum(manifest_hive_monitoring.variance))\
+                                .group_by(manifest_hive_monitoring.file_date, manifest_hive_monitoring.cdr_type)
+
+    cdr_dict = {}
+    data = []
+    for l in lookup:
+        data.append({
+            "file date": l.file_date.strftime("%Y-%m-%d"),
+            "cdr": l.cdr_type,
+            "manifest count": str(l[2]),
+            "t1 count": str(l[3]),
+            "variance": str(l[4])
+        })
+    result_set = {
+        "data": data
+    }
+ 
+
+    return jsonify(result_set)
+
+# DQ-OVERVIEW ORACLE
 @dq_blueprint.route('/dqchecks_overview_oracle_js', methods=['GET', 'POST'])
 def dqchecks_overview_oracle_js():
     if request.method == "POST":

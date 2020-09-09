@@ -293,6 +293,7 @@ table.dataTable td {
 }
 .dataTables_wrapper .dataTables_filter input {
   margin-left: 0.5em;
+  
 }
 .dataTables_wrapper .dataTables_info {
   clear: both;
