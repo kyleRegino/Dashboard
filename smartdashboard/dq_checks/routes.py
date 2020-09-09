@@ -217,7 +217,7 @@ def dqchecks_hive_table():
         date_today = date.today()
         start_date = date_today - relativedelta(days=8)
         end_date = date_today
-    # print(start_date,end_date)
+    
     lookup = db.session.query(manifest_hive_monitoring.file_date,
                                 manifest_hive_monitoring.cdr_type,
                                 func.sum(manifest_hive_monitoring.ocs_manifest),
@@ -226,7 +226,6 @@ def dqchecks_hive_table():
                                 .filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date))\
                                 .group_by(manifest_hive_monitoring.file_date,manifest_hive_monitoring.cdr_type)
 
-    cdr_dict = {}
     data = []
     for l in lookup:
         data.append({
@@ -239,7 +238,6 @@ def dqchecks_hive_table():
     result_set = {
         "data": data
     }
-    # print(result_set)
 
     return jsonify(result_set)
 
@@ -330,7 +328,7 @@ def dqchecks_oracle_table():
         date_today = date.today()
         start_date = date_today - relativedelta(days=8)
         end_date = date_today
-    # print(start_date,end_date)
+   
     lookup = db.session.query(manifest_oracle_monitoring.file_date,
                                 manifest_oracle_monitoring.cdr_type,
                                 func.sum(manifest_oracle_monitoring.ocs_manifest),
@@ -339,7 +337,6 @@ def dqchecks_oracle_table():
                                 .filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date))\
                                 .group_by(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type)
 
-    cdr_dict = {}
     data = []
     for l in lookup:
         data.append({
@@ -352,7 +349,6 @@ def dqchecks_oracle_table():
     result_set = {
         "data": data
     }
-    # print(result_set)
 
     return jsonify(result_set)
 

@@ -23,6 +23,26 @@ $('#max_hive').datetimepicker({
     }
 });
 
+$('#min_hive_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#max_hive_table').val() ? jQuery('#max_hive_table').val() : false
+        })
+    }
+});
+
+$('#max_hive_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#min_hive_table').val() ? jQuery('#min_hive_table').val() : false
+        })
+    }
+});
+
 $("#search_date_hive").click(function(){
     if ($("#search_date_hive")[0].checkValidity()) {
         var start_date = $("#min_hive").val();
@@ -120,12 +140,11 @@ $.ajax({
 });
 
 
-
 $("#variance_table_form_hive").submit(function(event) {
     event.preventDefault();
     var start_date = $("#min_hive_table").val();
     var end_date = $("#max_hive_table").val();
-    var hive_table = $('#hive_table').DataTable().clear().destroy();
+    $('#hive_table').DataTable().clear().destroy();
     generate_table_hive(start_date, end_date);
 });
 
