@@ -1812,7 +1812,7 @@ pre {
   .form-control:focus {
     color: #495057;
     background-color: #fff;
-    border-color: #80bdff;
+    border-color: #60bb46;
     outline: 0;
     -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
@@ -10983,7 +10983,21 @@ ul {
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}#hive_table_filter input {
+  -webkit-transition: none;
+  transition: none; } 
+#hive_table_filter input::-ms-expand {
+background-color: transparent;
+border: 0; }
+#hive_table_filter input:focus {
+color: #495057;
+background-color: #fff;
+border-color: #60bb46;
+outline: 0;
+/* -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);  */
 }
+
 
 #oracle_table_filter input{
   height: calc(1.5em + 0.75rem + 2px);
@@ -11000,6 +11014,19 @@ ul {
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}#oracle_table_filter input {
+  -webkit-transition: none;
+  transition: none; } 
+  #oracle_table_filter input::-ms-expand {
+background-color: transparent;
+border: 0; }
+#oracle_table_filter input:focus {
+color: #495057;
+background-color: #fff;
+border-color: #60bb46;
+outline: 0;
+/* -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);  */
 }
 
   
