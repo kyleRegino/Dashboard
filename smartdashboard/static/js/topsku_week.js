@@ -119,11 +119,11 @@ $.ajax({
                 },
                 axisBorder: {
                     show: true,
-                    color: '#008FFB'
+                    color: '#000000'
                 },
                 labels: {
                     style: {
-                        colors: '#008FFB',
+                        colors: '#000000',
                     },
                     formatter: function (x) {
                         return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -132,7 +132,8 @@ $.ajax({
                 title: {
                     text: "Transaction Amounts",
                     style: {
-                        color: '#008FFB',
+                        color: '#000000',
+                        fontSize: '0.8em',
                     }
                 },
                 tooltip: {
@@ -147,11 +148,11 @@ $.ajax({
                 },
                 axisBorder: {
                     show: true,
-                    color: '#FEB019'
+                    color: '#000000'
                 },
                 labels: {
                     style: {
-                        colors: '#FEB019',
+                        colors: '#000000',
                     },
                     formatter: function (x) {
                         return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -160,7 +161,8 @@ $.ajax({
                 title: {
                     text: "Transaction Counts",
                     style: {
-                        color: '#FEB019',
+                        color: '#000000',
+                        fontSize: '0.8em',
                     }
                 }
             }

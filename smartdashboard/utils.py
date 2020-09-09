@@ -16,6 +16,11 @@ def format_date(date,period):
     elif period == "month" or period == "year":
         return date
 
+def insert_cdr(lookup, date_index, manifest, t1, variance):
+    lookup["manifest"][date_index] = manifest
+    lookup["t1"][date_index] = t1
+    lookup["variance"][date_index] = variance
+
 def insert_sku(lookup, hour, amt, cnt):
     if hour == 5:
         lookup["amount"][0] = str(amt)

@@ -6,7 +6,7 @@ var chart_day ;
 var init_brand = 0;
 var max_brand;
 var y_axis_amount = [];
-var color_pallete = ["#2979FF", "#C5E1A5", "#90CAF9", "#AA00FF", "#CE93D8", "#4E342E", "#76FF03", "#546E7A"];
+var color_pallete = ['#5b9bd5', '#ed7d31', '#ffd966', '#2b2d4f', '#00b050', '#bf9000', '#d6dce5', '#ffff00', '#99ff66', '#ffa500'];
 var colors = [];
 
 $('#sku_date').datetimepicker({
@@ -30,6 +30,7 @@ function update_day_sku(sku_date) {
   }).done(function (data) {
     series_amount = [];
     series_hour = [];
+    y_axis_amount = [];
     var i = 0
     // PER HOUR
     Object.keys(data["brands"]).forEach(function (brand) {
@@ -44,9 +45,48 @@ function update_day_sku(sku_date) {
         type: 'bar'
       });
       colors.push(color_pallete[i]);
+      brand_max = Math.max(data["brands"][brand]["amount"]);
+      if (init_brand < brand_max) {
+        init_brand = brand_max
+        max_brand = brand
+      }
       i++;
     });
-
+    for (var i = 0; i < series_amount.length; i++) {
+      if (i == 0) {
+        show_y = true
+      }
+      else {
+        show_y = false
+      }
+      y_axis_amount.push({
+        seriesName: max_brand,
+        show: show_y,
+        opposite: false,
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+          color: '#00429d'
+        },
+        labels: {
+          style: {
+            colors: '#00429d',
+          },
+          formatter: function (x) {
+            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+          }
+        },
+        title: {
+          text: "Total Amounts Per Brand Over Hour",
+          style: {
+            color: '#00429d',
+            fontSize: '0.8em',
+          }
+        }
+      })
+    }
     series_amount.push({
       name: "Total Amounts Per Hour",
       data: data["totals"]["total_amt_hr"],
@@ -57,7 +97,37 @@ function update_day_sku(sku_date) {
       data: data["totals"]["total_cnt_hr"],
       type: 'line'
     });
+    y_axis_amount.push({
+      seriesName: "Total Amounts Per Hour",
+      opposite: true,
+      axisTicks: {
+        show: true,
+      },
+      axisBorder: {
+        show: true,
+        color: '#FEB019'
+      },
+      labels: {
+        style: {
+          colors: '#FEB019',
+        },
+        formatter: function (x) {
+          return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }
+      },
+      title: {
+        text: "Total Amounts Over Hour",
+        style: {
+          color: '#FEB019',
+          fontSize: '0.8em',
+        }
+      }
+    });
     colors.push("#FEB019")
+    chart_day.updateOptions({
+      yaxis: y_axis_amount
+    }
+    );
     chart_day.updateSeries(series_amount);
 
   });
@@ -105,11 +175,11 @@ $.ajax({
       },
       axisBorder: {
         show: true,
-        color: '#008FFB'
+        color: '#000000'
       },
       labels: {
         style: {
-          colors: '#008FFB',
+          colors: '#000000',
         },
         formatter: function (x) {
           return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -118,7 +188,8 @@ $.ajax({
       title: {
         text: "Total Amounts Per Brand Over Hour",
         style: {
-          color: '#008FFB',
+          color: '#000000',
+          fontSize: '0.8em',
         }
       }
     })
@@ -136,11 +207,11 @@ $.ajax({
     },
     axisBorder: {
       show: true,
-      color: '#FEB019'
+      color: '#000000'
     },
     labels: {
       style: {
-        colors: '#FEB019',
+        colors: '#000000',
       },
       formatter: function (x) {
         return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -149,7 +220,8 @@ $.ajax({
     title: {
       text: "Total Amounts Over Hour",
       style: {
-        color: '#FEB019',
+        color: '#000000',
+        fontSize: '0.8em',
       }
     }
   });
@@ -198,7 +270,6 @@ $.ajax({
     },
     yaxis: y_axis_amount
   };
-  
 
   chart_day = new ApexCharts(document.querySelector("#topsku_day"), options);
   chart_day.render();

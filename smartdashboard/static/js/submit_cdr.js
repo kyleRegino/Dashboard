@@ -23,7 +23,9 @@ $("#cdr_date_form_hive").submit(function(event){
         $("#variance_clr").text(data.variance_clr);
         update_data_hive(cdr_date);
         var today = new Date();
-        var date_today = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var date_today = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        console.log(date_today);
+        console.log(cdr_date);
         if (cdr_date != date_today){
             update_colors();
         }
@@ -51,7 +53,7 @@ $("#cdr_date_form_oracle").submit(function (event) {
         $("#variance_clr").text(data.variance_clr);
         update_data_oracle(cdr_date);
         var today = new Date();
-        var date_today = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var date_today = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
         if (cdr_date != date_today) {
             update_colors();
         }

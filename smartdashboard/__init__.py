@@ -18,6 +18,7 @@ Base = automap_base()
 # engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
 
 db = SQLAlchemy(app)
+db.init_app(app)
 Base.prepare(db.engine, reflect=True)
 
 bca_monitoring_table = Base.classes.job_bca_monitoring

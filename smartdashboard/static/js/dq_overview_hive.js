@@ -1,6 +1,7 @@
 var cdr_types = ["com", "vou", "cm", "adj", "first", "mon", "data", "voice", "sms", "clr"];
 var lines_hive = [];
 var hive_variance_chart = null;
+var submit_clicked = null;
 
 $('#min_hive').datetimepicker({
     timepicker: false,
@@ -22,14 +23,24 @@ $('#max_hive').datetimepicker({
     }
 });
 
-$("#hive_overview_form").submit(function (event) {
-    event.preventDefault();
-    console.log(event.name);
-    var start_date = $("#min_hive").val();
-    var end_date = $("#max_hive").val();
-    var period = $("#period_hive").val();
-    update_data_hive(start_date,end_date,period);
+$("#search_date").click(function(){
+    if ($("#search_date")[0].checkValidity()) {
+        var start_date = $("#min_hive").val();
+        var end_date = $("#max_hive").val();
+        var period = $("#period_hive").val();
+        if (start_date!= "" && end_date != "" && period != "") {
+            update_data_hive(start_date, end_date, period);
+        }
+        else{
+            alert("Form is not completed.")
+        }
+        
+    }
+    else {
+        $("#search_date")[0].reportValidity();
+    }
 });
+
 
 function update_data_hive(start_date,end_date,period) {
     $.ajax({

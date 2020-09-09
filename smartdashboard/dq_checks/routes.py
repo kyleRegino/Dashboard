@@ -1,13 +1,17 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
-from smartdashboard import session, manifest_hive_monitoring, manifest_oracle_monitoring
-from smartdashboard.utils import init_list, format_date, number_formatter
+from smartdashboard import db, session, manifest_hive_monitoring, manifest_oracle_monitoring
+from smartdashboard.utils import init_list, format_date, number_formatter, insert_cdr
 
 from sqlalchemy import or_, and_
 from sqlalchemy.sql import func
 
-from datetime import date
+from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, PatternFill
+import io, csv
+import pprint
 dq_blueprint = Blueprint('dq_blueprint', __name__)
 
 
@@ -35,8 +39,8 @@ def dqchecks_overview_hive_js():
     elif period_select == "year":
         period = func.year(manifest_hive_monitoring.file_date)
     
-    dates = session.query(period).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period).all()
-    variances = session.query(period,manifest_hive_monitoring.cdr_type,func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period,manifest_hive_monitoring.cdr_type).all()
+    dates = db.session.query(period).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period).all()
+    variances = db.session.query(period,manifest_hive_monitoring.cdr_type,func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period,manifest_hive_monitoring.cdr_type).all()
     len_date = len(dates)
 
     date_list = init_list(len_date)
@@ -117,6 +121,168 @@ def dqchecks_overview_hive_js():
 
     return jsonify(result_set)
 
+@dq_blueprint.route('/dqchecks_exce_hive_excel', methods=['POST'])
+def dqchecks_exce_hive_excel():
+    if request.method == "POST":
+        start_date = request.form["start_date"]
+        end_date = request.form["end_date"]
+        period_select = request.form["period"]
+
+    if period_select == "day":
+        period = manifest_hive_monitoring.file_date
+    elif period_select == "month":
+        period = func.month(manifest_hive_monitoring.file_date)
+    elif period_select == "year":
+        period = func.year(manifest_hive_monitoring.file_date)
+    
+    cdr_types = ["COM", "VOU", "CM", "ADJ", "FIRST", "MON", "DATA", "VOICE", "SMS", "CLR"]
+    dates = db.session.query(period).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period).all()
+    lookup = db.session.query(period,manifest_hive_monitoring.cdr_type,func.sum(manifest_hive_monitoring.ocs_manifest),func.sum(manifest_hive_monitoring.t1_hive),func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date)).group_by(period,manifest_hive_monitoring.cdr_type).all()
+    len_date = len(dates)
+    dates = [ d[0] for d in dates ]
+
+    cdr_dict = {}
+
+    variance_com = init_list(len_date)
+    variance_vou = init_list(len_date)
+    variance_first = init_list(len_date)
+    variance_mon = init_list(len_date)
+    variance_cm = init_list(len_date)
+    variance_adj = init_list(len_date)
+    variance_data = init_list(len_date)
+    variance_voice = init_list(len_date)
+    variance_sms = init_list(len_date)
+    variance_clr = init_list(len_date)
+    manifest_com = init_list(len_date)
+    manifest_vou = init_list(len_date)
+    manifest_first = init_list(len_date)
+    manifest_mon = init_list(len_date)
+    manifest_cm = init_list(len_date)
+    manifest_adj = init_list(len_date)
+    manifest_data = init_list(len_date)
+    manifest_voice = init_list(len_date)
+    manifest_sms = init_list(len_date)
+    manifest_clr = init_list(len_date)
+    t1_com = init_list(len_date)
+    t1_vou = init_list(len_date)
+    t1_first = init_list(len_date)
+    t1_mon = init_list(len_date)
+    t1_cm = init_list(len_date)
+    t1_adj = init_list(len_date)
+    t1_data = init_list(len_date)
+    t1_voice = init_list(len_date)
+    t1_sms = init_list(len_date)
+    t1_clr = init_list(len_date)
+
+    for l in lookup:
+        if l.cdr_type not in cdr_dict.keys():
+            cdr_dict[l.cdr_type] = {
+                "manifest": init_list(len_date),
+                "t1": init_list(len_date),
+                "variance": init_list(len_date)
+            }
+            insert_cdr(cdr_dict[l.cdr_type],dates.index(l[0]),l[2],l[3],l[4])
+        else:
+            insert_cdr(cdr_dict[l.cdr_type],dates.index(l[0]),l[2],l[3],l[4])
+            
+    # for i, d in enumerate(dates):
+    #     for l in lookup:
+    #         if l.cdr_type == "com" and l[0] == d[0]:
+    #             manifest_com[i] = str(l[2])
+    #             t1_com[i] = str(l[3])
+    #             variance_com[i] = str(l[4])
+    #         elif l.cdr_type == "vou" and l[0] == d[0]:
+    #             manifest_vou[i] = str(l[2])
+    #             t1_vou[i] = str(l[3])
+    #             variance_vou[i] = str(l[4])
+    #         elif l.cdr_type == "first" and l[0] == d[0]:
+    #             manifest_first[i] = str(l[2])
+    #             t1_first[i] = str(l[3])
+    #             variance_first[i] = str(l[4])
+    #         elif l.cdr_type == "mon" and l[0] == d[0]:
+    #             manifest_mon[i] = str(l[2])
+    #             t1_mon[i] = str(l[3])
+    #             variance_mon[i] = str(l[4])
+    #         elif l.cdr_type == "cm" and l[0] == d[0]:
+    #             manifest_cm[i] = str(l[2])
+    #             t1_cm[i] = str(l[3])
+    #             variance_cm[i] = str(l[4])
+    #         elif l.cdr_type == "adj" and l[0] == d[0]:
+    #             manifest_adj[i] = str(l[2])
+    #             t1_adj[i] = str(l[3])
+    #             variance_adj[i] = str(l[4])
+    #         elif l.cdr_type == "data" and l[0] == d[0]:
+    #             manifest_data[i] = str(l[2])
+    #             t1_data[i] = str(l[3])
+    #             variance_data[i] = str(l[4])
+    #         elif l.cdr_type == "voice" and l[0] == d[0]:
+    #             manifest_voice[i] = str(l[2])
+    #             t1_voice[i] = str(l[3])
+    #             variance_voice[i] = str(l[4])
+    #         elif l.cdr_type == "sms" and l[0] == d[0]:
+    #             manifest_sms[i] = str(l[2])
+    #             t1_sms[i] = str(l[3])
+    #             variance_sms[i] = str(l[4])
+    #         elif l.cdr_type == "clr" and l[0] == d[0]:
+    #             manifest_clr[i] = str(l[2])
+    #             t1_clr[i] = str(l[3])
+    #             variance_clr[i] = str(l[4])
+
+    #output in bytes
+    output = io.BytesIO()
+    #create WorkBook object
+    workbook = Workbook()
+    workbook_name = "Manifest Bashing {}".format(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
+    #add a sheet
+    ws = workbook.create_sheet('Manifest vs T1 Bashing Validation',0)
+
+    greenFill = PatternFill(start_color='AEEA00',
+                   end_color='AEEA00',
+                   fill_type='solid')
+
+    x_pos = 1
+    y_pos = 1
+    temp_y = 1
+    x_lim = 19
+    row = 0
+    
+    for c in cdr_dict.keys():
+        ### CREATE THE HEADER FOR THE CDR
+        # Merge for Date Column
+        ws.cell(row=y_pos, column=x_pos, value="Date").alignment = Alignment(horizontal='center')
+        # ws.cell(row=y_pos, column=x_pos, value="Date").fill = greenFill
+        ws.merge_cells(start_row=y_pos, start_column=x_pos, end_row=y_pos+1, end_column=x_pos)
+        # Merge for CDR Row
+        ws.cell(row=y_pos, column=x_pos+1, value=c).alignment = Alignment(horizontal='center')
+        ws.merge_cells(start_row=y_pos, start_column=x_pos+1, end_row=y_pos, end_column=x_pos+3)
+        ws.cell(row=y_pos+1, column=x_pos+1, value="MANIFEST").alignment = Alignment(horizontal='center')
+        ws.cell(row=y_pos+1, column=x_pos+2, value="T1").alignment = Alignment(horizontal='center')
+        ws.cell(row=y_pos+1, column=x_pos+3, value="VARIANCE").alignment = Alignment(horizontal='center')
+        for i, d in enumerate(dates):
+            ws.cell(row=y_pos+2, column=x_pos, value=d.strftime("%m/%d/%y"))
+            ws.cell(row=y_pos+2, column=x_pos+1, value=cdr_dict[c]["manifest"][i])
+            ws.cell(row=y_pos+2, column=x_pos+2, value=cdr_dict[c]["t1"][i])
+            ws.cell(row=y_pos+2, column=x_pos+3, value=cdr_dict[c]["variance"][i])
+            y_pos+=1
+
+        ### SET X AND Y POSITIONS
+        if x_pos+3 < 19:
+            y_pos = temp_y
+            x_pos += 5
+        else:
+            row += 1
+            y_pos = temp_y + (len(dates)+3)
+            temp_y = y_pos
+            x_pos = 1
+    
+    workbook.save(output)
+    output.seek(0)
+    pprint.pprint(cdr_dict)
+    filename = workbook_name
+
+    return Response(output, mimetype="application/openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition":"attachment;filename={}.xlsx".format(filename)})
+
+
 @dq_blueprint.route('/dqchecks_overview_oracle_js', methods=['GET', 'POST'])
 def dqchecks_overview_oracle_js():
     if request.method == "POST":
@@ -136,8 +302,8 @@ def dqchecks_overview_oracle_js():
     elif period_select == "year":
         period = func.year(manifest_oracle_monitoring.file_date)
     
-    dates = session.query(period).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(period).all()
-    variances = session.query(period,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(period,manifest_oracle_monitoring.cdr_type).all()
+    dates = db.session.query(period).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(period).all()
+    variances = db.session.query(period,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(period,manifest_oracle_monitoring.cdr_type).all()
     len_date = len(dates)
 
     date_list = init_list(len_date)
@@ -199,16 +365,16 @@ def dqchecks_overview_oracle_js():
 @dq_blueprint.route('/dq_manvshive')
 def dq_manvshive():
 
-    variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="com",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="vou",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="first",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="mon",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="cm",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="adj",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_data = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="data",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_voice = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="voice",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_sms = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="sms",manifest_hive_monitoring.file_date == date.today())).scalar()
-    variance_clr = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="clr",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_com = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="com",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_vou = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="vou",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_first = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="first",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_mon = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="mon",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_cm = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="cm",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_adj = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="adj",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_data = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="data",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_voice = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="voice",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_sms = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="sms",manifest_hive_monitoring.file_date == date.today())).scalar()
+    variance_clr = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="clr",manifest_hive_monitoring.file_date == date.today())).scalar()
 
     return render_template('dqchecks_manvshive.html', variance_com = number_formatter(variance_com),
                                                 variance_vou = number_formatter(variance_vou),
@@ -229,7 +395,7 @@ def dqchecks_manvshive_js():
     else:
         query_date = date.today()
 
-    results = session.query(manifest_hive_monitoring).filter(manifest_hive_monitoring.file_date == query_date)
+    results = db.session.query(manifest_hive_monitoring).filter(manifest_hive_monitoring.file_date == query_date)
     com_manifest = init_list()
     com_t1 = init_list()
     com_variance = init_list()
@@ -346,16 +512,16 @@ def dqchecks_manvshive_js():
 def dqchecks_manvshive_search():
     if request.method == "POST":
         query_date = request.form["date"]
-        variance_com = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="com",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_vou = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="vou",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_first = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="first",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_mon = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="mon",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_cm = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="cm",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_adj = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="adj",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_data = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="data",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_voice = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="voice",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_sms = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="sms",manifest_hive_monitoring.file_date == query_date)).scalar()
-        variance_clr = session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="clr",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_com = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="com",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_vou = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="vou",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_first = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="first",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_mon = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="mon",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_cm = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="cm",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_adj = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="adj",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_data = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="data",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_voice = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="voice",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_sms = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="sms",manifest_hive_monitoring.file_date == query_date)).scalar()
+        variance_clr = db.session.query(func.sum(manifest_hive_monitoring.variance)).filter(and_(manifest_hive_monitoring.cdr_type =="clr",manifest_hive_monitoring.file_date == query_date)).scalar()
 
     result_set = {
         "variance_com": number_formatter(variance_com),
@@ -375,16 +541,16 @@ def dqchecks_manvshive_search():
 # MANIFEST VS ORACLE
 @dq_blueprint.route('/dq_manvsoracle', methods=['GET', 'POST'])
 def dq_manvsoracle():
-    variance_com = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="com",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_vou = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="vou",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_first = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="first",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_mon = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="mon",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_cm = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="cm",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_adj = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="adj",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_data = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="data",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_voice = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="voice",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_sms = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="sms",manifest_oracle_monitoring.file_date == date.today())).scalar()
-    variance_clr = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="clr",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_com = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="com",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_vou = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="vou",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_first = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="first",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_mon = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="mon",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_cm = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="cm",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_adj = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="adj",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_data = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="data",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_voice = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="voice",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_sms = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="sms",manifest_oracle_monitoring.file_date == date.today())).scalar()
+    variance_clr = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="clr",manifest_oracle_monitoring.file_date == date.today())).scalar()
 
     return render_template('dqchecks_manvsoracle.html', variance_com = number_formatter(variance_com),
                                                 variance_vou = number_formatter(variance_vou),
@@ -405,7 +571,7 @@ def dqchecks_manvsoracle_js():
     else:
         query_date = date.today()
     
-    results = session.query(manifest_oracle_monitoring).filter(manifest_oracle_monitoring.file_date == query_date)
+    results = db.session.query(manifest_oracle_monitoring).filter(manifest_oracle_monitoring.file_date == query_date)
     com_manifest = init_list()
     com_t1 = init_list()
     com_variance = init_list()
@@ -518,16 +684,16 @@ def dqchecks_manvsoracle_js():
 def dqchecks_manvsoracle_search():
     if request.method == "POST":
         query_date = request.form["date"]
-        variance_com = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="com",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_vou = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="vou",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_first = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="first",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_mon = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="mon",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_cm = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="cm",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_adj = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="adj",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_data = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="data",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_voice = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="voice",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_sms = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="sms",manifest_oracle_monitoring.file_date == query_date)).scalar()
-        variance_clr = session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="clr",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_com = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="com",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_vou = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="vou",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_first = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="first",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_mon = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="mon",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_cm = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="cm",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_adj = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="adj",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_data = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="data",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_voice = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="voice",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_sms = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="sms",manifest_oracle_monitoring.file_date == query_date)).scalar()
+        variance_clr = db.session.query(func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.cdr_type =="clr",manifest_oracle_monitoring.file_date == query_date)).scalar()
 
     result_set = {
         "variance_com": number_formatter(variance_com),
