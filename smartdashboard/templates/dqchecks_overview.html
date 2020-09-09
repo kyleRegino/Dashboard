@@ -103,15 +103,15 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12 date-1">
-                        <form action="/" method="post" id="variance_table_form"
-                            autocomplete="off">
+                        <form action="/" method="post" id="variance_table_form_hive" autocomplete="off">
                             Start Date:
-                            <input type="search" class="form-control" name="start_date" id="min_oracle_table" value="{{ minDate }}" required>
+                            <input type="text" class="form-control" name="start_date" id="min_hive_table" value="{{ minDate }}" required>
                             End Date:
-                            <input type="search" class="form-control" name="end_date" id="max_oracle_table" value="{{ maxDate }}" required>
+                            <input type="text" class="form-control" name="end_date" id="max_hive_table" value="{{ maxDate }}" required>
+                            <input type="submit" id="search_date_hive_table" class="btn btn-primary" name="" />
                             CDR:
                             <select name="cdr" id="cdr_select_hive">
-                            
+                                
                             </select>
                         </form>
                         
@@ -152,9 +152,9 @@
                         <form action="/" method="post" id="variance_table_form"
                             autocomplete="off">
                             Start Date:
-                            <input type="text" name="start_date" id="min_oracle_table" value="{{ minDate }}" required>
+                            <input type="text" class="form-control" name="start_date" id="min_oracle_table" value="{{ minDate }}" required>
                             End Date:
-                            <input type="text" name="end_date" id="max_oracle_table" value="{{ maxDate }}" required>
+                            <input type="text" class="form-control" name="end_date" id="max_oracle_table" value="{{ maxDate }}" required>
                             <input type="submit" id="search_date_oracle_table" class="btn btn-primary" name="" />
                             CDR:
                             <select name="cdr" id="cdr_select_oracle">

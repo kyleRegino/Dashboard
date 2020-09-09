@@ -208,19 +208,23 @@ def dqchecks_hive_excel():
 
     return Response(output, mimetype="application/openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition":"attachment;filename={}.xlsx".format(filename)})
 
-@dq_blueprint.route('/dqchecks_hive_table', methods=['GET'])
+@dq_blueprint.route('/dqchecks_hive_table', methods=['POST'])
 def dqchecks_hive_table():
-    # if request.method == "POST":
-    #     start_date = request.form["start_date"]
-    #     end_date = request.form["end_date"]
-    #     period_select = request.form["period"]
+    start_date = request.form["start_date"]
+    end_date = request.form["end_date"]
 
+    if start_date == "" and end_date == "":
+        date_today = date.today()
+        start_date = date_today - relativedelta(days=8)
+        end_date = date_today
+    # print(start_date,end_date)
     lookup = db.session.query(manifest_hive_monitoring.file_date,
                                 manifest_hive_monitoring.cdr_type,
                                 func.sum(manifest_hive_monitoring.ocs_manifest),
                                 func.sum(manifest_hive_monitoring.t1_hive),
                                 func.sum(manifest_hive_monitoring.variance))\
-                                .group_by(manifest_hive_monitoring.file_date, manifest_hive_monitoring.cdr_type)
+                                .filter(and_(manifest_hive_monitoring.file_date >= start_date,manifest_hive_monitoring.file_date <= end_date))\
+                                .group_by(manifest_hive_monitoring.file_date,manifest_hive_monitoring.cdr_type)
 
     cdr_dict = {}
     data = []
@@ -235,7 +239,7 @@ def dqchecks_hive_table():
     result_set = {
         "data": data
     }
- 
+    # print(result_set)
 
     return jsonify(result_set)
 
@@ -326,8 +330,14 @@ def dqchecks_oracle_table():
         date_today = date.today()
         start_date = date_today - relativedelta(days=8)
         end_date = date_today
-    print(start_date,end_date)
-    lookup = db.session.query(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.ocs_manifest),func.sum(manifest_oracle_monitoring.t1_oracle),func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type)
+    # print(start_date,end_date)
+    lookup = db.session.query(manifest_oracle_monitoring.file_date,
+                                manifest_oracle_monitoring.cdr_type,
+                                func.sum(manifest_oracle_monitoring.ocs_manifest),
+                                func.sum(manifest_oracle_monitoring.t1_oracle),
+                                func.sum(manifest_oracle_monitoring.variance))\
+                                .filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date))\
+                                .group_by(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type)
 
     cdr_dict = {}
     data = []
@@ -342,7 +352,7 @@ def dqchecks_oracle_table():
     result_set = {
         "data": data
     }
-    print(result_set)
+    # print(result_set)
 
     return jsonify(result_set)
 
