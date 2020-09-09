@@ -120,6 +120,10 @@ $.ajax({
     oracle_variance_chart.render();
 });
 
-$('#oracle_table').DataTable({
-    ajax: '/dqchecks_oracle_table'
-});
+// $('#oracle_table').DataTable({
+//     ajax: '/dqchecks_oracle_table'
+// });
+
+$(document).ready(function() {
+    $('#oracle_table').DataTable();
+} );
