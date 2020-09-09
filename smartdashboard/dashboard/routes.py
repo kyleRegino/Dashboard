@@ -16,6 +16,7 @@ def dashboard():
     query_distinct_count = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().count()
     long_running_count = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')).count()
 
+    # TIME
     time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
     time_lrj = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
                     .order_by(Job_Monitoring.starttime.desc()).first()
@@ -41,7 +42,7 @@ def dashboard():
                                             time_overall=time_overall,
                                             time_lrj=time_lrj,
                                             time_oracle=time_oracle,
-                                            time_hive=time_hive
+                                            time_hive=time_hive,
                                             )
 
 @dashboard_blueprint.route('/get_job_monitoring', methods=['GET'])
@@ -66,3 +67,36 @@ def get_job_monitoring():
     }
 
     return jsonify(result_set)
+
+
+@dashboard_blueprint.route("/dashboard/<string:status>", methods=['GET', 'POST'])
+def status_job(status):
+    page = request.args.get('page', 1, type=int)
+    query_job_running = Job_Monitoring.query.filter(Job_Monitoring.status == 'RUNNING').count()
+    query_distinct_count = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().count()
+    long_running_count = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')).count()
+
+    # TIME
+    time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
+    time_lrj = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
+                    .order_by(Job_Monitoring.starttime.desc()).first()
+    time_hive = session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
+    time_oracle = session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
+
+    if status == "RUNNING":
+        job_status = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == status))\
+                                        .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=8)
+    elif status == "TASKS":
+        job_status = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().paginate(page=page, per_page=8)
+
+
+    return render_template('dashboard_status.html', query=job_status,
+                                                    status=status,
+                                                    running = number_formatter(query_job_running),
+                                                    query_distinct_count = number_formatter(query_distinct_count),
+                                                    long_running_count = number_formatter(long_running_count),
+                                                    time_overall=time_overall,
+                                                    time_lrj=time_lrj,
+                                                    time_oracle=time_oracle,
+                                                    time_hive=time_hive,
+                                                    )

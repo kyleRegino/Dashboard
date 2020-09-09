@@ -132,7 +132,7 @@
     </div>
 </div>
 
-<div class='row'>
+<!-- <div class='row'>
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-4 stretch-card">
@@ -151,16 +151,26 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Variance -->
 <div class='row'>
     <div class="col-md-12">
         <div class="card shadow mb-4 card-border">
             <div class="card-header py-3 card-border-header">
-                <div class="row-1 align-items-end">
-                    <div class="col-11">
+                <div class="row-1 d-flex align-items-end">
+                    <div class="col-6">
                         <h1 class="h3 text-gray-800">Variances per CDR</h1>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        <form action="" method="post" autocomplete="off" id="cdr_date_form_oracle">
+                            Date:
+                            <input type="text" name="cdr_date_oracle" id="cdr_date" size="10" required>
+                            <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
+                            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvsoracle')}}">
+                                <i class="mdi mdi-home-outline"></i>Home
+                            </a>
+                        </form>
                     </div>
                 </div>
             </div>
