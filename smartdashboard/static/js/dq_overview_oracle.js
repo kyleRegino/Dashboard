@@ -178,6 +178,7 @@ function generate_table_oracle(start_date,end_date) {
                     .search(val ? '^' + val + '$' : '', true, false)
                     .draw();
             });
+            select.empty()
             select.append('<option value=""> ALL </option>')
             column.data().unique().sort().each(function (d, j) {
                 select.append('<option value="' + d + '">' + d + '</option>')
