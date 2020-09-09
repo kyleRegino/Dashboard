@@ -317,14 +317,17 @@ def dqchecks_overview_oracle_js():
 
     return jsonify(result_set)
 
-@dq_blueprint.route('/dqchecks_oracle_table', methods=['GET'])
+@dq_blueprint.route('/dqchecks_oracle_table', methods=['POST'])
 def dqchecks_oracle_table():
-    # if request.method == "POST":
-    #     start_date = request.form["start_date"]
-    #     end_date = request.form["end_date"]
-    #     period_select = request.form["period"]
+    start_date = request.form["start_date"]
+    end_date = request.form["end_date"]
 
-    lookup = db.session.query(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.ocs_manifest),func.sum(manifest_oracle_monitoring.t1_oracle),func.sum(manifest_oracle_monitoring.variance)).group_by(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type)
+    if start_date == "" and end_date == "":
+        date_today = date.today()
+        start_date = date_today - relativedelta(days=8)
+        end_date = date_today
+    print(start_date,end_date)
+    lookup = db.session.query(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.ocs_manifest),func.sum(manifest_oracle_monitoring.t1_oracle),func.sum(manifest_oracle_monitoring.variance)).filter(and_(manifest_oracle_monitoring.file_date >= start_date,manifest_oracle_monitoring.file_date <= end_date)).group_by(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type)
 
     cdr_dict = {}
     data = []
@@ -339,7 +342,7 @@ def dqchecks_oracle_table():
     result_set = {
         "data": data
     }
- 
+    print(result_set)
 
     return jsonify(result_set)
 
