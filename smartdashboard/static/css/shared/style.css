@@ -10968,7 +10968,7 @@ ul {
   padding-right: 24px;
 }
 
-#hive_table{
+#hive_table_filter input{
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.56rem 1.375rem;
   font-size: 0.75rem;
