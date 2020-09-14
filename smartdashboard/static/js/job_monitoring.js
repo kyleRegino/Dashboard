@@ -23,7 +23,8 @@ $.ajax({
                     color: undefined,
                     offsetY: -10,
                     formatter: function (val) {
-                      return val
+                      return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+                      console.log(val)
                     }
                   },
                   value: {
@@ -45,13 +46,6 @@ $.ajax({
                     fontFamily: 'Helvetica, Arial, sans-serif',
                     fontWeight: 600,
                     color: '#373d3f',
-                  //   formatter: function (w) {
-                  //     total =  w.globals.seriesTotals.reduce((a, b) => {
-                  //       return a + b
-                  //     }, 0)
-                  //     return total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-                  //   }
-                  // }
                     formatter: function (w) {
                       return w.globals.seriesTotals.reduce((a, b) => {
                         return a + b
@@ -85,6 +79,19 @@ $.ajax({
               fontFamily: undefined,
               color:  '#263238'
             },
+        },
+        tooltip: {
+          enabled: true,
+          y: {
+            formatter: function(val) {
+              return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+            },
+            title: {
+              formatter: function (seriesName) {
+                return ''
+              }
+            }
+          }
         },      
         legend: {
           position: 'bottom',
@@ -125,7 +132,7 @@ $.ajax({
                   color: undefined,
                   offsetY: -10,
                   formatter: function (val) {
-                    return val
+                    return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                   }
                 },
                 value: {
@@ -136,7 +143,7 @@ $.ajax({
                   color: undefined,
                   offsetY: 16,
                   formatter: function (val) {
-                    return val
+                    return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                   }
                 },
                 total: {
@@ -150,7 +157,7 @@ $.ajax({
                   formatter: function (w) {
                     return w.globals.seriesTotals.reduce((a, b) => {
                       return a + b
-                    }, 0)
+                    }, 0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                   }
                 }
               }
@@ -161,21 +168,20 @@ $.ajax({
       colors: ['#ffaf00', '#19d895', "#ff6258", "#8862e0"],
       dataLabels: {
           enabled: true,
-      },
-      // title: {
-      //     text: 'Overall Status',
-      //     align: 'left',
-      //     // margin: 10,
-      //     offsetX: 0,
-      //     offsetY: -170,
-      //     floating: false,
-      //     style: {
-      //       fontSize:  '200%',
-      //       fontWeight:  'bold',
-      //       fontFamily: undefined,
-      //       color:  '#263238'
-      //     },
-      // },      
+      },    
+      tooltip: {
+        enabled: true,
+        y: {
+          formatter: function(val) {
+            return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+          },
+          title: {
+            formatter: function (seriesName) {
+              return ''
+            }
+          }
+        }
+      }, 
       legend: {
         position: 'bottom',
         horizontalAlign: 'center',
