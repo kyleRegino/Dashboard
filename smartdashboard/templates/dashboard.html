@@ -60,7 +60,7 @@
       </div>
 
       <!-- table -->
-      <div class="col-md-12 grid-margin">
+      <div class="col-md-12">
         <div class="card shadow mb-4 card-border">
           
           <div class="card-body"> 
@@ -70,12 +70,15 @@
                 <table class="table " id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
+                    <th>#</th>
                     <th>Task Name</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for testing in query.items %}
                     <tr">
+                      
+                      <td>{{ loop.index + query.page * query.per_page - 8 }}</td>
                       <td>{{testing[0]}}</td>
                     </tr>
                     {% endfor %}
@@ -94,9 +97,9 @@
               {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                 {% if page_num %}
                   {% if query.page == page_num %}
-                    <a class="btn btn-outline-info btn-space" href="{{ url_for('lrj_blueprint.long_running_job', page=page_num)}}">{{ page_num }}</a>
+                    <a class="btn btn-outline-info btn-space" href="{{ url_for('dashboard_blueprint.dashboard', page=page_num)}}">{{ page_num }}</a>
                   {% else %}
-                    <a class="btn btn-info btn-space" href="{{ url_for('lrj_blueprint.long_running_job', page=page_num)}}">{{ page_num }}</a>
+                    <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.dashboard', page=page_num)}}">{{ page_num }}</a>
                   {% endif %}
                 {% else %}
                     ... 

@@ -33,6 +33,10 @@ def dashboard():
     prev_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.prev_num) \
         if query_distinct.has_prev else None
 
+    print(query_distinct.page)
+    print(query_distinct.per_page)
+
+
     return render_template("dashboard.html", query = query_distinct,
                                             running = number_formatter(query_job_running),
                                             query_distinct_count = number_formatter(query_distinct_count),
@@ -43,6 +47,7 @@ def dashboard():
                                             time_lrj=time_lrj,
                                             time_oracle=time_oracle,
                                             time_hive=time_hive,
+                                            # pagination =pagination,
                                             )
 
 @dashboard_blueprint.route('/get_job_monitoring', methods=['GET'])
@@ -84,7 +89,7 @@ def status_job(status):
     time_oracle = db.session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
 
     if status == "RUNNING":
-        job_status = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == status))\
+        job_status = Job_Monitoring.query.filter(Job_Monitoring.status == status)\
                                         .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=8)
     elif status == "TASKS":
         job_status = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().paginate(page=page, per_page=8)
