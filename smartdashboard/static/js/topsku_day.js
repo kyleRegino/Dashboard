@@ -65,7 +65,12 @@ function create_yaxis() {
           colors: '#000000',
         },
         formatter: function (x) {
-          return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+          if (x != null) {
+            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+          }
+          else {
+            return ""
+          }
         }
       },
       title: {
@@ -73,6 +78,7 @@ function create_yaxis() {
         style: {
           color: '#000000',
           fontSize: '0.8em',
+          fontWeight: 550,
         }
       }
     })
@@ -106,7 +112,12 @@ function push_totals(total_amt, total_cnt) {
         colors: '#000000',
       },
       formatter: function (x) {
-        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        if (x != null) {
+          return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }
+        else {
+          return ""
+        }
       }
     },
     title: {
@@ -114,6 +125,7 @@ function push_totals(total_amt, total_cnt) {
       style: {
         color: '#000000',
         fontSize: '0.8em',
+        fontWeight: 550,
       }
     }
   });
@@ -139,10 +151,12 @@ function update_day_sku(sku_date) {
       var brand_count = data["brands"][brand]["count"];
       series_amount_push(brand, brand_amount);
       series_count_push(brand, brand_count);
-      compute_max_brand(brand_amount, brand);
+      mapped = brand_amount.map(Number)
+      compute_max_brand(Math.max(...mapped), brand);
       colors.push(color_pallete[i]);
       i++;
     });
+    series_amount = series_amount.sort((a, b) => (parseFloat(a["data"][0]) > parseFloat(b["data"][0])) ? 1 : -1)
     create_yaxis();
     total_amt = data["totals"]["total_amt_hr"];
     total_cnt = data["totals"]["total_cnt_hr"];
@@ -156,7 +170,9 @@ function update_day_sku(sku_date) {
     chart_day.updateSeries(series_amount);
   });
 }
-
+// function sort_list(a,b) {
+//   if (parseFloat(a["data"][0]) > parseFloat(a["data"][0]))
+// }
 $.ajax({
     url: "/topsku_day_js",
     method: "GET",
@@ -169,10 +185,12 @@ $.ajax({
     var brand_count = data["brands"][brand]["count"];
     series_amount_push(brand, brand_amount);
     series_count_push(brand, brand_count);
-    compute_max_brand(brand_amount, brand);
+    mapped = brand_amount.map(Number)
+    compute_max_brand(Math.max(...mapped), brand);
     colors.push(color_pallete[i]);
     i++;
   });
+  series_amount = series_amount.sort((a, b) => (parseFloat(a["data"][0]) > parseFloat(b["data"][0])) ? 1 : -1)
   create_yaxis();
   total_amt = data["totals"]["total_amt_hr"];
   total_cnt = data["totals"]["total_cnt_hr"];

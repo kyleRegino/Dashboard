@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_Monitoring
-from smartdashboard import session, manifest_hive_monitoring, manifest_oracle_monitoring
+from smartdashboard import db, manifest_hive_monitoring, manifest_oracle_monitoring
 from datetime import date
 from datetime import datetime
 from sqlalchemy import or_, and_
@@ -20,8 +20,8 @@ def dashboard():
     time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
     time_lrj = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
                     .order_by(Job_Monitoring.starttime.desc()).first()
-    time_hive = session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
-    time_oracle = session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
+    time_hive = db.session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
+    time_oracle = db.session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
 
     # print(str(time_overall.starttime))
     # print(str(time_hive.file_date))
@@ -80,8 +80,8 @@ def status_job(status):
     time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
     time_lrj = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
                     .order_by(Job_Monitoring.starttime.desc()).first()
-    time_hive = session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
-    time_oracle = session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
+    time_hive = db.session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
+    time_oracle = db.session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
 
     if status == "RUNNING":
         job_status = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == status))\

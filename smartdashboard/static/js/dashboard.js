@@ -36,6 +36,21 @@ $.ajax({
         xaxis: {
             categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
         },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#000000',
+                },
+                formatter: function (x) {
+                    if (x != null) {
+                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    else {
+                        return x
+                    }
+                }
+            },
+        },
         fill: {
             opacity: 1
         },
@@ -84,6 +99,21 @@ $.ajax({
         },
         xaxis: {
             categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#000000',
+                },
+                formatter: function (x) {
+                    if (x != null) {
+                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    else {
+                        return x
+                    }
+                }
+            },
         },
         fill: {
             opacity: 1

@@ -2,6 +2,16 @@ var cdr_types = ["com", "vou", "cm", "adj", "first", "mon", "data", "voice", "sm
 var lines_oracle = [];
 var oracle_variance_chart = null;
 
+function check_null(cdr_array) {
+    var is_nulls = cdr_array.every((val, i, arr) => val === arr[0])
+    if (is_nulls) {
+        return new Array(cdr_array.length).fill(0)
+    }
+    else {
+        return cdr_array
+    }
+}
+
 $('#min_oracle').datetimepicker({
     timepicker: false,
     format: 'Y-m-d',
@@ -81,12 +91,13 @@ function update_data_oracle(start_date, end_date, period) {
         lines_oracle = [];
         for (c of cdr_types) {
             var variance = "variance_" + c;
-            var data_cdr = data[variance]
+            var data_cdr = check_null(data[variance]);
             push_lines_oracle(c, data_cdr);
         }
+        var date_list = check_null(data["date_list"])
         oracle_variance_chart.updateOptions({
             xaxis: {
-                categories: data["date_list"],
+                categories: date_list,
             }
         }
         );
@@ -101,9 +112,10 @@ $.ajax({
 }).done(function (data) {
     for (c of cdr_types) {
         var variance = "variance_" + c;
-        var data_cdr = data[variance]
+        var data_cdr = check_null(data[variance]);
         push_lines_oracle(c, data_cdr);
     }
+    var date_list = check_null(data["date_list"])
     var options = {
         series: lines_oracle,
         chart: {
@@ -127,7 +139,22 @@ $.ajax({
             curve: 'smooth',
         },
         xaxis: {
-            categories: data["date_list"],
+            categories: date_list,
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#000000',
+                },
+                formatter: function (x) {
+                    if (x != null) {
+                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    else{
+                        return ""
+                    }
+                }
+            },
         },
         fill: {
             opacity: 1

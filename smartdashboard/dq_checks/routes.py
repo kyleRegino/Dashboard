@@ -231,9 +231,9 @@ def dqchecks_hive_table():
         data.append({
             "file date": l.file_date.strftime("%Y-%m-%d"),
             "cdr": l.cdr_type,
-            "manifest count": str(l[2]),
-            "t1 count": str(l[3]),
-            "variance": str(l[4])
+            "manifest count": str(number_formatter(l[2])),
+            "t1 count": str(number_formatter(l[3])),
+            "variance": str(number_formatter(l[4]))
         })
     result_set = {
         "data": data
@@ -342,9 +342,9 @@ def dqchecks_oracle_table():
         data.append({
             "file date": l.file_date.strftime("%Y-%m-%d"),
             "cdr": l.cdr_type,
-            "manifest count": str(l[2]),
-            "t1 count": str(l[3]),
-            "variance": str(l[4])
+            "manifest count": str(number_formatter(l[2])),
+            "t1 count": str(number_formatter(l[3])),
+            "variance": str(number_formatter(l[4]))
         })
     result_set = {
         "data": data
