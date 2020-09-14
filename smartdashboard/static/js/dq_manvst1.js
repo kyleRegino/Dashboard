@@ -2,31 +2,47 @@ var cdr_types = ["com", "vou", "cm", "adj", "first", "mon", "data", "voice", "sm
 var charts = [];
 var lines = [];
 var variance_chart = null;
-function update_data_hive(cdr_date){
+var url = "/dqchecks_manvs"+page+"_js";
+
+function check_null(cdr_array) {
+    var is_nulls = cdr_array.every( (val,i,arr) => val === arr[0] )
+    if (is_nulls) {
+        return new Array(cdr_array.length).fill(0)
+    }
+    else {
+        return cdr_array
+    }
+}
+
+function update_data(cdr_date){
     $.ajax({
-        url: "/dqchecks_manvshive_js",
+        url: url,
         method: "POST",
         dataType: "json",
         data: {"cdr_date": cdr_date}
     }).done(function (data) {
         lines = [];
         for (var i = 0; i < charts.length; i++) {
-            var manifest = cdr_types[i] + "_manifest";
-            var t1 = cdr_types[i] + "_t1";
-            var variance = cdr_types[i] + "_variance";
+            var manifest_key = cdr_types[i] + "_manifest";
+            var t1_key = cdr_types[i] + "_t1";
+            var variance_key = cdr_types[i] + "_variance";
+            var manifest = check_null(data[manifest_key]);
+            var t1 = check_null(data[t1_key]);
+            var variance = check_null(data[variance_key]);
             charts[i].updateSeries([{
                 name: 'Manifests',
-                data: data[manifest]
+                data: manifest
             }, {
                 name: 'T1',
-                data: data[t1]
+                data: t1
             }, {
                 name: 'Variance',
-                data: data[variance]
+                data: variance
             }]);
+            var overall_variance = check_null(data[variance_key]);
             lines.push({
                 name: cdr_types[i] + ' variance',
-                data: data[variance],
+                data: variance,
                 type: 'line'
             });
         }
@@ -36,27 +52,31 @@ function update_data_hive(cdr_date){
 
 
 $.ajax({
-    url: "/dqchecks_manvshive_js",
+    url: url,
     method: "GET",
     dataType: "json"
 }).done(function (data) {
     for (c of cdr_types){
-        var manifest = c+"_manifest";
-        var t1 = c + "_t1";
-        var variance = c + "_variance";
-        var queryselect = "#"+ c + "_hive";
+        var manifest_key = c + "_manifest";
+        var t1_key = c + "_t1";
+        var variance_key = c + "_variance";
+        var manifest = check_null(data[manifest_key]);
+        var t1 = check_null(data[t1_key]);
+        var variance = check_null(data[variance_key]);
+        var queryselect = "#"+ c + "_"+page;
+        
         var options = {
             series: [{
                 name: 'Manifests',
-                data: data[manifest],
+                data: manifest,
                 type: 'column'
             }, {
                 name: 'T1',
-                data: data[t1],
+                data: t1,
                 type: 'column'
             }, {
                 name: 'Variance',
-                data: data[variance],
+                data: variance,
                 type: 'line'
             }],
             chart: {
@@ -99,7 +119,15 @@ $.ajax({
             colors: ["#283593", "#F57C00", "#8BC34A"],
             dataLabels: {
                 enabled: true,
-                enabledOnSeries: [2]
+                enabledOnSeries: [2],
+                formatter: function (x) {
+                    if (x != null) {
+                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    else {
+                        return ""
+                    }
+                }
             },
             stroke: {
                 show: true,
@@ -117,6 +145,21 @@ $.ajax({
             xaxis: {
                 categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
             },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#000000',
+                    },
+                    formatter: function (x) {
+                        if (x != null) {
+                            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        else {
+                            return ""
+                        }
+                    }
+                },
+            },
             fill: {
                 opacity: 1
             },
@@ -126,7 +169,7 @@ $.ajax({
         chart.render();
         lines.push({
             name: c + ' variance',
-            data: data[variance],
+            data: variance,
             type: 'line'
         });
     }
@@ -172,6 +215,21 @@ $.ajax({
         xaxis: {
             categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
         },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#000000',
+                },
+                formatter: function (x) {
+                    if (x != null) {
+                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    else {
+                        return ""
+                    }
+                }
+            },
+        },
         fill: {
             opacity: 1
         },
@@ -179,6 +237,38 @@ $.ajax({
             size: 3
         },
     };
-    variance_chart = new ApexCharts(document.querySelector("#variances_hive"), options);
+    variance_selector = "#variances_"+page
+    variance_chart = new ApexCharts(document.querySelector(variance_selector), options);
     variance_chart.render();
+});
+
+// FOR CHANGING DATE AND UPDATING DATA
+var form_selector = "#cdr_date_form_"+page;
+var form_url = "/dqchecks_manvs"+page+"_search";
+$(form_selector).submit(function (event) {
+    event.preventDefault();
+    var cdr_date = $("#cdr_date").val();
+    $.ajax({
+        url: form_url,
+        method: "POST",
+        data: { "date": cdr_date }
+    }).done(function (data) {
+        $("#variance_com").text(data.variance_com);
+        $("#variance_cm").text(data.variance_cm);
+        $("#variance_vou").text(data.variance_vou);
+        $("#variance_adj").text(data.variance_adj);
+        $("#variance_first").text(data.variance_first);
+        $("#variance_mon").text(data.variance_mon);
+        $("#variance_data").text(data.variance_data);
+        $("#variance_voice").text(data.variance_voice);
+        $("#variance_sms").text(data.variance_sms);
+        $("#variance_clr").text(data.variance_clr);
+        update_data(cdr_date);
+        var today = new Date();
+        var date_today = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        if (cdr_date != date_today) {
+            update_colors();
+        }
+    });
+
 });

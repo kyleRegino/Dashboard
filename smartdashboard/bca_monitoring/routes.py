@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_BCA
-from smartdashboard import session, bca_monitoring_table
+from smartdashboard import db, bca_monitoring_table
 from smartdashboard.utils import time_to_seconds
 
 bca_blueprint = Blueprint('bca_blueprint', __name__)
@@ -15,7 +15,7 @@ def bca_monitoring():
 
 @bca_blueprint.route('/get_bca_monitoring', methods=['GET'])
 def get_bca_monitoring():
-    results = session.query(bca_monitoring_table).all()
+    results = db.session.query(bca_monitoring_table).all()
     dates = []
     usagetype_total = []
     prp_acct = []

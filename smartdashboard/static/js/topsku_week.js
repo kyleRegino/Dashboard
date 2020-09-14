@@ -21,6 +21,26 @@ $('#sku_max').datetimepicker({
     }
 });
 
+$('#sku_table_min').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#sku_table_max').val() ? jQuery('#sku_table_max').val() : false
+        })
+    }
+});
+
+$('#sku_table_max').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#sku_table_min').val() ? jQuery('#sku_table_min').val() : false
+        })
+    }
+});
+
 $("#sku_week_form").submit(function (event) {
     event.preventDefault();
     var start_date = $("#sku_min").val();
@@ -148,7 +168,12 @@ $.ajax({
                         colors: '#000000',
                     },
                     formatter: function (x) {
-                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                        if (x != null) {
+                            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        else {
+                            return ""
+                        }
                     }
                 },
                 title: {
@@ -156,6 +181,7 @@ $.ajax({
                     style: {
                         color: '#000000',
                         fontSize: '0.8em',
+                        fontWeight: 550,
                     }
                 },
                 tooltip: {
@@ -177,7 +203,12 @@ $.ajax({
                         colors: '#000000',
                     },
                     formatter: function (x) {
-                        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                        if (x != null) {
+                            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        else {
+                            return ""
+                        }
                     }
                 },
                 title: {
@@ -185,6 +216,7 @@ $.ajax({
                     style: {
                         color: '#000000',
                         fontSize: '0.8em',
+                        fontWeight: 550,
                     }
                 }
             }
@@ -196,51 +228,55 @@ $.ajax({
 
 });
 
-
-$("#weekly_table_form").submit(function(event) {
-    event.preventDefault();
-    var start_date = $("#min_weekly_table").val();
-    var end_date = $("#max_weekly_table").val();
-    $('#weekly_table').DataTable().clear().destroy();
-    generate_table_weekly(start_date, end_date);
-});
-
-function generate_table_weekly(start_date,end_date) {
-    $('#weekly_table').DataTable({
-        ajax: {
-            url:'/topsku_week_table',
-            type: 'POST',
-            dataType: "json",
-            data: {
-                "start_date": start_date,
-                "end_date": end_date
-            },
-            dataSrc: 'data',
-    
-        },
-        columns: [
-            { data: data[date1] },
-            { data: 'amount' }
-            
-            // { data: 'count' }
-        ],
-        // initComplete: function () {
-        //     var column = this.api().column(1);
-        //     var select = $("#cdr_select_hive").on('change', function () {
-        //         var val = $.fn.dataTable.util.escapeRegex(
-        //             $(this).val()
-        //         );
-
-        //         column
-        //             .search(val ? '^' + val + '$' : '', true, false)
-        //             .draw();
-        //     });
-        //     select.empty()
-        //     select.append('<option value=""> ALL </option>')
-        //     column.data().unique().sort().each(function (d, j) {
-        //         select.append('<option value="' + d + '">' + d + '</option>')
-        //     });
-        // }
+function generate_sku_table(data) {
+    var columns = [];
+    columnNames = data.columns;
+    for (var i in columnNames) {
+        if (i == 0) {
+            renderer = function (x) {
+                return x
+            }
+        }
+        else {
+            renderer = $.fn.dataTable.render.number(',', '.', 2);
+        }
+        columns.push({
+            data: columnNames[i],
+            title: columnNames[i],
+            render: renderer
+        });
+    }
+    $('#topsku_table').DataTable({
+        data: data.data,
+        columns: columns
     });
 };
-generate_table_weekly(null, null);
+
+function getData(cb_func,start_date,end_date) {
+    $.ajax({
+        url: "/topsku_week_table_js",
+        type: "POST",
+        data: {
+            "start_date": start_date,
+            "end_date": end_date
+        },
+        success: cb_func
+    });
+}
+
+$(document).ready(function () {
+    getData(generate_sku_table,"","")
+
+});
+
+function update_table_week(start_date, end_date) {
+    $('#topsku_table').DataTable().clear().destroy();
+    getData(generate_sku_table, start_date, end_date)
+}
+
+$("#sku_table_form").submit(function (event) {
+    event.preventDefault();
+    var start_date = $("#sku_table_min").val();
+    var end_date = $("#sku_table_max").val();
+    update_table_week(start_date, end_date);
+});

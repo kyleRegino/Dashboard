@@ -43,4 +43,21 @@ def insert_sku(lookup, hour, amt, cnt):
 
 def number_formatter(num):
     return '{0:,}'.format(num) if num != None else "None"
+
+def insert_sku_table(lookup, sku_dict):
+    if lookup[0].weekday() == 0:
+        sku_dict["start_date"] = lookup[0].strftime("%Y-%m-%d")
+    elif lookup[0].weekday() == 6:
+        sku_dict["end_date"] = lookup[0].strftime("%Y-%m-%d")
+
+    if lookup[2] not in sku_dict["brands"].keys():
+        sku_dict["brands"][lookup[2]] = None
+
+def aggregate_sku_table(lookup, sku_dict):
+    if sku_dict["brands"][lookup[2]] == None:
+        sku_dict["brands"][lookup[2]] = 0
+    if sku_dict["brands"]["TOTAL"] == None:
+        sku_dict["brands"]["TOTAL"] = 0
+    sku_dict["brands"][lookup[2]] += lookup[3]
+    sku_dict["brands"]["TOTAL"] += lookup[3]
         

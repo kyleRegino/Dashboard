@@ -18,7 +18,7 @@
             <div class="card-header py-3 card-border-header">
                 <div class="row-1 align-items-end">
                     <div class="col-11">
-                        <h1 class="h3 text-gray-800">Amount per Brand every 4hrs of DATE</h1>
+                        <h1 class="h3 text-gray-800">Amount per Brand every 4hrs of Date</h1>
                     </div>
                 </div>
             </div>
@@ -27,8 +27,13 @@
                     <div class="col-md-7 date-1">
                         <form action="" method="post" id="sku_day_form" autocomplete="off">
                             Date:
+<<<<<<< HEAD
                             <input type="text" class="form-control" name="datetimepickermin" id="sku_date" value="{{ minDate }}" required>
                             <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
+=======
+                            <input type="text" name="datetimepickermin" id="sku_date" value="{{ minDate }}" required>
+                            <input type="submit" class="btn btn-primary " name="" />
+>>>>>>> ee86ab5d15d8f27d21390c7ebd55f4f1670a1138
                         </form>
                     </div>
                 </div>
@@ -48,7 +53,7 @@
             <div class="card-header py-3 card-border-header">
                 <div class="row-1 align-items-end">
                     <div class="col-11">
-                        <h1 class="h3 text-gray-800">Data Trend based on Total Amount per Week</h1>
+                        <h1 class="h3 text-gray-800">Data Trend Based on Daliy Total Amount per Week</h1>
                     </div>
                 </div>
             </div>
@@ -59,8 +64,13 @@
                             Start Date:
                             <input type="text" class="form-control" name="datetimepickermin" id="sku_min" value="{{ minDate }}" required>
                             End Date:
+<<<<<<< HEAD
                             <input type="text" class="form-control" name="datetimepickermax" id="sku_max" value="{{ maxDate }}" required>
                             <input type="submit" id="search" value="Go" class="btn btn-primary " name="" />
+=======
+                            <input type="text" name="datetimepickermax" id="sku_max" value="{{ maxDate }}" required>
+                            <input type="submit" class="btn btn-primary " name="" />
+>>>>>>> ee86ab5d15d8f27d21390c7ebd55f4f1670a1138
                         </form>
                     </div>
                 </div>
@@ -74,42 +84,38 @@
     </div>
 </div>
 
-<!-- Weekly Base Table -->
-<div class="row">
-    <div class="col-md-12">
+<div class='row'>
+    <div class="col-md-12 grid-margin">
         <div class="card shadow mb-4 card-border">
             <div class="card-header py-3 card-border-header">
                 <div class="row-1 align-items-end">
                     <div class="col-11">
-                        <h1 class="h3 text-gray-800">Hive Variance Table</h1>
+                        <h1 class="h3 text-gray-800">Week on Week Amounts per Brand</h1>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body ">
                 <div class="row">
-                    <div class="col-md-12">
-                        <form action="/" method="post" id="weekly_table_form" autocomplete="off">
+                    <div class="col-md-7 date-1">
+                        <form action="" method="post" id="sku_table_form" autocomplete="off">
                             Start Date:
-                            <input type="text" class="form-control" name="start_date" id="min_weekly_table" value="{{ minDate }}" required>
+                            <input type="text" name="start_date" id="sku_table_min" value="{{ minDate }}" required>
                             End Date:
-                            <input type="text" class="form-control" name="end_date" id="max_weekly_table" value="{{ maxDate }}" required>
-                            <input type="submit" id="weekly_Search" class="btn btn-primary" name="" />
+                            <input type="text" name="end_date" id="sku_table_max" value="{{ maxDate }}" required>
+                            <input type="submit" class="btn btn-primary " name="" />
                         </form>
-                        
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <table id="weekly_table" class="table table-bordered" style="width:100%">
-                            <thead>
-                                <th>Date</th>
-                                {% for brand in brands%}
-                                <th>{{brand[0]}}</th>
-                                {% endfor %}
-                                <th>TOTAL</th>
-                            </thead>
-                        </table>
-                    </div>
+                    <table id="topsku_table" class="table table-bordered" style="width:100%">
+                        <!-- <thead>
+                            <th>Date</th>
+                            <th>CDR</th>
+                            <th>Manifest Count</th>
+                            <th>FC Count</th>
+                            <th>Variance</th>
+                        </thead> -->
+                    </table>
                 </div>
             </div>
         </div>
