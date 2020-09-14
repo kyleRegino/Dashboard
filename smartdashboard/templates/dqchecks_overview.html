@@ -26,9 +26,9 @@
                     <div class="col-md-12 date-1">
                         <form action="/dqchecks_hive_excel" method="post" id="hive_overview_form" autocomplete="off">
                             Start Date:
-                            <input type="text" name="start_date" id="min_hive" required>
+                            <input class="form-control" type="text" name="start_date" id="min_hive" required>
                             End Date:
-                            <input type="text" name="end_date" id="max_hive" required>
+                            <input class="form-control" type="text" name="end_date" id="max_hive" required>
                             <select name="period" id="period_hive" required>
                                 <option value="day">Day</option>
                                 <option value="month">Month</option>
@@ -66,9 +66,9 @@
                     <div class="col-md-12 date-1">
                         <form action="/dqchecks_oracle_excel" method="post" id="oracle_overview_form" autocomplete="off">
                             Start Date:
-                            <input type="text" name="start_date" id="min_oracle" value="{{ minDate }}" required>
+                            <input class="form-control" type="text" name="start_date" id="min_oracle" value="{{ minDate }}" required>
                             End Date:
-                            <input type="text" name="end_date" id="max_oracle" value="{{ maxDate }}" required>
+                            <input class="form-control" type="text" name="end_date" id="max_oracle" value="{{ maxDate }}" required>
                             <select name="period" id="period_oracle" required>
                                 <option value="day">Day</option>
                                 <option value="month">Month</option>
@@ -105,9 +105,9 @@
                     <div class="col-md-12">
                         <form action="/" method="post" id="variance_table_form_hive" autocomplete="off">
                             Start Date:
-                            <input type="text" class="form-control" name="start_date" id="min_hive_table" value="{{ minDate }}" required>
+                            <input class="form-control" type="text" class="form-control" name="start_date" id="min_hive_table" value="{{ minDate }}" required>
                             End Date:
-                            <input type="text" class="form-control" name="end_date" id="max_hive_table" value="{{ maxDate }}" required>
+                            <input class="form-control" type="text" class="form-control" name="end_date" id="max_hive_table" value="{{ maxDate }}" required>
                             <input type="submit" id="search_date_hive_table" class="btn btn-primary" name="" />
                             CDR:
                             <select name="cdr" id="cdr_select_hive">
@@ -152,9 +152,9 @@
                         <form action="/" method="post" id="variance_table_form"
                             autocomplete="off">
                             Start Date:
-                            <input type="text" class="form-control" name="start_date" id="min_oracle_table" value="{{ minDate }}" required>
+                            <input class="form-control" type="text" class="form-control" name="start_date" id="min_oracle_table" value="{{ minDate }}" required>
                             End Date:
-                            <input type="text" class="form-control" name="end_date" id="max_oracle_table" value="{{ maxDate }}" required>
+                            <input class="form-control" type="text" class="form-control" name="end_date" id="max_oracle_table" value="{{ maxDate }}" required>
                             <input type="submit" id="search_date_oracle_table" class="btn btn-primary" name="" />
                             CDR:
                             <select name="cdr" id="cdr_select_oracle">

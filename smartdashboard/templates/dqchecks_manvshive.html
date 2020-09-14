@@ -4,15 +4,18 @@
 
     <div class="col-12">
         <div class="page-header d-flex justify-content-between">
-            <h4 class="page-title">Manifests VS T1-HIVE</h4>
-            <a data-toggle="modal" data-target="#modal_threshold" href="#modal_threshold"><i class="typcn typcn-th-menu"></i></a>
+            <h4 class="page-title">Manifests VS T1-HIVE</h4>    
+            <ul class="quick-links ml-auto">
+                <li><a href="#"></a></li>
+                <li><a data-toggle="modal" data-target="#modal_threshold_hive" href="#modal_threshold_hive">Threshold</a></li>
+                <li><a href="#"></a></li>
+            </ul>
         </div>
     </div>
-
 </div>
 
 <!-- Modal-->
-<div class="modal fade" id="modal_threshold" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modal_threshold_hive" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
@@ -127,10 +130,6 @@
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">ADJ</h4>
-                            <!-- <p class="font-weight-semibold mb-0 ellipsis">+1.37%</p> -->
-                            <a href="#"><i class="typcn typcn-th-menu"></i></a>
-                                
-
                         </div>
                         <h2 id="variance_adj" class="font-weight-semibold mb-0">{{variance_adj}}</h2>
                     </div>

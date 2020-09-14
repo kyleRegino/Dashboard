@@ -11,11 +11,7 @@ topsku_blueprint = Blueprint('topsku_blueprint', __name__)
 
 @topsku_blueprint.route('/topsku', methods=['GET', 'POST'])
 def topsku():
-
-    brand = session.query(top_sku_talendfc).with_entities(top_sku_talendfc.brand).distinct().all()
-    # print(brand)
-
-    return render_template('topsku_talend.html', brands = brand)
+    return render_template('topsku_talend.html')
 
 @topsku_blueprint.route('/topsku_day_js', methods=['GET','POST'])
 def topsku_day_js():
@@ -24,17 +20,7 @@ def topsku_day_js():
     else:
         query_date = date.today()
 
-<<<<<<< HEAD
-    lookup = session.query(top_sku_talendfc.txn_date,
-                            top_sku_talendfc.processing_hr,
-                            top_sku_talendfc.brand, 
-                            func.sum(top_sku_talendfc.txn_amount), 
-                            func.sum(top_sku_talendfc.topup_cnt))\
-                            .filter(top_sku_talendfc.txn_date == query_date)\
-                            .group_by(top_sku_talendfc.txn_date,top_sku_talendfc.processing_hr,top_sku_talendfc.brand).all()
-=======
     lookup = db.session.query(top_sku_talendfc.txn_date,top_sku_talendfc.processing_hr,top_sku_talendfc.brand, func.sum(top_sku_talendfc.txn_amount), func.sum(top_sku_talendfc.topup_cnt)).filter(top_sku_talendfc.txn_date == query_date).group_by(top_sku_talendfc.txn_date,top_sku_talendfc.processing_hr,top_sku_talendfc.brand).all()
->>>>>>> ee86ab5d15d8f27d21390c7ebd55f4f1670a1138
     
     sku_dict = { "totals": {
                     "total_amt_hr": init_list(6,0),

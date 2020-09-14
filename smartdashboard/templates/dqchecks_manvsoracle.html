@@ -4,6 +4,57 @@
     <div class="col-12">
         <div class="page-header">
             <h4 class="page-title">Manifests VS T1-FC</h4>
+            <ul class="quick-links ml-auto">
+                <li><a href="#"></a></li>
+                <li><a data-toggle="modal" data-target="#modal_threshold_oracle" href="#modal_threshold_oracle">Threshold</a></li>
+                <li><a href="#"></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Modal-->
+<div class="modal fade" id="modal_threshold_oracle" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Choose status to generate EXCEL</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="/" method="post" autocomplete="off" id="form"> 
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text custome-font-size" for="inputGroupSelect01">CDR's</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                        <option disabled selected>Choose...</option>
+                        <option value="COM">COM</option>
+                        <option value="VOU">VOU</option>
+                        <option value="FIRST">FIRST</option>
+                        <option value="MON">MON</option>
+                        <option value="CM">CM</option>
+                        <option value="ADJ">ADJ</option>
+                        <option value="DATA">DATA</option>
+                        <option value="VOICE">VOICE</option>
+                        <option value="SMS">SMS</option>
+                        <option value="CLR">CLR</option> 
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text">Threshold</label>
+                    </div>
+                    <input type="number" class="form-control custome-font-size" >
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="lrj_excel" value="Search">Apply</button>
+            </div>
+        </form>
         </div>
     </div>
 </div>
@@ -132,27 +183,6 @@
     </div>
 </div>
 
-<!-- <div class='row'>
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-4 stretch-card">
-                <div class="card card-style card-border">
-                    <div class="card-body pb-0">
-                        <form action="" method="post" autocomplete="off" id="cdr_date_form_oracle">
-                            Date:
-                            <input type="text" name="cdr_date_oracle" id="cdr_date" size="7" required>
-                            <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
-                            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvsoracle')}}">
-                                <i class="mdi mdi-home-outline"></i>Home
-                            </a>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <!-- Variance -->
 <div class='row'>
     <div class="col-md-12">
@@ -165,7 +195,7 @@
                     <div class="col-6 d-flex justify-content-end">
                         <form action="" method="post" autocomplete="off" id="cdr_date_form_oracle">
                             Date:
-                            <input type="text" name="cdr_date_oracle" id="cdr_date" size="10" required>
+                            <input class="form-control" type="text" name="cdr_date_oracle" id="cdr_date" size="10" required>
                             <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
                             <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvsoracle')}}">
                                 <i class="mdi mdi-home-outline"></i>Home

@@ -121,16 +121,16 @@
         <div class="col-md-7 date-1">
           <form action="/lrj_datetime" method="post" autocomplete="off"> 
             Start Date:
-            <input type="text" name="datetimepickermin" id="min" value="{{ minDate }}"> 
+            <input class="form-control" type="text" name="datetimepickermin" id="min" value="{{ minDate }}"> 
             End Date:
-            <input type="text" name="datetimepickermax" id="max" value="{{ maxDate }}"> 
+            <input class="form-control" type="text" name="datetimepickermax" id="max" value="{{ maxDate }}"> 
             <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
           </form>  
         </div>
         <div class="col-md-5 date-2 table_filter d-flex justify-content-end">
           <form action="/lrj_search" method="post" autocomplete="off"> 
             <div class="input-group justify-content-end">
-              <input type="text" name="tag" id="tag" value="{{ tag }}"> 
+              <input class="form-control" type="text" name="tag" id="tag" value="{{ tag }}"> 
               <div class="input-group-append">
                 <button class="btn btn-outline-primary" id="searchfield" type="submit" value="Search">Search</button>
                 <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
