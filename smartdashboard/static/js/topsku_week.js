@@ -28,6 +28,28 @@ $("#sku_week_form").submit(function (event) {
     update_week_sku(start_date,end_date);
 });
 
+$('#min_weekly_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#max_weekly_table').val() ? jQuery('#max_weekly_table').val() : false
+        })
+    },
+    maxDateTime:true
+});
+
+$('#max_weekly_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#min_weekly_table').val() ? jQuery('#min_weekly_table').val() : false
+        })
+    },
+    maxDateTime:true,
+});
+
 function update_week_sku(start_date, end_date) {
     $.ajax({
         url: "/topsku_week_js",
@@ -173,3 +195,52 @@ $.ajax({
     chart_week.render();
 
 });
+
+
+$("#weekly_table_form").submit(function(event) {
+    event.preventDefault();
+    var start_date = $("#min_weekly_table").val();
+    var end_date = $("#max_weekly_table").val();
+    $('#weekly_table').DataTable().clear().destroy();
+    generate_table_weekly(start_date, end_date);
+});
+
+function generate_table_weekly(start_date,end_date) {
+    $('#weekly_table').DataTable({
+        ajax: {
+            url:'/topsku_week_table',
+            type: 'POST',
+            dataType: "json",
+            data: {
+                "start_date": start_date,
+                "end_date": end_date
+            },
+            dataSrc: 'data',
+    
+        },
+        columns: [
+            { data: data[date1] },
+            { data: 'amount' }
+            
+            // { data: 'count' }
+        ],
+        // initComplete: function () {
+        //     var column = this.api().column(1);
+        //     var select = $("#cdr_select_hive").on('change', function () {
+        //         var val = $.fn.dataTable.util.escapeRegex(
+        //             $(this).val()
+        //         );
+
+        //         column
+        //             .search(val ? '^' + val + '$' : '', true, false)
+        //             .draw();
+        //     });
+        //     select.empty()
+        //     select.append('<option value=""> ALL </option>')
+        //     column.data().unique().sort().each(function (d, j) {
+        //         select.append('<option value="' + d + '">' + d + '</option>')
+        //     });
+        // }
+    });
+};
+generate_table_weekly(null, null);

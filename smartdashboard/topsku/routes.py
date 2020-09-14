@@ -10,7 +10,11 @@ topsku_blueprint = Blueprint('topsku_blueprint', __name__)
 
 @topsku_blueprint.route('/topsku', methods=['GET', 'POST'])
 def topsku():
-    return render_template('topsku_talend.html')
+
+    brand = session.query(top_sku_talendfc).with_entities(top_sku_talendfc.brand).distinct().all()
+    # print(brand)
+
+    return render_template('topsku_talend.html', brands = brand)
 
 @topsku_blueprint.route('/topsku_day_js', methods=['GET','POST'])
 def topsku_day_js():
@@ -19,7 +23,13 @@ def topsku_day_js():
     else:
         query_date = date.today()
 
-    lookup = session.query(top_sku_talendfc.txn_date,top_sku_talendfc.processing_dthr,top_sku_talendfc.brand, func.sum(top_sku_talendfc.txn_amount), func.sum(top_sku_talendfc.topup_cnt)).filter(top_sku_talendfc.txn_date == query_date).group_by(top_sku_talendfc.txn_date,top_sku_talendfc.processing_dthr,top_sku_talendfc.brand).all()
+    lookup = session.query(top_sku_talendfc.txn_date,
+                            top_sku_talendfc.processing_hr,
+                            top_sku_talendfc.brand, 
+                            func.sum(top_sku_talendfc.txn_amount), 
+                            func.sum(top_sku_talendfc.topup_cnt))\
+                            .filter(top_sku_talendfc.txn_date == query_date)\
+                            .group_by(top_sku_talendfc.txn_date,top_sku_talendfc.processing_hr,top_sku_talendfc.brand).all()
     
     sku_dict = { "totals": {
                     "total_amt_hr": init_list(6,0),
@@ -33,9 +43,9 @@ def topsku_day_js():
                 "amount": init_list(6,0),
                 "count": init_list(6,0)
             }
-            insert_sku(sku_dict["brands"][l.brand], l.processing_dthr, l[3], l[4])
+            insert_sku(sku_dict["brands"][l.brand], l.processing_hr, l[3], l[4])
         else:
-            insert_sku(sku_dict["brands"][l.brand], l.processing_dthr, l[3], l[4])
+            insert_sku(sku_dict["brands"][l.brand], l.processing_hr, l[3], l[4])
 
     for k in sku_dict["brands"].keys():
         for i in range(6):
@@ -55,7 +65,11 @@ def topsku_week_js():
         end_date = start_date + timedelta(days=6)
 
     dates = [start_date + timedelta(days=x) for x in range(0, (end_date-start_date).days+1)]
-    lookup = session.query(top_sku_talendfc.txn_date,func.sum(top_sku_talendfc.txn_amount),func.sum(top_sku_talendfc.topup_cnt)).filter(and_(top_sku_talendfc.txn_date >= start_date, top_sku_talendfc.txn_date <= end_date)).group_by(top_sku_talendfc.txn_date).all()
+    lookup = session.query(top_sku_talendfc.txn_date,
+                            func.sum(top_sku_talendfc.txn_amount),
+                            func.sum(top_sku_talendfc.topup_cnt))\
+                            .filter(and_(top_sku_talendfc.txn_date >= start_date, top_sku_talendfc.txn_date <= end_date))\
+                            .group_by(top_sku_talendfc.txn_date).all()
 
     sku_dict = { "dates": [ d.strftime("%Y-%m-%d") for d in dates ],
                  "amounts": init_list(len(dates)),
@@ -71,3 +85,6 @@ def topsku_week_js():
 
    
     return jsonify(sku_dict)
+
+
+#to be deleted
