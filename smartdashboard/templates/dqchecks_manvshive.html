@@ -24,13 +24,13 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form action="/" method="post" autocomplete="off" id="form"> 
+        <form action="/dqchecks_update_threshold" method="post" autocomplete="off" id="form"> 
             <div class="modal-body">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                    <label class="input-group-text custome-font-size" for="inputGroupSelect01">CDR's</label>
+                    <label class="input-group-text custome-font-size" for="cdrs">CDR's</label>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01">
+                    <select class="custom-select" id="cdrs" name="cdrs">
                         <option disabled selected>Choose...</option>
                         <option value="COM">COM</option>
                         <option value="VOU">VOU</option>
@@ -48,12 +48,12 @@
                     <div class="input-group-prepend">
                     <label class="input-group-text">Threshold</label>
                     </div>
-                    <input type="number" class="form-control custome-font-size" >
+                    <input type="number" class="form-control custome-font-size" id="threshold" name="threshold">
                 </div>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" id="lrj_excel" value="Search">Apply</button>
+            <button type="submit" class="btn btn-primary" id="custom_threshold" value="Search">Apply</button>
             </div>
         </form>
         </div>
