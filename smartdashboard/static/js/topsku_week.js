@@ -21,24 +21,9 @@ $('#sku_max').datetimepicker({
     }
 });
 
-$('#sku_table_min').datetimepicker({
+$('#sku_table_date').datetimepicker({
     timepicker: false,
     format: 'Y-m-d',
-    onShow: function (ct) {
-        this.setOptions({
-            maxDate: jQuery('#sku_table_max').val() ? jQuery('#sku_table_max').val() : false
-        })
-    }
-});
-
-$('#sku_table_max').datetimepicker({
-    timepicker: false,
-    format: 'Y-m-d',
-    onShow: function (ct) {
-        this.setOptions({
-            minDate: jQuery('#sku_table_min').val() ? jQuery('#sku_table_min').val() : false
-        })
-    }
 });
 
 $("#sku_week_form").submit(function (event) {
@@ -230,31 +215,62 @@ function generate_sku_table(data) {
     });
 };
 
-function getData(cb_func,start_date,end_date) {
+function getData(cb_func,sku_date,hour) {
     $.ajax({
         url: "/topsku_week_table_js",
         type: "POST",
         data: {
-            "start_date": start_date,
-            "end_date": end_date
+            "sku_date": sku_date,
+            "hour": hour
         },
         success: cb_func
     });
 }
 
 $(document).ready(function () {
-    getData(generate_sku_table,"","")
-
+    hour = get_current_hour()
+    var today = new Date();
+    if (hour == 1) {
+        today.setDate(today.getDate() - 1);
+    }
+    var date = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    $("#sku_table_date").val(date);
+    $("#sku_table_hour").val(hour);
+    getData(generate_sku_table, date, hour)
 });
 
-function update_table_week(start_date, end_date) {
+function update_table_week(sku_date, hour) {
     $('#topsku_table').DataTable().clear().destroy();
-    getData(generate_sku_table, start_date, end_date)
+    getData(generate_sku_table, sku_date, hour)
 }
 
 $("#sku_table_form").submit(function (event) {
     event.preventDefault();
-    var start_date = $("#sku_table_min").val();
-    var end_date = $("#sku_table_max").val();
-    update_table_week(start_date, end_date);
+    var date = $("#sku_table_date").val();
+    var hour = $("#sku_table_hour").val();
+    update_table_week(date, hour);
 });
+
+function get_current_hour() {
+    var date = new Date;
+    var hour = date.getHours();
+    console.log(hour)
+    if (hour > 1 && hour < 9) {
+        return 5
+    }
+    else if (hour > 5 && hour < 13) {
+        return 9
+    }
+    else if (hour > 9 && hour < 17) {
+        return 13
+    }
+    else if (hour > 13 && hour < 21) {
+        return 17
+    }
+    else if (hour > 17 && hour <= 24) {
+        return 21
+    }
+    else if (hour < 5) {
+        return 1
+    }
+}

@@ -23,7 +23,7 @@ $.ajax({
                     color: undefined,
                     offsetY: -10,
                     formatter: function (val) {
-                      return val
+                      return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                     }
                   },
                   value: {
@@ -34,7 +34,7 @@ $.ajax({
                     color: undefined,
                     offsetY: 16,
                     formatter: function (val) {
-                      return val
+                      return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                     }
                   },
                   total: {
@@ -46,9 +46,10 @@ $.ajax({
                     fontWeight: 600,
                     color: '#373d3f',
                     formatter: function (w) {
-                      return w.globals.seriesTotals.reduce((a, b) => {
+                      total = w.globals.seriesTotals.reduce((a, b) => {
                         return a + b
                       }, 0)
+                      return total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                     }
                   }
                 }
@@ -118,7 +119,7 @@ $.ajax({
                   color: undefined,
                   offsetY: -10,
                   formatter: function (val) {
-                    return val
+                    return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                   }
                 },
                 value: {
@@ -129,7 +130,7 @@ $.ajax({
                   color: undefined,
                   offsetY: 16,
                   formatter: function (val) {
-                    return val
+                    return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                   }
                 },
                 total: {
@@ -141,9 +142,10 @@ $.ajax({
                   fontWeight: 600,
                   color: '#373d3f',
                   formatter: function (w) {
-                    return w.globals.seriesTotals.reduce((a, b) => {
+                    total =  w.globals.seriesTotals.reduce((a, b) => {
                       return a + b
                     }, 0)
+                    return total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                   }
                 }
               }
