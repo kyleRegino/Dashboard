@@ -33,6 +33,28 @@ $("#sku_week_form").submit(function (event) {
     update_week_sku(start_date,end_date);
 });
 
+$('#min_weekly_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#max_weekly_table').val() ? jQuery('#max_weekly_table').val() : false
+        })
+    },
+    maxDateTime:true
+});
+
+$('#max_weekly_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#min_weekly_table').val() ? jQuery('#min_weekly_table').val() : false
+        })
+    },
+    maxDateTime:true,
+});
+
 function update_week_sku(start_date, end_date) {
     $.ajax({
         url: "/topsku_week_js",

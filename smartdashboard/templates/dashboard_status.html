@@ -60,7 +60,7 @@
       </div>
 
       <!-- table -->
-      <div class="col-md-12 grid-margin">
+      <div class="col-md-12">
         <div class="card shadow mb-4 card-border">
           
           <div class="card-body"> 
@@ -70,6 +70,7 @@
                 <table class="table " id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
+                    <th>#</th>
                     <th>Task Name</th>
                     </tr>
                   </thead>
@@ -77,8 +78,10 @@
                     {% for testing in query.items %}
                     <tr">
                       {% if status == "RUNNING" %}
+                      <td>{{ loop.index + query.page * query.per_page - 8 }}</td>
                         <td>{{testing.tasklabel}}</td>
                       {% else %}
+                        <td>{{ loop.index + query.page * query.per_page - 8 }}</td>
                         <td>{{testing[0]}}</td>
                       {% endif %}
                     </tr>
@@ -89,7 +92,7 @@
             </div>
             
             <div class="row-2">
-              {% if prev_num %}
+              {% if query.has_prev %}
                 <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.status_job', status=status, page=query.prev_num) }}">Previous</a></li>
               {% else %}
                 <a class="btn disabled btn-space" href="#">Previous</a></li>
@@ -107,8 +110,8 @@
                 {% endif %}
               {% endfor %}
       
-              {% if next_num %}
-                <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.status_job', status=status, page=query.next_num) }}">Next</a></li>
+              {% if query.has_next %}
+                <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.status_job', status=status, page=query.next) }}">Next</a></li>
               {% else %}
                 <a class="btn disabled btn-space" href="#">Next</a></li>
               {% endif %}

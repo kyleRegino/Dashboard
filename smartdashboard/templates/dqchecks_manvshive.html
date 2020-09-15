@@ -3,12 +3,63 @@
 <div class="row page-title-header">
 
     <div class="col-12">
-        <div class="page-header">
-            <h4 class="page-title">Manifests VS T1-HIVE</h4>
+        <div class="page-header d-flex justify-content-between">
+            <h4 class="page-title">Manifests VS T1-HIVE</h4>    
+            <ul class="quick-links ml-auto">
+                <li><a href="#"></a></li>
+                <li><a data-toggle="modal" data-target="#modal_threshold_hive" href="#modal_threshold_hive">Threshold</a></li>
+                <li><a href="#"></a></li>
+            </ul>
         </div>
     </div>
-
 </div>
+
+<!-- Modal-->
+<div class="modal fade" id="modal_threshold_hive" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Choose status to generate EXCEL</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="/dqchecks_update_threshold" method="post" autocomplete="off" id="form"> 
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text custome-font-size" for="cdrs">CDR's</label>
+                    </div>
+                    <select class="custom-select" id="cdrs" name="cdrs">
+                        <option disabled selected>Choose...</option>
+                        <option value="COM">COM</option>
+                        <option value="VOU">VOU</option>
+                        <option value="FIRST">FIRST</option>
+                        <option value="MON">MON</option>
+                        <option value="CM">CM</option>
+                        <option value="ADJ">ADJ</option>
+                        <option value="DATA">DATA</option>
+                        <option value="VOICE">VOICE</option>
+                        <option value="SMS">SMS</option>
+                        <option value="CLR">CLR</option> 
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text">Threshold</label>
+                    </div>
+                    <input type="number" class="form-control custome-font-size" id="threshold" name="threshold">
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="custom_threshold" value="Search">Apply</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
 
 <div class="row">
     <div class="col-md-12 align-self-center">
@@ -77,7 +128,7 @@
             <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between align-items-center">
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">ADJ</h4>
                         </div>
                         <h2 id="variance_adj" class="font-weight-semibold mb-0">{{variance_adj}}</h2>

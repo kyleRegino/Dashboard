@@ -1,5 +1,5 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
-from smartdashboard import db, manifest_hive_monitoring, manifest_oracle_monitoring
+from smartdashboard import db, manifest_hive_monitoring, manifest_oracle_monitoring, cdr_threshold
 from smartdashboard.utils import init_list, format_date, number_formatter, insert_cdr
 
 from sqlalchemy import or_, and_
@@ -696,7 +696,7 @@ def dqchecks_manvsoracle_js():
 
     return jsonify(result_set)
 
-@dq_blueprint.route('/dqchecks_manvsoracle_search', methods=['POST'])
+@dq_blueprint.route('/dqchecks_manvsoracle_search', methods=['GET','POST'])
 def dqchecks_manvsoracle_search():
     if request.method == "POST":
         query_date = request.form["date"]
@@ -725,7 +725,32 @@ def dqchecks_manvsoracle_search():
 
     return jsonify(result_set)
 
-
-@dq_blueprint.route('/dqchecks_update_threshold', methods=['POST'])
+#THRESHOLD
+@dq_blueprint.route('/dqchecks_update_threshold', methods=['GET','POST'])
 def dqchecks_update_threshold():
-    return "hello"
+    if request.method == "POST":
+        cdr_types = request.form["cdrs"]
+        custom_threshold = request.form["threshold"]
+
+        # CREATING adding new cdr type and threshold
+        # lookup = cdr_threshold(cdr_type = cdr_types, threshold = custom_threshold )
+        # db.session.add(lookup)
+        # db.session.commit()
+
+        #UPDATING threshold according to cdr
+        lookup = db.session.query(cdr_threshold).filter(cdr_threshold.cdr_type == cdr_types).first()
+        lookup.cdr_type = cdr_types
+        lookup.threshold = custom_threshold
+        db.session.commit()
+
+
+    threshold_cdrs = {}
+    threshold = db.session.query(cdr_threshold).all()
+
+    for t in threshold:
+        threshold_cdrs[t.cdr_type] = str(number_formatter(t.threshold))
+
+    result_set = {
+        "cdrs_threshold": threshold_cdrs
+    }
+    return jsonify(result_set)

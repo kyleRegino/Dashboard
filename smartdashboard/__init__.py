@@ -25,6 +25,7 @@ bca_monitoring_table = Base.classes.job_bca_monitoring
 manifest_hive_monitoring = Base.classes.manifest_hive_monitoring
 manifest_oracle_monitoring = Base.classes.manifest_oracle_monitoring
 top_sku_talendfc = Base.classes.top_sku_talendfc
+cdr_threshold = Base.classes.cdr_threshold
 
 
 session = Session(db.engine)
