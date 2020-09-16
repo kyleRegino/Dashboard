@@ -11064,42 +11064,42 @@ box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);  */
 
 /* DATA TABLES COLOR - TOPSKU */
 th.HOME{
-  background-color: #00b050;
-  width: 150px !important;
-  text-align: center;
-}
-th.SMART.BRO.PREPAID{
-  background-color: #9954cc;
-  width: 150px !important;
-  text-align: center;
-}
-th.SMART.PREPAID{
-  background-color: #ffff00;
-  width: 150px !important;
-  text-align: center;
-}
-th.SUN.BW.PREPAID{
-  background-color: #8faadc;
-  width: 150px !important;
-  text-align: center;
-}
-th.SUN.FLP{
-  background-color: #f4b183;
-  width: 150px !important;
-  text-align: center;
-}
-th.SUN.PREPAID{
-  background-color: #00b0f0;
-  width: 150px !important;
-  text-align: center;
-}
-th.TNT{
   background-color: #ff3300;
   width: 150px !important;
   text-align: center;
 }
+th.SMART.BRO.PREPAID{
+  background-color: #90EE90;
+  width: 150px !important;
+  text-align: center;
+}
+th.SMART.PREPAID{
+  background-color: #00b050;
+  width: 150px !important;
+  text-align: center;
+}
+th.SUN.BW.PREPAID{
+  background-color: #F0E68C;
+  width: 150px !important;
+  text-align: center;
+}
+th.SUN.FLP{
+  background-color: #F0E68C;
+  width: 150px !important;
+  text-align: center;
+}
+th.SUN.PREPAID{
+  background-color: #FFFF00;
+  width: 150px !important;
+  text-align: center;
+}
+th.TNT{
+  background-color: #FFA500;
+  width: 150px !important;
+  text-align: center;
+}
 th.SUN.BW.FLP{
-  background-color: #ff00ff;
+  background-color: #F0E68C;
   width: 150px !important;
   text-align: center;
 }
