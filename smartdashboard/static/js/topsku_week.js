@@ -261,7 +261,7 @@ $(document).ready(function () {
     var day = weekday[today.getDay()];
     $("#sku_table_date").val(date);
     $("#sku_table_hour").val(hour);
-    var text = "Topup Statistics as of " + date + ", " + day + ", Hour: " + hour + ":00"
+    var text = "(Topup Statistics as of " + date + ", " + day + ", Hour: " + hour + ":00)"
     $("#current_time_status").text(text)
     getData(generate_sku_table, date, hour)
 });
