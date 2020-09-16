@@ -1,7 +1,17 @@
 var series_amount = []
 var series_count = [];
 var y_axis_amount = [];
-var color_pallete = ['#5b9bd5', '#ed7d31', '#ffd966', '#2b2d4f', '#00b050', '#bf9000', '#d6dce5', '#ffff00', '#99ff66', '#ffa500'];
+var color_pallete = {
+  "HOME": '#FF3300',
+  "SMART BRO PREPAID": '#33CC33',
+  "SMART PREPAID": '#008000',
+  "SUN BW PREPAID": '#FFFF99',
+  "SUN FLP": '#FFFF66',
+  "SUN PREPAID": '#FFFF00',
+  "TNT": '#FF6600',
+  "SUN BW FLP": '#FFFFCC'
+}
+// var color_pallete = ['#5b9bd5', '#ed7d31', '#ffd966', '#2b2d4f', '#00b050', '#bf9000', '#d6dce5', '#ffff00', '#99ff66', '#ffa500'];
 var colors = [];
 var chart_day;
 var max_brand = 0;
@@ -66,7 +76,7 @@ function create_yaxis() {
         },
         formatter: function (x) {
           if (x != null) {
-            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+            return x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
           }
           else {
             return ""
@@ -113,7 +123,7 @@ function push_totals(total_amt, total_cnt) {
       },
       formatter: function (x) {
         if (x != null) {
-          return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+          return x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         }
         else {
           return ""
@@ -153,10 +163,12 @@ function update_day_sku(sku_date) {
       series_count_push(brand, brand_count);
       mapped = brand_amount.map(Number)
       compute_max_brand(Math.max(...mapped), brand);
-      colors.push(color_pallete[i]);
       i++;
     });
     series_amount = series_amount.sort((a, b) => (parseFloat(a["data"][0]) > parseFloat(b["data"][0])) ? 1 : -1)
+    for (amt of series_amount) {
+      colors.push(color_pallete[amt.name]);
+    }
     create_yaxis();
     total_amt = data["totals"]["total_amt_hr"];
     total_cnt = data["totals"]["total_cnt_hr"];
@@ -178,7 +190,6 @@ $.ajax({
     method: "GET",
     dataType: "json"
 }).done(function (data) {
-  var i = 0;
   // PER HOUR
   Object.keys(data["brands"]).forEach(function (brand) {
     var brand_amount = data["brands"][brand]["amount"];
@@ -187,10 +198,11 @@ $.ajax({
     series_count_push(brand, brand_count);
     mapped = brand_amount.map(Number)
     compute_max_brand(Math.max(...mapped), brand);
-    colors.push(color_pallete[i]);
-    i++;
   });
   series_amount = series_amount.sort((a, b) => (parseFloat(a["data"][0]) > parseFloat(b["data"][0])) ? 1 : -1)
+  for (amt of series_amount) {
+    colors.push(color_pallete[amt.name]);
+  }
   create_yaxis();
   total_amt = data["totals"]["total_amt_hr"];
   total_cnt = data["totals"]["total_cnt_hr"];

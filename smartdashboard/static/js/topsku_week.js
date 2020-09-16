@@ -115,7 +115,7 @@ $.ajax({
                 endingShape: 'rounded'
             },
         },
-        colors: ['#008FFB', '#FEB019', "#00E676", "#FFEA00", "#FFA06D", "#718792", "#D50000", "#D500F9", "#1A237E", "#4E342E"],
+        colors: ['#33CC33', '#2196F3'],
         dataLabels: {
             enabled: false,
         },
@@ -155,7 +155,7 @@ $.ajax({
                     },
                     formatter: function (x) {
                         if (x != null) {
-                            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                            return x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                         }
                         else {
                             return ""
@@ -190,7 +190,7 @@ $.ajax({
                     },
                     formatter: function (x) {
                         if (x != null) {
-                            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                            return x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                         }
                         else {
                             return ""
@@ -216,26 +216,28 @@ $.ajax({
 
 function generate_sku_table(data) {
     var columns = [];
-    columnNames = data.columns;
+    var columnNames = data.columns;
     for (var i in columnNames) {
         if (i == 0) {
+            className = columnNames[i]
             renderer = function (x) {
                 return x
             }
         }
         else {
+            className = columnNames[i] + ' dt-body-right'
             renderer = $.fn.dataTable.render.number(',', '.', 2);
         }
         columns.push({
             data: columnNames[i],
             title: columnNames[i],
             render: renderer,
-            className: columnNames[i]
+            className: className
         });
     }
     $('#topsku_table').DataTable({
         data: data.data,
-        columns: columns
+        columns: columns,
     });
 };
 

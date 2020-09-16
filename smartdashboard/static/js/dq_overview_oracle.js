@@ -190,9 +190,9 @@ function generate_table_oracle(start_date,end_date) {
         columns: [
             { data: 'file date' },
             { data: 'cdr' },
-            { data: 'manifest count' },
-            { data: 't1 count' },
-            { data: 'variance' }
+            { data: 'manifest count', className: 'dt-body-right' },
+            { data: 't1 count', className: 'dt-body-right' },
+            { data: 'variance', className: 'dt-body-right' }
         ],
         initComplete: function () {
             var column = this.api().column(1);

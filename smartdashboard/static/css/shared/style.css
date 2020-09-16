@@ -11104,6 +11104,9 @@ th.SUN.BW.FLP{
   text-align: center;
 }
 
+.right-align-table{
+  text-align: right !important;
+}
   
 
 /*-------------------------------------------------------------------*/

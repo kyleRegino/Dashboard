@@ -75,19 +75,13 @@ def topsku_week_js():
 
 @topsku_blueprint.route('/topsku_week_table_js', methods=['POST'])
 def topsku_week_table_js():
-    print(request.form["sku_date"])
     date = datetime.strptime(request.form["sku_date"],"%Y-%m-%d").date()
     hour = int(request.form["hour"])
 
     weekday = date.weekday()
     start_date = date - relativedelta(weeks=4, weekday=weekday)
     end_date = date
-    print(start_date,end_date,hour)
-    '''
-    get day out of date
-    generate day - week * 3
-    get the dates
-    '''
+   
     # if start_date == "" and end_date == "" and date.today().weekday() != 6:
     #     date_today = date.today()
     #     start_date = date_today - relativedelta(weeks=4, weekday=MO(-1))
@@ -136,7 +130,7 @@ def topsku_week_table_js():
     #     else:
     #         insert_sku_table(l,sku_dict[l[1]])
     #         aggregate_sku_table(l,sku_dict[l[1]])
-    pprint.pprint(sku_dict)
+   
     formatted_data = {
                     "columns": ["Dates"] + brands,
                     "data": []
