@@ -1,5 +1,6 @@
 var chart_week = null;
 var series_week = [];
+var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
 $('#sku_min').datetimepicker({
     timepicker: false,
@@ -257,13 +258,17 @@ $(document).ready(function () {
         today.setDate(today.getDate() - 1);
     }
     var date = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    var day = weekday[today.getDay()];
     $("#sku_table_date").val(date);
     $("#sku_table_hour").val(hour);
+    var text = "Topup Statistics as of " + date + ", " + day + ", Hour: " + hour + ":00"
+    $("#current_time_status").text(text)
     getData(generate_sku_table, date, hour)
 });
 
 function update_table_week(sku_date, hour) {
     $('#topsku_table').DataTable().clear().destroy();
+    $('#topsku_table').empty();
     getData(generate_sku_table, sku_date, hour)
 }
 
@@ -271,13 +276,16 @@ $("#sku_table_form").submit(function (event) {
     event.preventDefault();
     var date = $("#sku_table_date").val();
     var hour = $("#sku_table_hour").val();
+    var date_converted = new Date(date);
+    var day = weekday[date_converted.getDay()];
+    var text = "Topup Statistics as of " + date + ", " + day + ", Hour: " + hour + ":00"
+    $("#current_time_status").text(text)
     update_table_week(date, hour);
 });
 
 function get_current_hour() {
     var date = new Date;
     var hour = date.getHours();
-    console.log(hour)
     if (hour > 1 && hour < 9) {
         return 5
     }
