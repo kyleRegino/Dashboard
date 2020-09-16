@@ -238,8 +238,13 @@ function generate_sku_table(data) {
     $('#topsku_table').DataTable({
         data: data.data,
         columns: columns,
-    });
+    }).columns.adjust().draw();
+    $('#container').css( 'display', 'block' );
 };
+
+// var table =  $('#topsku_table').DataTable();
+// $('#container').css( 'display', 'block' );
+// table.columns.adjust().draw();
 
 function getData(cb_func,sku_date,hour) {
     $.ajax({

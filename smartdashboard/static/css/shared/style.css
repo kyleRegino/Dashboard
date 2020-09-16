@@ -11065,53 +11065,58 @@ box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);  */
 /* DATA TABLES COLOR - TOPSKU */
 th.HOME{
   background-color: #ff3300;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
   color: white !important;
-  /* font-size: large; */
 }
 th.SMART.BRO.PREPAID{
   background-color: #33cc33;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
   color: black !important;
 }
 th.SMART.PREPAID{
   background-color: #008000;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
   color: white !important;
 }
 th.SUN.BW.PREPAID{
   background-color: #ffff99;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
 }
 th.SUN.FLP{
   background-color: #ffff66;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
 }
 th.SUN.PREPAID{
   background-color: #ffff00 ;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
 }
 th.TNT{
   background-color: #ff6600;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
   color: white !important;
 }
 th.SUN.BW.FLP{
   background-color: #ffffcc;
-  width: 150px !important;
+  width: 10% !important;
   text-align: center;
 }
 /* 
 #topsku_table td, #topsku_table th{
-  font-size: 100%;
-} */
+  font-size: 90%;
+}
+
+
+#topsku_table table {
+  width:100%;
+  table-layout: fixed;
+}
 
   
 
