@@ -272,3 +272,19 @@ $(form_selector).submit(function (event) {
     });
 
 });
+
+// THRESHOLD
+$("#form_threshold").submit(function (event) {
+    event.preventDefault();
+    var cdrs = $("#cdrs").val();
+    var threshold = $("#threshold").val();
+    $.ajax({
+        url: "/dqchecks_update_threshold",
+        method: "POST",
+        data: { "cdrs": cdrs,
+                "threshold": threshold}
+    }).done(function (data) {
+        $("#modal_threshold_hive").modal("hide");
+    });
+
+});

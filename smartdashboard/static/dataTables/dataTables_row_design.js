@@ -27,27 +27,6 @@
        }
     });
 
-    $("#topsku_table").find("tr").each(function () {
-  
-      var status= $(this).find(".HOME");
-      console.log(status);
-      // if(status.html() == 'RUNNING')
-      // {
-      //   $(status).addClass('badge badge-warning')
-      // }
-      // if (status.html() == 'OK') 
-      // {
-      //   // $(status).innerHTML = "COMPLETED";
-      //   $(status).html("COMPLETED");
-      //   $(status).addClass('badge badge-success')
-      // }
-      // if (status.html() == 'ERROR') {
-      //   $(status).addClass('badge badge-danger')
-      // }
-      // if (status.html() == 'MISFIRED') {
-      //   $(status).addClass('badge badge-info')
-      // }
-    });
 
     $(".main-panel").each(function () {
       var current_status= $(this).find("#current_status"); 
