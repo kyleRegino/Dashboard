@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_Monitoring
-from smartdashboard import db, manifest_hive_monitoring, manifest_oracle_monitoring
+from smartdashboard import db, manifest_hive_monitoring, manifest_oracle_monitoring, pending
 from datetime import date
 from datetime import datetime
 from sqlalchemy import or_, and_
@@ -15,7 +15,11 @@ def dashboard():
     query_job_running = Job_Monitoring.query.filter(Job_Monitoring.status == 'RUNNING').count()
     query_distinct_count = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().count()
     long_running_count = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')).count()
-
+    pendings = db.session.query(pending).all()
+    pending_hdfs = []
+    time_p_hdfs = None
+    pending_hive = []
+    time_p_hive = None
     # TIME
     time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
     time_lrj = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
@@ -26,6 +30,15 @@ def dashboard():
     # print(str(time_overall.starttime))
     # print(str(time_hive.file_date))
     # print(str(time_oracle.file_date))
+    for p in pendings:
+        if p.job == "HDFS":
+            pending_hdfs.append(p)
+        elif p.job == "T0":
+            pending_hive.append(p)
+    if pending_hdfs:
+        time_p_hdfs = pending_hdfs[0].txn_dt
+    if pending_hive:
+        time_p_hive = pending_hive[0].txn_dt
 
     query_distinct = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().paginate(page=page, per_page=8)
     next_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.next_num) \
@@ -33,8 +46,8 @@ def dashboard():
     prev_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.prev_num) \
         if query_distinct.has_prev else None
 
-    print(query_distinct.page)
-    print(query_distinct.per_page)
+    # print(query_distinct.page)
+    # print(query_distinct.per_page)
 
 
     return render_template("dashboard.html", query = query_distinct,
@@ -47,6 +60,10 @@ def dashboard():
                                             time_lrj=time_lrj,
                                             time_oracle=time_oracle,
                                             time_hive=time_hive,
+                                            time_p_hdfs = time_p_hdfs,
+                                            time_p_hive = time_p_hive,
+                                            pending_hdfs = pending_hdfs,
+                                            pending_hive = pending_hive
                                             # pagination =pagination,
                                             )
 

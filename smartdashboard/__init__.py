@@ -26,7 +26,7 @@ manifest_hive_monitoring = Base.classes.manifest_hive_monitoring
 manifest_oracle_monitoring = Base.classes.manifest_oracle_monitoring
 top_sku_talendfc = Base.classes.top_sku_talendfc
 cdr_threshold = Base.classes.cdr_threshold
-
+pending = Base.classes.pending_push_load
 
 session = Session(db.engine)
 
