@@ -750,7 +750,4 @@ def dqchecks_update_threshold():
     for t in threshold:
         threshold_cdrs[t.cdr_type] = str(number_formatter(t.threshold))
 
-    result_set = {
-        "cdrs_threshold": threshold_cdrs
-    }
-    return jsonify(result_set)
+    return jsonify(threshold_cdrs)
