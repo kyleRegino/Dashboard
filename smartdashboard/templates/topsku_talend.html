@@ -86,10 +86,10 @@
             </div>
             <div class="card-body ">
                 <div class="row">
-                    <div class="col-md-7 date-1">
+                    <div class="col-md-12">
                         <form action="" method="post" id="sku_table_form" autocomplete="off">
                             Date:
-                            <input type="text" name="sku_date" id="sku_table_date" required>
+                            <input class="form-control" type="text" name="sku_date" id="sku_table_date" required>
                             Hour:
                             <select name="hour" id="sku_table_hour" required>
                                 <option value="1">1 AM</option>
@@ -104,8 +104,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <table id="topsku_table" class="table table-bordered" style="width:100%">
-                    </table>
+                    <div class="col-md-12">
+                        <table id="topsku_table" class="table table-bordered" style="width:100%">
+                        </table>
+                    </div>
+                    
                 </div>
             </div>
         </div>

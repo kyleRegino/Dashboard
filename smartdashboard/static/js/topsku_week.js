@@ -228,7 +228,8 @@ function generate_sku_table(data) {
         columns.push({
             data: columnNames[i],
             title: columnNames[i],
-            render: renderer
+            render: renderer,
+            className: columnNames[i]
         });
     }
     $('#topsku_table').DataTable({
