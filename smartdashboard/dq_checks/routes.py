@@ -153,7 +153,8 @@ def dqchecks_hive_excel():
             insert_cdr(cdr_dict[l.cdr_type],dates.index(l[0]),l[2],l[3],l[4])
         else:
             insert_cdr(cdr_dict[l.cdr_type],dates.index(l[0]),l[2],l[3],l[4])
-            
+    
+    print(cdr_dict)
     #output in bytes
     output = io.BytesIO()
     #create WorkBook object
@@ -751,3 +752,57 @@ def dqchecks_update_threshold():
         threshold_cdrs[t.cdr_type] = str(number_formatter(t.threshold))
 
     return jsonify(threshold_cdrs)
+
+
+# FOR LZERO
+@dq_blueprint.route('/dq_overview_lzero')
+def dq_overview_lzero():
+    return render_template('dqchecks_overview_lzero.html')
+
+@dq_blueprint.route('/dq_manvshive_lzero')
+def dq_manvshive_lzero():
+    cdr_types = ["com", "vou", "cm", "adj", "first", "mon", "data", "voice", "sms", "clr"]
+    lookup = db.session.query(manifest_hive_monitoring.file_date,manifest_hive_monitoring.cdr_type,func.sum(manifest_hive_monitoring.variance)).filter(manifest_hive_monitoring.file_date == date.today()).group_by(manifest_hive_monitoring.file_date,manifest_hive_monitoring.cdr_type)
+    variance_dict = dict.fromkeys(cdr_types,None)
+    
+    for l in lookup:
+        if l.cdr_type not in variance_dict.keys():
+            variance_dict[l.cdr_type] = l[2]
+        else:
+            variance_dict[l.cdr_type] = l[2]
+
+    return render_template('dqchecks_manvshive_lzero.html', variance_com = number_formatter(variance_dict["com"]),
+                                                variance_vou = number_formatter(variance_dict["vou"]),
+                                                variance_first = number_formatter(variance_dict["first"]),
+                                                variance_mon = number_formatter(variance_dict["mon"]),
+                                                variance_cm = number_formatter(variance_dict["cm"]),
+                                                variance_adj = number_formatter(variance_dict["adj"]),
+                                                variance_data = number_formatter(variance_dict["data"]),
+                                                variance_voice = number_formatter(variance_dict["voice"]),
+                                                variance_sms = number_formatter(variance_dict["sms"]),
+                                                variance_clr = number_formatter(variance_dict["clr"])
+                                                )
+
+@dq_blueprint.route('/dq_manvsoracle_lzero', methods=['GET', 'POST'])
+def dq_manvsoracle_lzero():
+    cdr_types = ["com", "vou", "cm", "adj", "first", "mon", "data", "voice", "sms", "clr"]
+    lookup = db.session.query(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type,func.sum(manifest_oracle_monitoring.variance)).filter(manifest_oracle_monitoring.file_date == date.today()).group_by(manifest_oracle_monitoring.file_date,manifest_oracle_monitoring.cdr_type)
+    variance_dict = dict.fromkeys(cdr_types,None)
+    
+    for l in lookup:
+        if l.cdr_type not in variance_dict.keys():
+            variance_dict[l.cdr_type] = l[2]
+        else:
+            variance_dict[l.cdr_type] = l[2]
+ 
+    return render_template('dqchecks_manvsoracle_lzero.html', variance_com = number_formatter(variance_dict["com"]),
+                                                variance_vou = number_formatter(variance_dict["vou"]),
+                                                variance_first = number_formatter(variance_dict["first"]),
+                                                variance_mon = number_formatter(variance_dict["mon"]),
+                                                variance_cm = number_formatter(variance_dict["cm"]),
+                                                variance_adj = number_formatter(variance_dict["adj"]),
+                                                variance_data = number_formatter(variance_dict["data"]),
+                                                variance_voice = number_formatter(variance_dict["voice"]),
+                                                variance_sms = number_formatter(variance_dict["sms"]),
+                                                variance_clr = number_formatter(variance_dict["clr"])
+                                                )

@@ -4,12 +4,20 @@
 
     <div class="col-12">
         <div class="page-header d-flex justify-content-between">
-            <h4 class="page-title">Manifests VS T1-HIVE</h4>    
-            <ul class="quick-links ml-auto">
+            <h4 class="page-title align-self-center">Manifests VS T1-HIVE</h4>    
+            <ul class="quick-links ml-auto align-self-center">
                 <li><a href="#"></a></li>
                 <li><a data-toggle="modal" data-target="#modal_threshold_hive" href="#modal_threshold_hive">Threshold</a></li>
                 <li><a href="#"></a></li>
             </ul>
+            <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
+                Date:
+                <input type="search" class="form-control" name="cdr_date_hive" id="cdr_date" size="10" required>
+                <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
+                <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
+                    <i class="mdi mdi-home-outline"></i>Home
+                </a> 
+            </form>
         </div>
     </div>
 </div>
@@ -19,7 +27,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Choose status to generate EXCEL</h5>
+            <h5 class="modal-title" id="staticBackdropLabel">Choose CDR and Add threshold to apply</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -183,28 +191,6 @@
     </div>
 </div>
 
-<!-- <div class='row'>
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-4 stretch-card">
-                <div class="card card-style card-border">
-                    <div class="card-body pb-0">
-                        <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
-                            Date:
-                            <input type="search" class="form-control" name="cdr_date_hive" id="cdr_date" size="8" required>
-                            <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
-                            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
-                                <i class="mdi mdi-home-outline"></i>Home
-                            </a> 
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-
 <!-- Variance -->
 <div class='row'>
     <div class="col-md-12">
@@ -214,7 +200,7 @@
                     <div class="col-6">
                         <h1 class="h3 text-gray-800">Variances per CDR</h1>
                     </div>
-                    <div class="col-6 d-flex justify-content-end">
+                    <!-- <div class="col-6 d-flex justify-content-end">
                         <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
                             Date:
                             <input type="search" class="form-control" name="cdr_date_hive" id="cdr_date" size="10" required>
@@ -223,7 +209,7 @@
                                 <i class="mdi mdi-home-outline"></i>Home
                             </a> 
                         </form>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="card-body">

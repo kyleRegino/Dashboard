@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_lzero.html' %}
 {% block content %}
 
 
@@ -119,7 +119,7 @@
 
       <div class="row">
         <div class="col-md-7 date-1">
-          <form action="/lrj_datetime" method="post" autocomplete="off"> 
+          <form action="/lrj_datetime_lzero" method="post" autocomplete="off"> 
             Start Date:
             <input class="form-control" type="text" name="datetimepickermin" id="min" value="{{ minDate }}"> 
             End Date:
@@ -128,7 +128,7 @@
           </form>  
         </div>
         <div class="col-md-5 date-2 table_filter d-flex justify-content-end">
-          <form action="/lrj_search" method="post" autocomplete="off"> 
+          <form action="/lrj_search_lzero" method="post" autocomplete="off"> 
             <div class="input-group justify-content-end">
               <input class="form-control" type="text" name="tag" id="tag" value="{{ tag }}"> 
               <div class="input-group-append">
@@ -140,7 +140,7 @@
                   <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
                   <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
                 </div> -->
-                <a class="btn btn-outline-primary" href="{{ url_for('lrj_blueprint.long_running_job')}}">
+                <a class="btn btn-outline-primary" href="{{ url_for('lrj_blueprint.long_running_job_lzero')}}">
                   <i class="mdi mdi-home-outline"></i>Home
                 </a>
               </div>
@@ -188,9 +188,9 @@
         {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
           {% if page_num %}
             {% if query.page == page_num %}
-              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.lrj_search', page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.lrj_search_lzero', page=page_num)}}">{{ page_num }}</a>
             {% else %}
-              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.lrj_search', page=page_num)}}">{{ page_num }}</a>
+              <a class="btn btn-info mb-4 btn-space" href="{{ url_for('lrj_blueprint.lrj_search_lzero', page=page_num)}}">{{ page_num }}</a>
             {% endif %}
           {% else %}
               ... 

@@ -243,3 +243,125 @@ def lrj_js():
     }
 
     return jsonify(result_set)
+
+
+
+# FOR LZERO
+@lrj_blueprint.route('/long_running_job_lzero', methods=['GET', 'POST'])
+def long_running_job_lzero():
+    page = request.args.get('page', 1, type=int)
+
+    long_running = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')) \
+                    .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=50)
+
+    get_time = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
+                    .order_by(Job_Monitoring.starttime.desc()).first()
+
+    query_job_running = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'RUNNING', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_ok = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'OK', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_error = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'ERROR', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_misfired = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'MISFIRED', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+
+    long_next_num = url_for('lrj_blueprint.long_running_job_lzero', page=long_running.next_num) \
+        if long_running.has_next else None
+    long_prev_num = url_for('lrj_blueprint.long_running_job_lzero', page=long_running.prev_num) \
+        if long_running.has_prev else None
+
+    return render_template("longrunningjobs_lzero.html", query=long_running,
+                                                            running = number_formatter(query_job_running),
+                                                            ok = query_job_ok,
+                                                            error = query_job_error,
+                                                            misfired = query_job_misfired,
+                                                            next_num=long_next_num,
+                                                            prev_num=long_prev_num,
+                                                            time = get_time
+                                                            )
+
+@lrj_blueprint.route('/lrj_search_lzero', methods=['GET', 'POST'])
+def lrj_search_lzero():
+    page = request.args.get('page', 1, type=int)
+
+    query_job_running = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'RUNNING', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_ok = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'OK', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_error = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'ERROR', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_misfired = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'MISFIRED', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+
+    global search, tag
+    if request.method == 'POST' and 'tag' in request.form:
+        tag = request.form["tag"]
+        search = "%{}%".format(tag)
+
+
+    search_string = Job_Monitoring.query.filter(or_(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.starttime.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.duration_mins.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.tasklabel.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.id.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status.like(search)), 
+                                                    ))\
+                                                        .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=50)
+
+
+    search_next_num = url_for('lrj_blueprint.lrj_search_lzero', page=search_string.next_num) \
+        if search_string.has_next else None
+    search_prev_num = url_for('lrj_blueprint.lrj_search_lzero', page=search_string.prev_num) \
+        if search_string.has_prev else None
+
+    return render_template('longrunningjob_search_lzero.html', query=search_string, 
+                                        running = query_job_running,
+                                        tag=tag,
+                                        ok = query_job_ok,
+                                        error = query_job_error,
+                                        misfired = query_job_misfired,
+                                        search=search,
+                                        next_num=search_next_num,
+                                        prev_num=search_prev_num
+                                        )
+
+@lrj_blueprint.route('/lrj_datetime_lzero', methods=['GET', 'POST'])
+def lrj_datetime_lzero():
+    page = request.args.get('page', 1, type=int)
+    query_job_running = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'RUNNING', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_ok = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'OK', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_error = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'ERROR', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+    query_job_misfired = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'MISFIRED', 
+                                                    Job_Monitoring.duration_mins >= 30 )).count()
+
+
+    global mindate, maxdate, minDate, maxDate
+    if request.method == 'POST' and 'datetimepickermin' in request.form or 'datetimepickermax' in request.form:
+        minDate = request.form["datetimepickermin"]
+        maxDate = request.form["datetimepickermax"]
+        mindate = "{}%".format(minDate)
+        maxdate = "{}%".format(maxDate)
+
+    search_string = Job_Monitoring.query.filter(or_(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.starttime.like(mindate)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.starttime.like(maxdate))
+                                                    ))\
+                                                        .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=50, error_out=False)
+    
+    search_next_num = url_for('lrj_blueprint.lrj_datetime_lzero', page=search_string.next_num) \
+        if search_string.has_next else None
+    search_prev_num = url_for('lrj_blueprint.lrj_datetime_lzero', page=search_string.prev_num) \
+        if search_string.has_prev else None
+
+    return render_template('longrunningjob_search_lzero.html', query=search_string, 
+                                        minDate=minDate,
+                                        maxDate=maxDate,
+                                        running = query_job_running,
+                                        ok = query_job_ok,
+                                        error = query_job_error,
+                                        misfired = query_job_misfired,
+                                        next_num=search_next_num,
+                                        prev_num=search_prev_num
+                                        )

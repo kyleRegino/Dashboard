@@ -95,8 +95,18 @@ def topsku_week_table_js():
     #     end_date = datetime.strptime(end_date,"%Y-%m-%d").date() + relativedelta(weekday=SU(1))
 
 
-    brands = db.session.query(func.distinct(top_sku_talendfc.brand)).filter(and_(top_sku_talendfc.txn_date >= start_date, top_sku_talendfc.txn_date <= end_date, func.weekday(top_sku_talendfc.txn_date) == weekday, top_sku_talendfc.processing_hr == hour))
-    lookup = db.session.query(top_sku_talendfc.txn_date,top_sku_talendfc.brand,func.sum(top_sku_talendfc.txn_amount)).filter(and_(top_sku_talendfc.txn_date >= start_date, top_sku_talendfc.txn_date <= end_date, func.weekday(top_sku_talendfc.txn_date) == weekday, top_sku_talendfc.processing_hr == hour)).group_by(top_sku_talendfc.txn_date,top_sku_talendfc.brand)
+    brands = db.session.query(func.distinct(top_sku_talendfc.brand))\
+                .filter(and_(top_sku_talendfc.txn_date >= start_date, 
+                                top_sku_talendfc.txn_date <= end_date, 
+                                func.weekday(top_sku_talendfc.txn_date) == weekday, 
+                                top_sku_talendfc.processing_hr == hour))
+    lookup = db.session.query(top_sku_talendfc.txn_date,top_sku_talendfc.brand,func.sum(top_sku_talendfc.txn_amount))\
+                .filter(and_(top_sku_talendfc.txn_date >= start_date, 
+                                top_sku_talendfc.txn_date <= end_date, 
+                                func.weekday(top_sku_talendfc.txn_date) == weekday, 
+                                top_sku_talendfc.processing_hr == hour))\
+                .group_by(top_sku_talendfc.txn_date,top_sku_talendfc.brand)
+
 
     brands = [ b[0] for b in brands ] + ["TOTAL"]
     sku_dict = {}
@@ -148,4 +158,88 @@ def topsku_week_table_js():
     #         sku[b] = str(sku_dict[k]["brands"][b])
     #     formatted_data["data"].append(sku)
     
+    print(formatted_data)
     return jsonify(formatted_data)
+
+@topsku_blueprint.route('/topsku_week_table_excel', methods=['POST'])
+def topsku_week_table_excel():
+    date = datetime.strptime(request.form["sku_date"],"%Y-%m-%d").date()
+    hour = int(request.form["hour"])
+
+    weekday = date.weekday()
+    start_date = date - relativedelta(weeks=4, weekday=weekday)
+    end_date = date
+
+    brands = db.session.query(func.distinct(top_sku_talendfc.brand))\
+                .filter(and_(top_sku_talendfc.txn_date >= start_date, 
+                                top_sku_talendfc.txn_date <= end_date, 
+                                func.weekday(top_sku_talendfc.txn_date) == weekday, 
+                                top_sku_talendfc.processing_hr == hour))
+    lookup = db.session.query(top_sku_talendfc.txn_date,top_sku_talendfc.brand,func.sum(top_sku_talendfc.txn_amount))\
+                .filter(and_(top_sku_talendfc.txn_date >= start_date, 
+                                top_sku_talendfc.txn_date <= end_date, 
+                                func.weekday(top_sku_talendfc.txn_date) == weekday, 
+                                top_sku_talendfc.processing_hr == hour))\
+                .group_by(top_sku_talendfc.txn_date,top_sku_talendfc.brand)
+
+    brands = [ b[0] for b in brands ] + ["TOTAL"]
+    sku_dict = {}
+
+    for l in lookup.all():
+        key = l[0].strftime("%Y-%m-%d")
+        if key not in sku_dict.keys():
+            sku_dict[key] = {
+                "brands": dict.fromkeys(brands,None),
+            }
+            sku_dict[key]["brands"][l[1]] = str(l[2])
+            if sku_dict[key]["brands"]["TOTAL"] == None:
+                sku_dict[key]["brands"]["TOTAL"] = 0
+            sku_dict[key]["brands"]["TOTAL"] += l[2]
+        else:
+            if sku_dict[key]["brands"]["TOTAL"] == None:
+                sku_dict[key]["brands"]["TOTAL"] = 0
+            sku_dict[key]["brands"][l[1]] = str(l[2])
+            sku_dict[key]["brands"]["TOTAL"] += l[2]
+            
+    formatted_data = {
+                    "columns": ["Dates"] + brands,
+                    "data": []
+                }
+    for k in sku_dict.keys():
+        sku = dict.fromkeys(formatted_data["columns"])
+        sku["Dates"] = k
+        for b in sku_dict[k]["brands"].keys():
+            sku[b] = str(sku_dict[k]["brands"][b])
+        formatted_data["data"].append(sku)
+
+    #output in bytes
+    output = io.BytesIO()
+    #create WorkBook object
+    workbook = Workbook()
+    workbook_name = "Manifest Hive Bashing {}".format(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
+    #add a sheet
+    ws = workbook.create_sheet('Week on Week Amounts per Brand',0)
+
+    greenFill = PatternFill(start_color='AEEA00',
+                   end_color='AEEA00',
+                   fill_type='solid')
+
+    x_pos = 1
+    y_pos = 1
+    temp_y = 1
+    x_lim = 19
+    row = 0
+
+    for c in cdr_dict.keys():
+        print(c)
+
+    workbook.save(output)
+    output.seek(0)
+    pprint.pprint(cdr_dict)
+    filename = workbook_name
+
+    return Response(output, mimetype="application/openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition":"attachment;filename={}.xlsx".format(filename)})
+
+
+
+

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_lzero.html' %}
 {% block content %}
 
 
@@ -24,7 +24,7 @@
       <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-style border-left-1-1">
           <div class="card-body pb-0">
-            <a href="{{ url_for('dashboard_blueprint.status_job', status='TASKS') }}" class="stretched-link" name="running"></a>
+            <a href="{{ url_for('dashboard_blueprint.status_job_lzero', status='TASKS') }}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between">
               <h5 class="card-title font-weight-semibold mb-0 text-muted">TOTAL NUMBER OF JOB TASKS</h5>
             </div>
@@ -37,7 +37,7 @@
       <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-style border-left-1">
           <div class="card-body pb-0">
-            <a href="{{ url_for('dashboard_blueprint.status_job', status='RUNNING') }}" class="stretched-link" name="running"></a>
+            <a href="{{ url_for('dashboard_blueprint.status_job_lzero', status='RUNNING') }}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between">
               <h5 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOB TASKS</h5>
             </div>
@@ -50,7 +50,7 @@
       <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-style border-left-1-2">
           <div class="card-body pb-0">
-            <a href="{{ url_for('lrj_blueprint.long_running_job')}}" class="stretched-link" name="running"></a>
+            <a href="{{ url_for('lrj_blueprint.long_running_job_lzero')}}" class="stretched-link" name="running"></a>
             <div class="d-flex justify-content-between" type="submit" name="running">
               <h5 class="card-title font-weight-semibold mb-0 text-muted">LONG RUNNING JOB TASK AS OF {{ time_lrj.starttime }}</h5>
             </div>
@@ -77,13 +77,9 @@
                   <tbody>
                     {% for testing in query.items %}
                     <tr">
-                      {% if status == "RUNNING" %}
+                      
                       <td>{{ loop.index + query.page * query.per_page - 8 }}</td>
-                        <td>{{testing.tasklabel}}</td>
-                      {% else %}
-                        <td>{{ loop.index + query.page * query.per_page - 8 }}</td>
-                        <td>{{testing[0]}}</td>
-                      {% endif %}
+                      <td>{{testing[0]}}</td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -92,8 +88,8 @@
             </div>
             
             <div class="row-2">
-              {% if query.has_prev %}
-                <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.status_job', status=status, page=query.prev_num) }}">Previous</a></li>
+              {% if prev_num %}
+                <a class="btn btn-info btn-space" href="{{ prev_num }}">Previous</a></li>
               {% else %}
                 <a class="btn disabled btn-space" href="#">Previous</a></li>
               {% endif %}
@@ -101,21 +97,20 @@
               {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                 {% if page_num %}
                   {% if query.page == page_num %}
-                    <a class="btn btn-outline-info btn-space" href="{{ url_for('dashboard_blueprint.status_job', status=status, page=page_num)}}">{{ page_num }}</a>
+                    <a class="btn btn-outline-info btn-space" href="{{ url_for('dashboard_blueprint.dashboard_lzero', page=page_num)}}">{{ page_num }}</a>
                   {% else %}
-                    <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.status_job', status=status, page=page_num)}}">{{ page_num }}</a>
+                    <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.dashboard_lzero', page=page_num)}}">{{ page_num }}</a>
                   {% endif %}
                 {% else %}
                     ... 
                 {% endif %}
               {% endfor %}
       
-              {% if query.has_next %}
-                <a class="btn btn-info btn-space" href="{{ url_for('dashboard_blueprint.status_job', status=status, page=query.next_num) }}">Next</a></li>
+              {% if next_num %}
+                <a class="btn btn-info btn-space" href="{{ next_num }}">Next</a></li>
               {% else %}
                 <a class="btn disabled btn-space" href="#">Next</a></li>
               {% endif %}
-            
             </div>
           </div>     
         </div>
@@ -142,6 +137,73 @@
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-6 grid-margin">
+        <div class="card card-border" style="height: 100%;" height="100">
+          <div class="card-body" >
+            <div class="d-flex align-items-end mb-4">
+              <h3 class="mb-0 font-weight-semibold">Pending Push to HDFS</h3>
+              <p class="mb-0 font-weight-semibold mr-2 ml-2 mb-1">AS OF {{ time_p_hdfs }}</p>
+            </div>
+            <div>
+              <table class="table table-bordered" id="pending_hdfs">
+                <thead>
+                  <tr>
+                    <th>CDR</th>
+                    <th>COUNT</th>
+                    <th>OLDEST BATCH</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for h in pending_hdfs %}
+                  <tr">
+                    <td>{{ h.cdr_type }}</td>
+                    <td>{{ h.cdr_count }}</td>
+                    <td>{{ h.oldest_batch }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 grid-margin">
+        <div class="card card-border">
+          <div class="card-body">
+            <div class="d-flex align-items-end mb-4">
+              <h3 class="mb-0 font-weight-semibold">Pending Load to T0</h3>
+              <p class="mb-0 font-weight-semibold mr-2 ml-2 mb-1">AS OF {{ time_p_hive }}</p>
+            </div>
+            <div>
+              <table class="table table-bordered" id="pending_hive">
+                <thead>
+                  <tr>
+                    <th>CDR</th>
+                    <th>COUNT</th>
+                    <th>OLDEST BATCH</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for h in pending_hive %}
+                  <tr">
+                    <td>{{ h.cdr_type }}</td>
+                    <td>{{ h.cdr_count }}</td>
+                    <td>{{ h.oldest_batch }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" id="synced-charts">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6 grid-margin">
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-end ">
@@ -156,7 +218,7 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-end">
-              <h3 class="mb-0 font-weight-semibold">Manifest vs T1-Oracle</h3>
+              <h3 class="mb-0 font-weight-semibold">Manifest vs T1-FC</h3>
               <p class="mb-0 font-weight-semibold mr-2 ml-2 mb-1">AS OF {{ time_oracle.file_date}}</p>
             </div>
             <div id="variances_oracle_dashboard"></div>

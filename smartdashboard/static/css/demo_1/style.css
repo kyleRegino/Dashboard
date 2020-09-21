@@ -714,7 +714,7 @@
 
 .quick-links {
   list-style: none;
-  margin-bottom: 0;
+  /* margin-bottom: 0; */
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -729,7 +729,8 @@
   .quick-links li {
     margin-right: 10px;
     border-right: 1px solid #212529;
-    line-height: 1; }
+    /* line-height: 1;  */
+  }
     .quick-links li a {
       display: inline-block;
       color: #212529;

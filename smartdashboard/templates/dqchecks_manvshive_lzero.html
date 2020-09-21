@@ -1,28 +1,29 @@
-{% extends 'base.html' %}
+{% extends 'base_lzero.html' %}
 {% block content %}
 <div class="row page-title-header">
+
     <div class="col-12">
-        <div class="page-header">
-            <h4 class="page-title align-self-center">Manifests VS T1-FC</h4>
+        <div class="page-header d-flex justify-content-between">
+            <h4 class="page-title align-self-center">Manifests VS T1-HIVE</h4>    
             <ul class="quick-links ml-auto align-self-center">
                 <li><a href="#"></a></li>
-                <li><a data-toggle="modal" data-target="#modal_threshold_oracle" href="#modal_threshold_oracle">Threshold</a></li>
+                <li><a data-toggle="modal" data-target="#modal_threshold_hive" href="#modal_threshold_hive">Threshold</a></li>
                 <li><a href="#"></a></li>
             </ul>
-            <form action="" method="post" autocomplete="off" id="cdr_date_form_oracle">
+            <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
                 Date:
-                <input class="form-control" type="text" name="cdr_date_oracle" id="cdr_date" size="10" required>
+                <input type="search" class="form-control" name="cdr_date_hive" id="cdr_date" size="10" required>
                 <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
-                <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvsoracle')}}">
+                <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
                     <i class="mdi mdi-home-outline"></i>Home
-                </a>
+                </a> 
             </form>
         </div>
     </div>
 </div>
 
 <!-- Modal-->
-<div class="modal fade" id="modal_threshold_oracle" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modal_threshold_hive" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
@@ -31,7 +32,7 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form action="/dqchecks_update_threshold" method="post" autocomplete="off" id="form"> 
+        <form action="" method="post" autocomplete="off" id="form_threshold"> 
             <div class="modal-body">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -55,17 +56,18 @@
                     <div class="input-group-prepend">
                     <label class="input-group-text">Threshold</label>
                     </div>
-                    <input type="number" class="form-control custome-font-size" id="threshold" name="threshold" >
+                    <input type="number" class="form-control custome-font-size" id="threshold" name="threshold">
                 </div>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" id="lrj_excel" value="Search">Apply</button>
+            <button type="submit" value="Go" class="btn btn-primary" id="custom_threshold" >Apply</button>
             </div>
         </form>
         </div>
     </div>
 </div>
+
 
 <div class="row">
     <div class="col-md-12 align-self-center">
@@ -91,8 +93,7 @@
                     </div>
                 </div>
             </div>
-            
-            
+               
             <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
@@ -124,7 +125,7 @@
                         <h2 id="variance_cm" class="font-weight-semibold mb-0">{{variance_cm}}</h2>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
 </div>
@@ -132,17 +133,16 @@
 <div class='row'>
     <div class="col-md-12">
         <div class="row">
-            
             <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between align-items-center">
                             <h4 class="card-title font-weight-semibold mb-0 text-muted">ADJ</h4>
                         </div>
                         <h2 id="variance_adj" class="font-weight-semibold mb-0">{{variance_adj}}</h2>
                     </div>
                 </div>
-            </div>
+            </div>  
 
             <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
@@ -154,7 +154,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
@@ -165,7 +165,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
@@ -176,7 +176,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-17 stretch-card">
                 <div class="card card-style card-border">
                     <div class="card-body pb-0">
@@ -187,7 +187,7 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 </div>
 
@@ -201,24 +201,23 @@
                         <h1 class="h3 text-gray-800">Variances per CDR</h1>
                     </div>
                     <!-- <div class="col-6 d-flex justify-content-end">
-                        <form action="" method="post" autocomplete="off" id="cdr_date_form_oracle">
+                        <form action="" method="post" autocomplete="off" id="cdr_date_form_hive">
                             Date:
-                            <input class="form-control" type="text" name="cdr_date_oracle" id="cdr_date" size="10" required>
+                            <input type="search" class="form-control" name="cdr_date_hive" id="cdr_date" size="10" required>
                             <button type="submit" value="Go" class="btn btn-primary " name="">Submit</button>
-                            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvsoracle')}}">
+                            <a class="btn btn-outline-primary" href="{{ url_for('dq_blueprint.dq_manvshive')}}">
                                 <i class="mdi mdi-home-outline"></i>Home
-                            </a>
+                            </a> 
                         </form>
                     </div> -->
                 </div>
             </div>
             <div class="card-body">
-                <div id="variances_oracle"></div>
+                <div id="variances_hive"></div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class='row'>
     <!-- COM -->
@@ -232,7 +231,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="com_oracle"></div>
+                <div id="com_hive"></div>
             </div>
         </div>
     </div>
@@ -247,10 +246,15 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="vou_oracle"></div>
+                <div id="vou_hive"></div>
             </div>
         </div>
     </div>
+</div>
+
+
+<div class='row'>
+    
 </div>
 
 
@@ -266,7 +270,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="first_oracle"></div>
+                <div id="first_hive"></div>
             </div>
         </div>
     </div>
@@ -281,7 +285,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="mon_oracle"></div>
+                <div id="mon_hive"></div>
             </div>
         </div>
     </div>
@@ -299,7 +303,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="cm_oracle"></div>
+                <div id="cm_hive"></div>
             </div>
         </div>
     </div>
@@ -314,11 +318,12 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="adj_oracle"></div>
+                <div id="adj_hive"></div>
             </div>
         </div>
     </div>
 </div>
+
 
 <div class='row'>
     <!-- DATA -->
@@ -332,7 +337,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="data_oracle"></div>
+                <div id="data_hive"></div>
             </div>
         </div>
     </div>
@@ -347,7 +352,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="voice_oracle"></div>
+                <div id="voice_hive"></div>
             </div>
         </div>
     </div>
@@ -365,7 +370,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="sms_oracle"></div>
+                <div id="sms_hive"></div>
             </div>
         </div>
     </div>
@@ -380,7 +385,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="clr_oracle"></div>
+                <div id="clr_hive"></div>
             </div>
         </div>
     </div>
@@ -390,7 +395,7 @@
 
 {% block scripts %}
 <script>
-    var page = "oracle";
+    var page = "hive";
 </script>
 <script src="../static/js/dq_init.js"></script>
 <script src="../static/js/dq_manvst1.js"></script>

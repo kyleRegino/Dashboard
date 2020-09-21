@@ -23,7 +23,8 @@ $.ajax({
                     color: undefined,
                     offsetY: -10,
                     formatter: function (val) {
-                      return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+                      return val
+                      // .toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                     }
                   },
                   value: {
@@ -34,7 +35,8 @@ $.ajax({
                     color: undefined,
                     offsetY: 16,
                     formatter: function (val) {
-                      return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+                      return val
+                      // .toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                     }
                   },
                   total: {
@@ -46,9 +48,10 @@ $.ajax({
                     fontWeight: 600,
                     color: '#373d3f',
                     formatter: function (w) {
-                      total = w.globals.seriesTotals.reduce((a, b) => {
+                      w.globals.seriesTotals.reduce((a, b) => {
                         return a + b
-                      }, 0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+                      }, 0)
+                      // .toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                     }
                   }
                 }
@@ -83,7 +86,8 @@ $.ajax({
           enabled: true,
           y: {
             formatter: function(val) {
-              return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+              return val
+              // .toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
             },
             title: {
               formatter: function (seriesName) {
@@ -156,7 +160,8 @@ $.ajax({
                   formatter: function (w) {
                     total =  w.globals.seriesTotals.reduce((a, b) => {
                       return a + b
-                    }, 0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+                    }, 0)
+                    // .toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                   }
                 }
               }

@@ -111,7 +111,7 @@ $.ajax({
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '55%',
+                columnWidth: '30%',
                 endingShape: 'rounded'
             },
         },
@@ -156,6 +156,7 @@ $.ajax({
                     formatter: function (x) {
                         if (x != null) {
                             return x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                            // x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                         }
                         else {
                             return ""
@@ -190,7 +191,8 @@ $.ajax({
                     },
                     formatter: function (x) {
                         if (x != null) {
-                            return x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                            return x.toFixed().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                            // x.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
                         }
                         else {
                             return ""
@@ -238,8 +240,8 @@ function generate_sku_table(data) {
     $('#topsku_table').DataTable({
         data: data.data,
         columns: columns,
-    }).columns.adjust().draw();
-    $('#container').css( 'display', 'block' );
+    });
+    
 };
 
 // var table =  $('#topsku_table').DataTable();

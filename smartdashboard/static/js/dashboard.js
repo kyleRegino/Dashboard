@@ -129,3 +129,11 @@ $.ajax({
     variance_chart = new ApexCharts(document.querySelector("#variances_oracle_dashboard"), options);
     variance_chart.render();
 });
+
+
+
+$(document).ready(function() {
+    $('#pending_hdfs').DataTable();
+    $('#pending_hive').DataTable();
+
+} );

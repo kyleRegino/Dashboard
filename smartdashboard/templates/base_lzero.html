@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Smart Dashboard</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../static/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../static/vendors/iconfonts/ionicons/css/ionicons.css">
+    <link rel="stylesheet" href="../static/vendors/iconfonts/typicons/src/font/typicons.css">
+    <link rel="stylesheet" href="../static/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="../static/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../static/vendors/css/vendor.bundle.addons.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../static/css/shared/style.css">
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../static/css/demo_1/style.css">
+    <!-- End Layout styles -->
+    <link rel="shortcut icon" href="../static/images/Smart_Communications.png" />
+
+    <!-- Date Picker-->
+    <link href = "../static/datetimepicker-master/jquery.datetimepicker.css" rel = "stylesheet">
+
+    <!-- DataTables-->
+    <link rel="stylesheet" type="text/css" href="../static/dataTables/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/dataTables/datatables.css"/>
+    
+</head>
+
+<body>    
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center" style="background-color: white;">
+        <a class="navbar-brand brand-logo" href="{{ url_for('dashboard_blueprint.dashboard') }}">
+          <img src="../static/images/Smart_Communications-edit-3.png" alt="logo" /> </a>
+        <!-- <a class="navbar-brand brand-logo-mini" href="index.html">
+          <img src="../static/images/logo-mini.svg" alt="logo" /> </a> -->
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center">
+        <h3 class="font">Smart-TALEND PROJECT MONITORING DASHBOARD</h3>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas background" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item nav-category">Main Menu</li>
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dashboard_blueprint.dashboard_lzero') }}">
+              <i class="menu-icon typcn typcn-document-text"></i>
+              <span class="menu-title">DASHBOARD</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('lrj_blueprint.long_running_job_lzero') }}">
+              <i class="menu-icon typcn typcn-shopping-bag"></i>
+              <span class="menu-title">LONG RUNNING JOBS</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="menu-icon typcn typcn-coffee"></i>
+              <span class="menu-title">DQ CHECKS</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('dq_blueprint.dq_overview_lzero')}}">Manifests VS T1 Overview</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('dq_blueprint.dq_manvshive_lzero')}}">Manifests VS T1-HIVE</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('dq_blueprint.dq_manvsoracle_lzero')}}">Manifests VS T1-FC</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('bca_blueprint.bca_monitoring_lzero') }}">
+              <i class="menu-icon typcn typcn-th-large-outline"></i>
+              <span class="menu-title">BCA MONITORING</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper over">
+          {% block content%}
+          {% endblock%}
+        </div>
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="../static/vendors/js/vendor.bundle.base.js"></script>
+  <script src="../static/vendors/js/vendor.bundle.addons.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="../static/js/shared/off-canvas.js"></script>
+  <script src="../static/js/shared/misc.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="../static/js/demo_1/dashboard.js"></script>
+
+  <!-- DATA TABLES JOBS -->
+  <script src="../static/dataTables/dataTables-jobs.js"></script>
+  <script src="../static/dataTables/dataTables_row_design.js"></script>
+
+  <!-- Date Picker-->
+  <script src = "../static/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+  <script src = "../static/datetimepicker-master/build/jquery.datetimepicker.full.js"></script> 
+
+  <!-- Charts -->
+  <script src="../static/js/shared/chart.js"></script>
+  <script src="../static/js/apexcharts.js"></script>
+  
+  <!-- Auto-Refresh -->
+  <script src="../static/js/auto_refresh.js"></script>
+
+  <script src="../static/js/resize.js"></script>
+
+  <!-- DataTables-->
+  <script type="text/javascript" src="../static/dataTables/datatables.min.js"></script>
+  <script type="text/javascript" src="../static/dataTables/datatables.js"></script>
+
+  {% block scripts %}
+  {% endblock %}
+
+  <!-- End custom js for this page-->
+</body>
+
+</html>
