@@ -129,11 +129,11 @@ def lrj_search():
         search = "%{}%".format(tag)
 
 
-    search_string = Job_Monitoring.query.filter(or_(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.starttime.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.duration_mins.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.tasklabel.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.id.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status.like(search)), 
+    search_string = Job_Monitoring.query.filter(or_(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.starttime.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.duration_mins.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.tasklabel.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.id.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.status.like(search)), 
                                                     ))\
                                                         .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=50)
 
@@ -285,13 +285,13 @@ def long_running_job_lzero():
 def lrj_search_lzero():
     page = request.args.get('page', 1, type=int)
 
-    query_job_running = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'RUNNING', 
+    query_job_running = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'RUNNING', Job_Monitoring.status == 'RUNNING', 
                                                     Job_Monitoring.duration_mins >= 30 )).count()
-    query_job_ok = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'OK', 
+    query_job_ok = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'OK', Job_Monitoring.status == 'RUNNING', 
                                                     Job_Monitoring.duration_mins >= 30 )).count()
-    query_job_error = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'ERROR', 
+    query_job_error = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'ERROR', Job_Monitoring.status == 'RUNNING', 
                                                     Job_Monitoring.duration_mins >= 30 )).count()
-    query_job_misfired = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'MISFIRED', 
+    query_job_misfired = Job_Monitoring.query.filter(and_(Job_Monitoring.status == 'MISFIRED', Job_Monitoring.status == 'RUNNING', 
                                                     Job_Monitoring.duration_mins >= 30 )).count()
 
     global search, tag
@@ -300,11 +300,11 @@ def lrj_search_lzero():
         search = "%{}%".format(tag)
 
 
-    search_string = Job_Monitoring.query.filter(or_(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.starttime.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.duration_mins.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.tasklabel.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.id.like(search)), 
-                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status.like(search)), 
+    search_string = Job_Monitoring.query.filter(or_(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.starttime.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.duration_mins.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.tasklabel.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.id.like(search)), 
+                                                    and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING', Job_Monitoring.status.like(search)), 
                                                     ))\
                                                         .order_by(Job_Monitoring.starttime.desc()).paginate(page=page, per_page=50)
 

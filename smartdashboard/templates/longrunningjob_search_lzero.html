@@ -12,18 +12,18 @@
 </div>
 
 
-<div class="row">
+<div class="row justify-content-center" style="text-align:center;margin:0">
   <!-- JOBS -->
   <div class="col-md-8 align-self-center">
-    <div class="row">
+    <div class="row justify-content-center">
 
       <!-- RUNNING JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <div class="col-md-3 stretch-card">
         <div class="card card-style border-left-1">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='RUNNING') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">RUNNING JOBS</h4>
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">JOBS STILL RUNNING</h4>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ running }}</h2>
           </div>
@@ -31,62 +31,62 @@
       </div>
 
       <!-- COMPLETED JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <!-- <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-2">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='OK') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED JOBS</h4>
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">COMPLETED LONG RUNNING JOBS</h4>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ ok }}</h2>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
       <!-- ERROR JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <!-- <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-3">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='ERROR') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR JOBS</h4>
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">ERROR TASK</h4>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ error }}</h2>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- MISFIRED JOBS -->
-      <div class="col-md-6 grid-margin stretch-card">
+      <!-- <div class="col-md-6 grid-margin stretch-card">
         <div class="card card-style border-left-4">
           <div class="card-body pb-0">
             <a href="{{ url_for('lrj_blueprint.status_job', status='MISFIRED') }}" class="stretched-link"></a>
             <div class="d-flex justify-content-between">
-              <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED JOBS</h4>
+              <h4 class="card-title font-weight-semibold mb-0 text-muted">MISFIRED TASK</h4>
             </div>
             <h2 class="font-weight-semibold mb-0">{{ misfired }}</h2>
           </div>
         </div>
-      </div>
+      </div> -->
     
     </div>
   </div>
-
+</div>
   <!-- DOUNUT CHART -->
-  <div class="col-md-4 align-self-center">
+<div class="row justify-content-center" style="text-align:center;margin:0">
+  <div class="col-md-6">
     <div class="row">
-      <div class="col-md-12 grid-margin stretch-card">   
+      <div class="col-md-12 stretch-card">   
         <div class="card card-border">
-          <div class="card-body">
-            <div class="card-header py-3 card-border-header ">
-              <h1 class="h3 text-gray-800">Overall Status </h1>
-            </div>
-            <div class="my-auto" id="donutchart_longrunning" height="200"></div>
+          <div class="card-header py-3 card-border-header ">
+            <h1 class="h3 text-gray-800">Overall Status </h1>
+          </div>
+          <div class="card-body justify-content-center">
+            <div class="my-auto" id="barchart_longrunning" height="100"></div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -103,11 +103,11 @@
         <div class="col-sm-6 d-flex justify-content-end">
           <div class="sort-wrapper d-flex justify-content-end">
             <div class="dropdown ml-3 toolbar-item">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
               <div class="dropdown-menu" aria-labelledby="dropdownexport">
-                <a class="dropdown-item" href="#">Export as PDF</a>
-                <a class="dropdown-item" href="#">Export as Excel</a>
-                <a class="dropdown-item" href="#">Export as CSV</a>
+                <a class="dropdown-item" href="#">Download as PDF</a>
+                <a class="dropdown-item" href="#">Download as Excel</a>
+                <a class="dropdown-item" href="#">Download as CSV</a>
               </div>
             </div>
           </div>
