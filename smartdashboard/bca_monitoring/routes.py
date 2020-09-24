@@ -10,7 +10,6 @@ def bca_monitoring():
     page = request.args.get('page', 1, type=int)
     bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=50)
 
-
     return render_template('bca_monitoring.html', bca_query = bca_query)
 
 @bca_blueprint.route('/get_bca_monitoring', methods=['GET'])

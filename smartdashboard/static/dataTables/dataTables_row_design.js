@@ -1,14 +1,12 @@
  $(document).ready(function() {
     $("#dataTable").find("tr").each(function () {
         var duration= $(this).find(".duration"); 
-        console.log(duration);
         if(duration.html() >= 30.00)
           {
             $(duration).addClass("text-danger");
           }
     
        var status= $(this).find(".status");
-       console.log(status);
        if(status.html() == 'RUNNING')
        {
         $(status).addClass('badge badge-warning')
@@ -30,7 +28,6 @@
 
     $(".main-panel").each(function () {
       var current_status= $(this).find("#current_status"); 
-      console.log(current_status.html());
       if(current_status.html() == 'RUNNING JOBS') {
         var running_card=$(this).find('#running_card')
         $(running_card).fadeTo('slow',.6);

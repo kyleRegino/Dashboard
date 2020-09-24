@@ -203,8 +203,6 @@ $.ajax({
   method: "GET",
   dataType: "json"
 }).done(function (data) {
-  // console.log(data.job_status[0]);
-  console.log(data);
   var options = {
     series: [ { data: [data.job_status[0], data.job_status[1], data.job_status[2], data.job_status[3]] } ],
     chart: {

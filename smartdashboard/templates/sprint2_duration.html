@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row page-title-header">
+    <div class="col-12">
+        <div class="page-header d-flex justify-content-between">
+            <h4 class="page-title align-self-center">Sprint 2 Average Durations</h4>
+        </div>
+    </div>
+</div>
+
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">Average Duration Over Time</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 date-1">
+                        <form action="" method="post" id="sprint2_duration_form" autocomplete="off">
+                            Start Date:
+                            <input class="form-control" type="text" name="start_date" id="min_date" required>
+                            End Date:
+                            <input class="form-control" type="text" name="end_date" id="max_date" required>
+                            <input type="submit" id="search_duration" value="Submit" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="sprint2_durations"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="sprint2_counts"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="../static/js/durations.js"></script>
+{% endblock %}

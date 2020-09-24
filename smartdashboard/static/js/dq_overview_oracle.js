@@ -99,8 +99,7 @@ function update_data_oracle(start_date, end_date, period) {
             xaxis: {
                 categories: date_list,
             }
-        }
-        );
+        });
         oracle_variance_chart.updateSeries(lines_oracle);
     });
 }

@@ -130,10 +130,41 @@ $.ajax({
     variance_chart.render();
 });
 
+var today = new Date();
+var time = today.getTime()
 
+function diff_hour(t2,t1) {
+    var diff = (t2-t1) / 1000;
+    diff /= 3600;
+    console.log(Math.abs(diff));
+    return Math.abs(diff);
+}
 
 $(document).ready(function() {
-    $('#pending_hdfs').DataTable();
-    $('#pending_hive').DataTable();
-
-} );
+    $('#pending_hdfs').DataTable({
+        "createdRow": function (row, data, index) {
+            if (parseInt(data[1]) >= 1000) {
+                $('td', row).eq(1).css('color','red');
+            }
+            var string_time = data[2].substring(0, 4) + "-" + data[2].substring(4, 6) + "-" + data[2].substring(6, 8) + "T" + data[2].substring(8, 10) + ":" + data[2].substring(10, 12) + ":" + data[2].substring(12, 14);
+            var row_time = new Date(string_time);
+            var row_time = row_time.getTime();
+            if (diff_hour(row_time, time) >= 1) {
+                $('td', row).eq(2).css('color', 'red');
+            }
+        }
+    });
+    $('#pending_hive').DataTable({
+        "createdRow": function (row, data, index) {
+            if (data[1] >= 1000) {
+                $('td', row).eq(1).css('color', 'red');
+            }
+            var string_time = data[2].substring(0, 4) + "-" + data[2].substring(4, 6) + "-" + data[2].substring(6, 8) + "T" + data[2].substring(8, 10) + ":" + data[2].substring(10, 12) + ":" + data[2].substring(12, 14);
+            var row_time = new Date(string_time);
+            var row_time = row_time.getTime();
+            if (diff_hour(row_time, time) >= 1) {
+                $('td', row).eq(2).css('color', 'red');
+            }
+        }
+    });
+});

@@ -98,8 +98,7 @@ function update_data_hive(start_date,end_date,period) {
             xaxis: {
                 categories: date_list,
             }
-        }
-        );
+        });
         hive_variance_chart.updateSeries(lines_hive);
     });
 }

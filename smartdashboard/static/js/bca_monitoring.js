@@ -85,10 +85,6 @@ $.ajax({
         stroke: {
             curve: 'smooth'
         },
-        // title: {
-        //     text: 'BCA Jobs Duration per Day',
-        //     align: 'left'
-        // },
         title: {
             text: 'BCA Jobs Duration per Day',
             align: 'left',
@@ -129,8 +125,6 @@ $.ajax({
                     return new Date(value * 1000).toISOString().substr(11, 8);
                 }
             }
-            // min: 5,
-            // max: 40
         },
         legend: {
             position: 'top',

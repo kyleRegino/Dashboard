@@ -27,6 +27,7 @@ manifest_oracle_monitoring = Base.classes.manifest_oracle_monitoring
 top_sku_talendfc = Base.classes.top_sku_talendfc
 cdr_threshold = Base.classes.cdr_threshold
 pending = Base.classes.pending_push_load
+durations = Base.classes.cdr_durations
 
 session = Session(db.engine)
 
@@ -37,9 +38,11 @@ from smartdashboard.long_running_jobs.routes import lrj_blueprint
 from smartdashboard.bca_monitoring.routes import bca_blueprint
 from smartdashboard.dq_checks.routes import dq_blueprint
 from smartdashboard.topsku.routes import topsku_blueprint
+from smartdashboard.average_durations.routes import average_durations_blueprint
 
 app.register_blueprint(dashboard_blueprint)
 app.register_blueprint(lrj_blueprint)
 app.register_blueprint(bca_blueprint)
 app.register_blueprint(dq_blueprint)
 app.register_blueprint(topsku_blueprint)
+app.register_blueprint(average_durations_blueprint)
