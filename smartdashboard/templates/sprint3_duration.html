@@ -8,6 +8,46 @@
     </div>
 </div>
 
+<div class="row" id="synced-charts">
+    <div class="col-md-12">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-border" style="height: 100%;" height="100">
+                    <div class="card-body">
+                        <!-- <div class="d-flex align-items-end mb-4">
+                            <h3 class="mb-0 font-weight-semibold">Past 7 Days Averages</h3>
+                        </div> -->
+                        <div>
+                            <table class="table table-bordered" id="sprint3_week">
+                                <thead>
+                                    <tr>
+                                        <th colspan='3' style="text-align:center; font-weight:bold;">{{ dates }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center">CDR</th>
+                                        <th style="text-align:center">Averate Duration</th>
+                                        <th style="text-align:center">Average File Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in result %}
+                                    <tr">
+                                        <td style="text-align:center">{{ r.cdr_type }}</td>
+                                        <td class="duration_cell" style="text-align:center">{{ r.average_duration }}
+                                        </td>
+                                        <td class="count_cell" style="text-align:center">{{ r.file_count }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class='row'>
     <div class="col-md-12">
         <div class="card shadow mb-4 card-border">

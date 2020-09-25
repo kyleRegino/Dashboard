@@ -1,9 +1,89 @@
+var chart;
+
+$('#min_date').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#max_date').val() ? jQuery('#max_date').val() : false
+        })
+    }
+});
+
+$('#max_date').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#min_date').val() ? jQuery('#min_date').val() : false
+        })
+    }
+});
+
+$("#bca_duration_form").submit(function (e) {
+    e.preventDefault();
+    var start_date = $("#min_date").val();
+    var end_date = $("#max_date").val();
+    $.ajax({
+        url: "/get_bca_monitoring",
+        method: "POST",
+        data: {
+            "start_date": start_date,
+            "end_date": end_date
+        }
+    }).done(function (data) {
+        series = [
+            {
+                name: "Usagetype Total",
+                data: data["usagetype_total"]
+            },
+            {
+                name: "Prp Account",
+                data: data["prp_acct"]
+            },
+            {
+                name: "Pcodes",
+                data: data["pcodes"]
+            },
+            {
+                name: "UsageType_DataDeducts",
+                data: data["data_deducts"]
+            },
+            {
+                name: "UsageType_Expiration",
+                data: data["expiration"]
+            },
+            {
+                name: "UsageType_TopupDeducts",
+                data: data["topup_deducts"]
+            },
+            {
+                name: "UsageType_VoiceDeducts",
+                data: data["voice_deducts"]
+            },
+            {
+                name: "UsageType_VasDeducts",
+                data: data["vas_deducts"]
+            },
+            {
+                name: "UsageType_SMSDeducts",
+                data: data["sms_deducts"]
+            }
+        ];
+        chart.updateOptions({
+            xaxis: {
+                categories: data["dates"],
+            }
+        });
+        chart.updateSeries(series);
+    })
+});
+
 $.ajax({
     url: "/get_bca_monitoring",
     method: "GET",
-    dataType: "json"
+    dataType: "json",
 }).done(function (data) {
-    console.log(data);
     var options = {
         series: [
             {
@@ -44,7 +124,7 @@ $.ajax({
             }
         ],
         chart: {
-            height: 700,
+            height: 350,
             type: 'line',
             dropShadow: {
                 enabled: true,
@@ -85,20 +165,20 @@ $.ajax({
         stroke: {
             curve: 'smooth'
         },
-        title: {
-            text: 'BCA Jobs Duration per Day',
-            align: 'left',
-            margin: 50,
-            offsetX: 0,
-            offsetY: 0,
-            floating: false,
-            style: {
-              fontSize:  '30px',
-              fontWeight:  'bold',
-              fontFamily: undefined,
-              color:  '#263238'
-            },
-        },
+        // title: {
+        //     text: 'BCA Jobs Duration per Day',
+        //     align: 'left',
+        //     margin: 50,
+        //     offsetX: 0,
+        //     offsetY: 0,
+        //     floating: false,
+        //     style: {
+        //       fontSize:  '30px',
+        //       fontWeight:  'bold',
+        //       fontFamily: undefined,
+        //       color:  '#263238'
+        //     },
+        // },
         grid: {
             borderColor: '#e7e7e7',
             row: {
@@ -127,17 +207,12 @@ $.ajax({
             }
         },
         legend: {
-            position: 'top',
             horizontalAlign: 'center',
-            floating: true,
-            offsetY: -25,
-            offsetX: -5
         }
     };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 });
-
 
 

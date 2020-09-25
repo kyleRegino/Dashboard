@@ -82,7 +82,7 @@ $(form).submit(function(e){
     });
 });
 
-$(document).ready(function(){
+$(document).ready(function() {
     $.ajax({
         url: sprint_url,
         method: "GET",
@@ -225,5 +225,12 @@ $(document).ready(function(){
         duration_graph.render();
         count_graph = new ApexCharts(document.querySelector(query_counts), options_count);
         count_graph.render();
+    });
+
+    $("td.duration_cell").each(function(){
+        $(this).html(new Date($(this).text() * 1000).toISOString().substr(11, 8));
+    });
+    $("td.count_cell").each(function () {
+        $(this).html(parseFloat($(this).text()).toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
     });
 });

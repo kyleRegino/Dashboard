@@ -9,11 +9,77 @@ average_durations_blueprint = Blueprint('average_durations_blueprint', __name__)
 
 @average_durations_blueprint.route('/sprint2', methods=['GET'])
 def sprint2():
-    return render_template('sprint2_duration.html')
+    today = date.today()
+    start_date = today - timedelta(days=6) 
+    lookup = db.session.query(durations.cdr_type,
+                        func.avg(durations.average_duration),
+                        func.avg(durations.file_count))\
+                        .filter(and_(durations.file_date >= start_date,durations.file_date <= today,
+                        durations.cdr_type.in_(("cbs_cdr_com","cbs_cdr_mon","cbs_cdr_cm","cbs_cdr_adj","cbs_cdr_first","cbs_cdr_vou"))))\
+                        .group_by(durations.cdr_type).all()
+
+    results = []
+    total_dur = 0
+    total_count = 0
+
+    for l in lookup:
+        r = {
+            "cdr_type": l.cdr_type,
+            "average_duration": str(l[1]),
+            "file_count": str(l[2])
+        }
+        print(l)
+        total_dur += l[1]
+        total_count += l[2]
+        results.append(r)
+
+    r = {
+            "cdr_type": "Average Total",
+            "average_duration": total_dur/len(results),
+            "file_count": total_count/len(results)
+        }
+    results.append(r)
+
+    dates = start_date.strftime("%Y-%m-%d")+" to "+today.strftime("%Y-%m-%d")
+
+    return render_template('sprint2_duration.html', result = results,dates=dates)
 
 @average_durations_blueprint.route('/sprint3', methods=['GET'])
 def sprint3():
-    return render_template('sprint3_duration.html')
+    today = date.today()
+    start_date = today - timedelta(days=6) 
+    lookup = db.session.query(durations.cdr_type,
+                        func.avg(durations.average_duration),
+                        func.avg(durations.file_count))\
+                        .filter(and_(durations.file_date >= start_date,durations.file_date <= today,
+                        durations.cdr_type.in_(("cbs_cdr_data","cbs_cdr_voice","cbs_cdr_sms","cbs_cdr_clr","all_accounts_balance","all_free_units","all_subscribers_state"))))\
+                        .group_by(durations.cdr_type).all()
+
+    results = []
+    total_dur = 0
+    total_count = 0
+
+    for l in lookup:
+        r = {
+            "cdr_type": l.cdr_type,
+            "average_duration": str(l[1]),
+            "file_count": str(l[2])
+        }
+        print(l)
+        total_dur += l[1]
+        total_count += l[2]
+        results.append(r)
+
+    r = {
+            "cdr_type": "Average Total",
+            "average_duration": total_dur/len(results),
+            "file_count": total_count/len(results)
+        }
+    results.append(r)
+
+    dates = start_date.strftime("%Y-%m-%d")+" to "+today.strftime("%Y-%m-%d")
+
+    return render_template('sprint3_duration.html', result = results,dates=dates)
 
 @average_durations_blueprint.route('/sprint2_api', methods=['GET','POST'])
 def sprint2_api():
@@ -172,3 +238,57 @@ def sprint3_api():
                 result["data"][l.cdr_type]["count"][dates.index(dt)] = str(l[4])
 
     return jsonify(result)
+
+@average_durations_blueprint.route('/sprint2_table', methods=['GET'])
+def sprint2_table():
+    today = date.today()
+    start_date = today - timedelta(days=6) 
+    lookup = db.session.query(durations.cdr_type,
+                        func.avg(durations.average_duration),
+                        func.avg(durations.file_count))\
+                        .filter(and_(durations.file_date >= start_date,durations.file_date <= today,
+                        durations.cdr_type.in_(("cbs_cdr_com","cbs_cdr_mon","cbs_cdr_cm","cbs_cdr_adj","cbs_cdr_first","cbs_cdr_vou"))))\
+                        .group_by(durations.cdr_type)
+
+    results = { 
+                "dates": [start_date.strftime("%Y-%m-%d"),today.strftime("%Y-%m-%d")],
+                "data": {}
+                }
+
+    for l in lookup:
+        if l.cdr_type not in results["data"].keys():
+            results["data"][l.cdr_type] = {
+                                            "duration": None,
+                                            "count": None
+                                            }
+            results["data"][l.cdr_type]["duration"] = str(l[1])
+            results["data"][l.cdr_type]["count"] = str(l[2])
+    
+    return jsonify(results) 
+
+@average_durations_blueprint.route('/sprint3_table', methods=['GET'])
+def sprint3_table():
+    today = date.today()
+    start_date = today - timedelta(days=6) 
+    lookup = db.session.query(durations.cdr_type,
+                        func.avg(durations.average_duration),
+                        func.avg(durations.file_count))\
+                        .filter(and_(durations.file_date >= start_date,durations.file_date <= today,
+                        durations.cdr_type.in_(("cbs_cdr_data","cbs_cdr_voice","cbs_cdr_sms","cbs_cdr_clr","all_accounts_balance","all_free_units","all_subscribers_state"))))\
+                        .group_by(durations.cdr_type)
+
+    results = { 
+                "dates": [start_date.strftime("%Y-%m-%d"),today.strftime("%Y-%m-%d")],
+                "data": {}
+                }
+
+    for l in lookup:
+        if l.cdr_type not in results["data"].keys():
+            results["data"][l.cdr_type] = {
+                                            "duration": None,
+                                            "count": None
+                                            }
+            results["data"][l.cdr_type]["duration"] = str(l[1])
+            results["data"][l.cdr_type]["count"] = str(l[2])
+    
+    return jsonify(results) 

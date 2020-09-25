@@ -1,7 +1,10 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_BCA
+from sqlalchemy import and_
 from smartdashboard import db, bca_monitoring_table
+from datetime import date, datetime
 from smartdashboard.utils import time_to_seconds
+from dateutil.relativedelta import relativedelta
 
 bca_blueprint = Blueprint('bca_blueprint', __name__)
 
@@ -12,9 +15,16 @@ def bca_monitoring():
 
     return render_template('bca_monitoring.html', bca_query = bca_query)
 
-@bca_blueprint.route('/get_bca_monitoring', methods=['GET'])
+@bca_blueprint.route('/get_bca_monitoring', methods=['GET','POST'])
 def get_bca_monitoring():
-    results = db.session.query(bca_monitoring_table).all()
+    if request.method == "POST":
+        start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+        end_date = datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
+    elif request.method == "GET":
+        end_date = date.today()
+        start_date = end_date - relativedelta(months=4)
+
+    results = db.session.query(bca_monitoring_table).filter(and_(bca_monitoring_table.RunDate >= start_date,bca_monitoring_table.RunDate <= end_date )).all()
     dates = []
     usagetype_total = []
     prp_acct = []
