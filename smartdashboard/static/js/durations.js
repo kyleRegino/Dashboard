@@ -1,5 +1,10 @@
 var duration_graph;
 var count_graph;
+var sprint = page;
+var sprint_url = "/" + sprint + "_api"
+var form = "#" + sprint +"_duration_form"
+var query_durations = "#" + sprint + "_durations"
+var query_counts = "#" + sprint + "_counts"
 
 function check_null(cdr_array) {
     var is_nulls = cdr_array.every((val, i, arr) => val === arr[0])
@@ -31,12 +36,12 @@ $('#max_date').datetimepicker({
     }
 });
 
-$("#sprint2_duration_form").submit(function(e){
+$(form).submit(function(e){
     e.preventDefault();
     var start_date = $("#min_date").val();
     var end_date = $("#max_date").val();
     $.ajax({
-        url: "/sprint2_api",
+        url: sprint_url,
         method: "POST",
         data: {
             "start_date": start_date,
@@ -79,7 +84,7 @@ $("#sprint2_duration_form").submit(function(e){
 
 $(document).ready(function(){
     $.ajax({
-        url: "/sprint2_api",
+        url: sprint_url,
         method: "GET",
     }).done(function (data) {
         var lines_durations = []
@@ -216,9 +221,9 @@ $(document).ready(function(){
                 size: 3
             },
         };
-        duration_graph = new ApexCharts(document.querySelector("#sprint2_durations"), options_durations);
+        duration_graph = new ApexCharts(document.querySelector(query_durations), options_durations);
         duration_graph.render();
-        count_graph = new ApexCharts(document.querySelector("#sprint2_counts"), options_count);
+        count_graph = new ApexCharts(document.querySelector(query_counts), options_count);
         count_graph.render();
     });
 });
