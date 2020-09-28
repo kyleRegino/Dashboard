@@ -97,6 +97,11 @@ def status_job(status):
     query_job_running = Job_Monitoring.query.filter(Job_Monitoring.status == 'RUNNING').count()
     query_distinct_count = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().count()
     long_running_count = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')).count()
+    pendings = db.session.query(pending).all()
+    pending_hdfs = []
+    time_p_hdfs = None
+    pending_hive = []
+    time_p_hive = None
 
     # TIME
     time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
@@ -104,6 +109,16 @@ def status_job(status):
                     .order_by(Job_Monitoring.starttime.desc()).first()
     time_hive = db.session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
     time_oracle = db.session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
+
+    for p in pendings:
+        if p.job == "HDFS":
+            pending_hdfs.append(p)
+        elif p.job == "T0":
+            pending_hive.append(p)
+    if pending_hdfs:
+        time_p_hdfs = pending_hdfs[0].txn_dt
+    if pending_hive:
+        time_p_hive = pending_hive[0].txn_dt
 
     if status == "RUNNING":
         job_status = Job_Monitoring.query.filter(Job_Monitoring.status == status)\
@@ -121,6 +136,10 @@ def status_job(status):
                                                     time_lrj=time_lrj,
                                                     time_oracle=time_oracle,
                                                     time_hive=time_hive,
+                                                    time_p_hdfs = time_p_hdfs,
+                                                    time_p_hive = time_p_hive,
+                                                    pending_hdfs = pending_hdfs,
+                                                    pending_hive = pending_hive
                                                     )
 
 
@@ -137,6 +156,7 @@ def dashboard_lzero():
     time_p_hdfs = None
     pending_hive = []
     time_p_hive = None
+
     # TIME
     time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
     time_lrj = Job_Monitoring.query.filter(Job_Monitoring.duration_mins >= 30) \
@@ -158,9 +178,9 @@ def dashboard_lzero():
         time_p_hive = pending_hive[0].txn_dt
 
     query_distinct = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().paginate(page=page, per_page=8)
-    next_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.next_num) \
+    next_num = url_for('dashboard_blueprint.dashboard_lzero', page=query_distinct.next_num) \
             if query_distinct.has_next else None
-    prev_num = url_for('dashboard_blueprint.dashboard', page=query_distinct.prev_num) \
+    prev_num = url_for('dashboard_blueprint.dashboard_lzero', page=query_distinct.prev_num) \
         if query_distinct.has_prev else None
 
     # print(query_distinct.page)
@@ -190,6 +210,11 @@ def status_job_lzero(status):
     query_job_running = Job_Monitoring.query.filter(Job_Monitoring.status == 'RUNNING').count()
     query_distinct_count = Job_Monitoring.query.with_entities(Job_Monitoring.tasklabel).distinct().count()
     long_running_count = Job_Monitoring.query.filter(and_(Job_Monitoring.duration_mins >= 30, Job_Monitoring.status == 'RUNNING')).count()
+    pendings = db.session.query(pending).all()
+    pending_hdfs = []
+    time_p_hdfs = None
+    pending_hive = []
+    time_p_hive = None
 
     # TIME
     time_overall = Job_Monitoring.query.order_by(Job_Monitoring.starttime.desc()).first()
@@ -197,6 +222,16 @@ def status_job_lzero(status):
                     .order_by(Job_Monitoring.starttime.desc()).first()
     time_hive = db.session.query(manifest_hive_monitoring).order_by(manifest_hive_monitoring.file_date.desc()).first()
     time_oracle = db.session.query(manifest_oracle_monitoring).order_by(manifest_oracle_monitoring.file_date.desc()).first()
+
+    for p in pendings:
+        if p.job == "HDFS":
+            pending_hdfs.append(p)
+        elif p.job == "T0":
+            pending_hive.append(p)
+    if pending_hdfs:
+        time_p_hdfs = pending_hdfs[0].txn_dt
+    if pending_hive:
+        time_p_hive = pending_hive[0].txn_dt
 
     if status == "RUNNING":
         job_status = Job_Monitoring.query.filter(Job_Monitoring.status == status)\
@@ -214,4 +249,8 @@ def status_job_lzero(status):
                                                     time_lrj=time_lrj,
                                                     time_oracle=time_oracle,
                                                     time_hive=time_hive,
+                                                    time_p_hdfs = time_p_hdfs,
+                                                    time_p_hive = time_p_hive,
+                                                    pending_hdfs = pending_hdfs,
+                                                    pending_hive = pending_hive
                                                     )
