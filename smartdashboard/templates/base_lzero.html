@@ -90,6 +90,24 @@
           </li>
 
           <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic_1" aria-expanded="false" aria-controls="ui-basic_1">
+              <i class="menu-icon typcn typcn-coffee"></i>
+              <span class="menu-title">OCS CDR's Processing Stats</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic_1">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('average_durations_blueprint.sprint2_lzero')}}">Sprint 2</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('average_durations_blueprint.sprint3_lzero')}}">Sprint 3</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('bca_blueprint.bca_monitoring_lzero') }}">
               <i class="menu-icon typcn typcn-th-large-outline"></i>
               <span class="menu-title">BCA MONITORING</span>

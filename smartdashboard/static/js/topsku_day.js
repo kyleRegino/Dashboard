@@ -224,20 +224,20 @@ $.ajax({
           zoomin: true,
           zoomout: true,
           pan: true,
-          // reset: true | '<img src="/static/icons/reset.png" width="20">',
-          // customIcons: []
+          reset: true | '<img src="/static/icons/reset.png" width="20">',
+          customIcons: []
         },
-        // export: {
-        //   csv: {
-        //     filename: undefined,
-        //     columnDelimiter: ',',
-        //     headerCategory: 'category',
-        //     headerValue: 'value',
-        //     dateFormatter(timestamp) {
-        //       return new Date(timestamp).toDateString()
-        //     }
-        //   }
-        // },
+        export: {
+          csv: {
+            filename: undefined,
+            columnDelimiter: ',',
+            headerCategory: 'category',
+            headerValue: 'value',
+            dateFormatter(timestamp) {
+              return new Date(timestamp).toDateString()
+            }
+          }
+        },
         autoSelected: 'zoom' 
       },
     },
@@ -255,8 +255,9 @@ $.ajax({
       bar: {
         horizontal: false,
         columnWidth: '70%',
-        endingShape: 'rounded'
+        endingShape: 'rounded',
       },
+
     },
     grid: {
       borderColor: '#e7e7e7',
@@ -270,7 +271,34 @@ $.ajax({
     },
     xaxis: {
       categories: ['0500H', '0900H', '1300H', '1700H', '2100H', '0100H'],
-      tickPlacement: 'between'
+      tickPlacement: 'between',
+    },
+    toolbar: {
+      show: true,
+      offsetX: 0,
+      offsetY: 0,
+      tools: {
+        download: true,
+        selection: true,
+        zoom: true,
+        zoomin: true,
+        zoomout: true,
+        pan: true,
+        // reset: true | '<img src="/static/icons/reset.png" width="20">',
+        // customIcons: []
+      },
+      // export: {
+      //   csv: {
+      //     filename: undefined,
+      //     columnDelimiter: ',',
+      //     headerCategory: 'category',
+      //     headerValue: 'value',
+      //     dateFormatter(timestamp) {
+      //       return new Date(timestamp).toDateString()
+      //     }
+      //   }
+      // },
+      autoSelected: 'zoom' 
     },
     yaxis: y_axis_amount
   };
