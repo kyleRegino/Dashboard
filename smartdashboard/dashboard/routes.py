@@ -8,7 +8,7 @@ from smartdashboard.utils import number_formatter
 
 dashboard_blueprint = Blueprint('dashboard_blueprint', __name__)
 
-@dashboard_blueprint.route('/')
+# @dashboard_blueprint.route('/')
 @dashboard_blueprint.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     page = request.args.get('page', 1, type=int)

@@ -11,7 +11,7 @@ bca_blueprint = Blueprint('bca_blueprint', __name__)
 @bca_blueprint.route('/bca_monitoring', methods=['GET', 'POST'])
 def bca_monitoring():
     page = request.args.get('page', 1, type=int)
-    bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=50)
+    bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
 
     return render_template('bca_monitoring.html', bca_query = bca_query)
 
@@ -68,6 +68,6 @@ def get_bca_monitoring():
 @bca_blueprint.route('/bca_monitoring_lzero', methods=['GET', 'POST'])
 def bca_monitoring_lzero():
     page = request.args.get('page', 1, type=int)
-    bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=50)
+    bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
 
     return render_template('bca_monitoring_lzero.html', bca_query = bca_query)

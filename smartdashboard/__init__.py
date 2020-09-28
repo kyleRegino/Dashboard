@@ -39,6 +39,7 @@ from smartdashboard.bca_monitoring.routes import bca_blueprint
 from smartdashboard.dq_checks.routes import dq_blueprint
 from smartdashboard.topsku.routes import topsku_blueprint
 from smartdashboard.average_durations.routes import average_durations_blueprint
+from smartdashboard.other_pages.routes import others_blueprint
 
 app.register_blueprint(dashboard_blueprint)
 app.register_blueprint(lrj_blueprint)
@@ -46,3 +47,4 @@ app.register_blueprint(bca_blueprint)
 app.register_blueprint(dq_blueprint)
 app.register_blueprint(topsku_blueprint)
 app.register_blueprint(average_durations_blueprint)
+app.register_blueprint(others_blueprint)

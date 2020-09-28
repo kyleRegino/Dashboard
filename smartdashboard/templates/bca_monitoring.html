@@ -55,11 +55,11 @@
             <div class="col-sm-6 d-flex justify-content-end">
             <div class="sort-wrapper d-flex justify-content-end">
                 <div class="dropdown ml-3 toolbar-item">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</button>
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownexport">
-                    <a class="dropdown-item" href="#">Export as PDF</a>
-                    <a class="dropdown-item" href="#">Export as Excel</a>
-                    <a class="dropdown-item" href="#">Export as CSV</a>
+                    <a class="dropdown-item" href="#">Download as PDF</a>
+                    <a class="dropdown-item" href="#">Download as Excel</a>
+                    <a class="dropdown-item" href="#">Download as CSV</a>
                 </div>
                 </div>
             </div>
@@ -73,16 +73,16 @@
                 <div class="col-md-7 date-1">
                 <form action="/dashboard" method="post" autocomplete="off"> 
                     Start Date:
-                    <input type="text" name="datetimepickermin" id="min" size="12" />
+                    <input type="text" class="form-control" name="datetimepickermin" id="min" size="12" />
                     End Date:
-                    <input type="text" name="datetimepickermax" id="max" size="12" />
+                    <input type="text" class="form-control" name="datetimepickermax" id="max" size="12" />
                     <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
                 </form>  
                 </div>
                 <div class="col-md-5 date-2 table_filter d-flex justify-content-end">
                 <form action="/dashboard" method="post" autocomplete="off"> 
                     <div class="input-group justify-content-end">
-                    <input type="text" name="tag" id="tag" placeholder="Enter keyword" size="15">
+                    <input type="text" class="form-control" name="tag" id="tag" placeholder="Enter keyword" size="15">
                     <div class="input-group-append">
                         <button class="btn btn-outline-primary" type="submit" value="Search">Search</button>
                         <!-- <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
