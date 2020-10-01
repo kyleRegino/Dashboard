@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_BCA
 from sqlalchemy import and_
-from smartdashboard import db, bca_monitoring_table
+from smartdashboard import db, bca_monitoring_table, bca_dq_prp, bca_dq_pcodes
 from datetime import date, datetime
 from smartdashboard.utils import time_to_seconds
 from dateutil.relativedelta import relativedelta
@@ -61,6 +61,21 @@ def get_bca_monitoring():
         "sms_deducts": sms
     }
 
+    return jsonify(result_set)
+
+@bca_blueprint.route('/bca_monitoring_dq_prp', methods=['GET', 'POST'])
+def bca_monitoring_dq_prp():
+    lookup = db.session.query(bca_dq_prp).all()
+
+    result_set = {}
+    
+    for l in lookup:
+        result_set[l.brand] = {
+            "bal": l.total_bal,
+            "count": l.total_count,
+            "su": l.total_su
+        }
+    
     return jsonify(result_set)
 
 

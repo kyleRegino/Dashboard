@@ -26,9 +26,8 @@ def sprint2():
         r = {
             "cdr_type": l.cdr_type,
             "average_duration": str(l[1]),
-            "file_count": str(l[2])
+            "file_count": int(l[2])
         }
-        print(l)
         total_dur += l[1]
         total_count += l[2]
         results.append(r)
@@ -36,7 +35,7 @@ def sprint2():
     r = {
             "cdr_type": "Average Total",
             "average_duration": total_dur/len(results),
-            "file_count": total_count/len(results)
+            "file_count": int(total_count/len(results))
         }
     results.append(r)
 
@@ -63,9 +62,8 @@ def sprint3():
         r = {
             "cdr_type": l.cdr_type,
             "average_duration": str(l[1]),
-            "file_count": str(l[2])
+            "file_count": int(l[2])
         }
-        print(l)
         total_dur += l[1]
         total_count += l[2]
         results.append(r)
@@ -73,7 +71,7 @@ def sprint3():
     r = {
             "cdr_type": "Average Total",
             "average_duration": total_dur/len(results),
-            "file_count": total_count/len(results)
+            "file_count": int(total_count/len(results))
         }
     results.append(r)
 
@@ -261,9 +259,9 @@ def sprint2_table():
                                             "duration": None,
                                             "count": None
                                             }
-            results["data"][l.cdr_type]["duration"] = str(l[1])
-            results["data"][l.cdr_type]["count"] = str(l[2])
-    
+            results["data"][l.cdr_type]["duration"] = int(l[1])
+            results["data"][l.cdr_type]["count"] = int(l[2])
+            
     return jsonify(results) 
 
 @average_durations_blueprint.route('/sprint3_table', methods=['GET'])
@@ -317,7 +315,6 @@ def sprint2_lzero():
             "average_duration": str(l[1]),
             "file_count": str(l[2])
         }
-        print(l)
         total_dur += l[1]
         total_count += l[2]
         results.append(r)
@@ -354,7 +351,6 @@ def sprint3_lzero():
             "average_duration": str(l[1]),
             "file_count": str(l[2])
         }
-        print(l)
         total_dur += l[1]
         total_count += l[2]
         results.append(r)
