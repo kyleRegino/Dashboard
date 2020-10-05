@@ -2,8 +2,8 @@ from flask import render_template, request, url_for, jsonify, Response, Blueprin
 from smartdashboard.models import Job_BCA
 from sqlalchemy import and_
 from smartdashboard import db, bca_monitoring_table, bca_dq_prp, bca_dq_pcodes
-from datetime import date, datetime
-from smartdashboard.utils import time_to_seconds
+from datetime import date, datetime, timedelta
+from smartdashboard.utils import time_to_seconds, init_list
 from dateutil.relativedelta import relativedelta
 
 bca_blueprint = Blueprint('bca_blueprint', __name__)
@@ -63,18 +63,75 @@ def get_bca_monitoring():
 
     return jsonify(result_set)
 
+@bca_blueprint.route('/bca_monitoring_dq', methods=['GET'])
+def bca_monitoring_dq():
+    return render_template('bca_dq.html')
+
 @bca_blueprint.route('/bca_monitoring_dq_prp', methods=['GET', 'POST'])
 def bca_monitoring_dq_prp():
-    lookup = db.session.query(bca_dq_prp).all()
+    if request.method == "POST":
+        start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+        end_date = datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
+    elif request.method == "GET":
+        end_date = date.today()
+        start_date = end_date - relativedelta(months=1)
 
-    result_set = {}
+    dates = [start_date + timedelta(days=x) for x in range(0, (end_date-start_date).days+1)]
+    lookup = db.session.query(bca_dq_prp).filter(and_(bca_dq_prp.cre_dt >= start_date, bca_dq_prp.cre_dt <= end_date)).all()
+
+    result_set = {
+        "dates": [ d.strftime("%Y-%m-%d") for d in dates ],
+        "data": {}
+    }
     
     for l in lookup:
-        result_set[l.brand] = {
-            "bal": l.total_bal,
-            "count": l.total_count,
-            "su": l.total_su
-        }
+        if l.brand not in result_set["data"].keys():
+            result_set["data"][l.brand] = {
+                "bal": init_list(len(dates)),
+                "count": init_list(len(dates)),
+                "su": init_list(len(dates))
+            }
+            result_set["data"][l.brand]["bal"][dates.index(l.cre_dt)] = l.total_bal
+            result_set["data"][l.brand]["count"][dates.index(l.cre_dt)] = l.total_count 
+            result_set["data"][l.brand]["su"][dates.index(l.cre_dt)] = l.total_su
+        else:
+            result_set["data"][l.brand]["bal"][dates.index(l.cre_dt)] = l.total_bal
+            result_set["data"][l.brand]["count"][dates.index(l.cre_dt)] = l.total_count 
+            result_set["data"][l.brand]["su"][dates.index(l.cre_dt)] = l.total_su
+    
+    return jsonify(result_set)
+
+@bca_blueprint.route('/bca_monitoring_dq_pcodes', methods=['GET', 'POST'])
+def bca_monitoring_dq_pcodes():
+    if request.method == "POST":
+        start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+        end_date = datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
+    elif request.method == "GET":
+        end_date = date.today()
+        start_date = end_date - relativedelta(months=1)
+
+    dates = [start_date + timedelta(days=x) for x in range(0, (end_date-start_date).days+1)]
+    lookup = db.session.query(bca_dq_pcodes).filter(and_(bca_dq_pcodes.effective_date >= start_date, bca_dq_pcodes.effective_date <= end_date)).all()
+
+    result_set = {
+        "dates": [ d.strftime("%Y-%m-%d") for d in dates ],
+        "data": {}
+    }
+    
+    for l in lookup:
+        if l.brand not in result_set["data"].keys():
+            result_set["data"][l.brand] = {
+                "total_topup": init_list(len(dates)),
+                "topup_count": init_list(len(dates)),
+                "total_count": init_list(len(dates))
+            }
+            result_set["data"][l.brand]["total_topup"][dates.index(l.effective_date)] = l.total_topup
+            result_set["data"][l.brand]["topup_count"][dates.index(l.effective_date)] = l.count_topup 
+            result_set["data"][l.brand]["total_count"][dates.index(l.effective_date)] = l.total_count
+        else:
+            result_set["data"][l.brand]["total_topup"][dates.index(l.effective_date)] = l.total_topup
+            result_set["data"][l.brand]["topup_count"][dates.index(l.effective_date)] = l.count_topup 
+            result_set["data"][l.brand]["total_count"][dates.index(l.effective_date)] = l.total_count
     
     return jsonify(result_set)
 

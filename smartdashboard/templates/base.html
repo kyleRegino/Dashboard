@@ -111,10 +111,21 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('bca_blueprint.bca_monitoring') }}">
-              <i class="menu-icon typcn typcn-th-large-outline"></i>
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic_2" aria-expanded="false" aria-controls="ui-basic_2">
+              <i class="menu-icon typcn typcn-coffee"></i>
               <span class="menu-title">BCA MONITORING</span>
+              <i class="menu-arrow"></i>
             </a>
+            <div class="collapse" id="ui-basic_2">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('bca_blueprint.bca_monitoring') }}">BCA Job Durations</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('bca_blueprint.bca_monitoring_dq')}}">BCA DQ Checks</a>
+                </li>
+              </ul>
+            </div>
           </li>
         </ul>
       </nav>
