@@ -22,6 +22,8 @@ db.init_app(app)
 Base.prepare(db.engine, reflect=True)
 
 bca_monitoring_table = Base.classes.job_bca_monitoring
+bca_dq_prp = Base.classes.dly_prp_acct_stats
+bca_dq_pcodes = Base.classes.dly_pcodes_prp_stats
 manifest_hive_monitoring = Base.classes.manifest_hive_monitoring
 manifest_oracle_monitoring = Base.classes.manifest_oracle_monitoring
 top_sku_talendfc = Base.classes.top_sku_talendfc

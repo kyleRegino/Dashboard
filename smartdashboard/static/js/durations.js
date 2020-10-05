@@ -231,6 +231,6 @@ $(document).ready(function() {
         $(this).html(new Date($(this).text() * 1000).toISOString().substr(11, 8));
     });
     $("td.count_cell").each(function () {
-        $(this).html(parseFloat($(this).text()).toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+        $(this).html(parseInt($(this).text()).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
     });
 });
