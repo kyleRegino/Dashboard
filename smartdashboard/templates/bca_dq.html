@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row page-title-header">
+    <div class="col-12">
+        <div class="page-header">
+            <h4 class="page-title">BCA Tables DQ Checks</h4>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- DLY_PRP_ACCT -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">Daily PRP Accounts Per Brand Over Time</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 date-1">
+                        <form action="/" method="post" id="prp_acct_form" autocomplete="off">
+                            Start Date:
+                            <input class="form-control" type="text" name="start_date" id="min_prp" required>
+                            End Date:
+                            <input class="form-control" type="text" name="end_date" id="max_prp" required>
+                            <input type="submit" id="search_prp_acct" value="Go" class="btn btn-primary " />
+                        <select name="prp_attr" id="prp_attr" required>
+                            <option value="total_bal">Total Balance</option>
+                            <option value="total_count">Total Count</option>
+                            <option value="total_su">Total SU</option>
+                        </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="prp_acct_chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- DLY_PCODES -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">Daily Pcodes Per Brand Over Time</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 date-1">
+                        <form action="/" method="post" id="pcodes_form"
+                            autocomplete="off">
+                            Start Date:
+                            <input class="form-control" type="text" name="start_date" id="min_pcodes"
+                                value="{{ minDate }}" required>
+                            End Date:
+                            <input class="form-control" type="text" name="end_date" id="max_pcodes"
+                                value="{{ maxDate }}" required>
+                            <input type="submit" id="search_pcodes" value="Go" class="btn btn-primary " />
+                            <select name="pcodes_attr" id="pcodes_attr" required>
+                                <option value="total_topup">Total Topup Amount</option>
+                                <option value="topup_count">Total Topup Count</option>
+                                <option value="total_count">Total Row Count</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="pcodes_chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="../static/js/bca_dq.js"></script>
+{% endblock %}
