@@ -1,11 +1,11 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
-from smartdashboard import db, manifest_hive_monitoring, manifest_oracle_monitoring, cdr_threshold
+from smartdashboard import db, manifest_hive_monitoring, manifest_oracle_monitoring, cdr_threshold, subsdump
 from smartdashboard.utils import init_list, format_date, number_formatter, insert_cdr
 
 from sqlalchemy import or_, and_
 from sqlalchemy.sql import func
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from openpyxl import Workbook
@@ -753,6 +753,60 @@ def dqchecks_update_threshold():
 
     return jsonify(threshold_cdrs)
 
+
+@dq_blueprint.route('/dq_subsdump')
+def dq_subsdump():
+    return render_template('dq_subsdump.html')
+
+@dq_blueprint.route('/dq_subsdump_hive', methods=['GET','POST'])
+def dq_subsdump_hive():
+    if request.method == "POST":
+        start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+        end_date = datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
+    elif request.method == "GET":
+        end_date = date.today()
+        start_date = end_date - relativedelta(months=1) 
+
+    dates = [start_date + timedelta(days=x) for x in range(0, (end_date-start_date).days+1)]
+    lookup = db.session.query(subsdump).filter(and_(subsdump.file_date >= start_date,subsdump.file_date <= end_date,subsdump.db == "Hive")).all()
+    
+    result_set = {
+        "dates": [ d.strftime("%Y-%m-%d") for d in dates ],
+        "data": {}
+    }
+    for l in lookup:
+        if l.table_name not in result_set["data"].keys():
+            result_set["data"][l.table_name] = init_list(len(dates),0)
+            result_set["data"][l.table_name][dates.index(l.file_date)] = l.count
+        else:
+            result_set["data"][l.table_name][dates.index(l.file_date)] = l.count
+
+    return jsonify(result_set)
+
+@dq_blueprint.route('/dq_subsdump_oracle', methods=['GET','POST'])
+def dq_subsdump_oracle():
+    if request.method == "POST":
+        start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+        end_date = datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
+    elif request.method == "GET":
+        end_date = date.today()
+        start_date = end_date - relativedelta(months=1) 
+         
+    dates = [start_date + timedelta(days=x) for x in range(0, (end_date-start_date).days+1)]
+    lookup = db.session.query(subsdump).filter(and_(subsdump.file_date >= start_date,subsdump.file_date <= end_date,subsdump.db == "FC")).all()
+    
+    result_set = {
+        "dates": [ d.strftime("%Y-%m-%d") for d in dates ],
+        "data": {}
+    }
+    for l in lookup:
+        if l.table_name not in result_set["data"].keys():
+            result_set["data"][l.table_name] = init_list(len(dates),0)
+            result_set["data"][l.table_name][dates.index(l.file_date)] = l.count
+        else:
+            result_set["data"][l.table_name][dates.index(l.file_date)] = l.count
+
+    return jsonify(result_set)
 
 # FOR LZERO
 @dq_blueprint.route('/dq_overview_lzero')
