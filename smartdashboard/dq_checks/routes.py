@@ -753,7 +753,7 @@ def dqchecks_update_threshold():
 
     return jsonify(threshold_cdrs)
 
-
+#SUBSDUMP
 @dq_blueprint.route('/dq_subsdump')
 def dq_subsdump():
     return render_template('dq_subsdump.html')
@@ -860,3 +860,8 @@ def dq_manvsoracle_lzero():
                                                 variance_sms = number_formatter(variance_dict["sms"]),
                                                 variance_clr = number_formatter(variance_dict["clr"])
                                                 )
+
+@dq_blueprint.route('/dq_subsdump_lzero')
+def dq_subsdump_lzero():
+    return render_template('dq_subsdump_lzero.html')
+

@@ -1,0 +1,89 @@
+{% extends 'base_lzero.html' %}
+{% block content %}
+<div class="row page-title-header">
+    <div class="col-12">
+        <div class="page-header">
+            <h4 class="page-title">Subsdump Monitoring</h4>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Hive Subsdump -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">Hive Subsdump Count Per Day</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 date-1">
+                        <form action="" method="post" id="hive_subsdump_form" autocomplete="off">
+                            Start Date:
+                            <input class="form-control" type="text" name="start_date" id="min_hive" required>
+                            End Date:
+                            <input class="form-control" type="text" name="end_date" id="max_hive" required>
+                            <input type="submit" id="search_date_hive" value="Go" class="btn btn-primary" />
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="subsdump_hive"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Oracle Subsdump -->
+<div class='row'>
+    <div class="col-md-12">
+        <div class="card shadow mb-4 card-border">
+            <div class="card-header py-3 card-border-header">
+                <div class="row-1 align-items-end">
+                    <div class="col-11">
+                        <h1 class="h3 text-gray-800">FC Subsdump Count Per Day</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 date-1">
+                        <form action="" method="post" id="oracle_subsdump_form"
+                            autocomplete="off">
+                            Start Date:
+                            <input class="form-control" type="text" name="start_date" id="min_oracle"
+                                value="{{ minDate }}" required>
+                            End Date:
+                            <input class="form-control" type="text" name="end_date" id="max_oracle"
+                                value="{{ maxDate }}" required>
+                            <input type="submit" id="search_date_oracle" value="Go" class="btn btn-primary" />
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="subsdump_oracle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="../static/js/subsdump_hive.js"></script>
+<script src="../static/js/subsdump_oracle.js"></script>
+{% endblock %}
