@@ -30,6 +30,7 @@ top_sku_talendfc = Base.classes.top_sku_talendfc
 cdr_threshold = Base.classes.cdr_threshold
 pending = Base.classes.pending_push_load
 durations = Base.classes.cdr_durations
+subsdump = Base.classes.subsdump_monitoring
 
 session = Session(db.engine)
 
