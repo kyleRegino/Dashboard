@@ -397,6 +397,8 @@ def dq_manvshive():
             variance_dict[l.cdr_type] = l[2]
         else:
             variance_dict[l.cdr_type] = l[2]
+    
+    query_distinct =  db.session.query(cdr_threshold).all()
 
     return render_template('dqchecks_manvshive.html', variance_com = number_formatter(variance_dict["com"]),
                                                 variance_vou = number_formatter(variance_dict["vou"]),
@@ -407,7 +409,8 @@ def dq_manvshive():
                                                 variance_data = number_formatter(variance_dict["data"]),
                                                 variance_voice = number_formatter(variance_dict["voice"]),
                                                 variance_sms = number_formatter(variance_dict["sms"]),
-                                                variance_clr = number_formatter(variance_dict["clr"])
+                                                variance_clr = number_formatter(variance_dict["clr"]),
+                                                query=query_distinct
                                                 )
 
 @dq_blueprint.route('/dqchecks_manvshive_js', methods=['GET','POST'])
@@ -567,6 +570,8 @@ def dq_manvsoracle():
             variance_dict[l.cdr_type] = l[2]
         else:
             variance_dict[l.cdr_type] = l[2]
+
+    query_distinct =  db.session.query(cdr_threshold).all()
  
     return render_template('dqchecks_manvsoracle.html', variance_com = number_formatter(variance_dict["com"]),
                                                 variance_vou = number_formatter(variance_dict["vou"]),
@@ -577,7 +582,8 @@ def dq_manvsoracle():
                                                 variance_data = number_formatter(variance_dict["data"]),
                                                 variance_voice = number_formatter(variance_dict["voice"]),
                                                 variance_sms = number_formatter(variance_dict["sms"]),
-                                                variance_clr = number_formatter(variance_dict["clr"])
+                                                variance_clr = number_formatter(variance_dict["clr"]),
+                                                query=query_distinct
                                                 )
 
 @dq_blueprint.route('/dqchecks_manvsoracle_js', methods=['GET','POST'])
@@ -824,6 +830,8 @@ def dq_manvshive_lzero():
         else:
             variance_dict[l.cdr_type] = l[2]
 
+    query_distinct =  db.session.query(cdr_threshold).all()
+
     return render_template('dqchecks_manvshive_lzero.html', variance_com = number_formatter(variance_dict["com"]),
                                                 variance_vou = number_formatter(variance_dict["vou"]),
                                                 variance_first = number_formatter(variance_dict["first"]),
@@ -833,7 +841,8 @@ def dq_manvshive_lzero():
                                                 variance_data = number_formatter(variance_dict["data"]),
                                                 variance_voice = number_formatter(variance_dict["voice"]),
                                                 variance_sms = number_formatter(variance_dict["sms"]),
-                                                variance_clr = number_formatter(variance_dict["clr"])
+                                                variance_clr = number_formatter(variance_dict["clr"]),
+                                                query=query_distinct
                                                 )
 
 @dq_blueprint.route('/dq_manvsoracle_lzero', methods=['GET', 'POST'])
@@ -847,6 +856,8 @@ def dq_manvsoracle_lzero():
             variance_dict[l.cdr_type] = l[2]
         else:
             variance_dict[l.cdr_type] = l[2]
+
+    query_distinct =  db.session.query(cdr_threshold).all()
  
     return render_template('dqchecks_manvsoracle_lzero.html', variance_com = number_formatter(variance_dict["com"]),
                                                 variance_vou = number_formatter(variance_dict["vou"]),
@@ -857,7 +868,8 @@ def dq_manvsoracle_lzero():
                                                 variance_data = number_formatter(variance_dict["data"]),
                                                 variance_voice = number_formatter(variance_dict["voice"]),
                                                 variance_sms = number_formatter(variance_dict["sms"]),
-                                                variance_clr = number_formatter(variance_dict["clr"])
+                                                variance_clr = number_formatter(variance_dict["clr"]),
+                                                query=query_distinct
                                                 )
 
 @dq_blueprint.route('/dq_subsdump_lzero')

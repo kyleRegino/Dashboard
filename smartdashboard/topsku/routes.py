@@ -158,7 +158,7 @@ def topsku_week_table_js():
     #         sku[b] = str(sku_dict[k]["brands"][b])
     #     formatted_data["data"].append(sku)
     
-    print(formatted_data)
+    # print(formatted_data)
     return jsonify(formatted_data)
 
 @topsku_blueprint.route('/topsku_week_table_excel', methods=['POST'])

@@ -32,11 +32,12 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
+
         <form action="" method="post" autocomplete="off" id="form_threshold"> 
             <div class="modal-body">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                    <label class="input-group-text custome-font-size" for="cdrs">CDR's</label>
+                        <label class="input-group-text custome-font-size" for="cdrs">CDR's</label>
                     </div>
                     <select class="custom-select" id="cdrs" name="cdrs">
                         <option disabled selected>Choose...</option>
@@ -54,14 +55,32 @@
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                    <label class="input-group-text">Threshold</label>
+                        <label class="input-group-text">Threshold</label>
                     </div>
                     <input type="number" class="form-control custome-font-size" id="threshold" name="threshold">
                 </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-9">
+                        <table id="threshold_table" class="table table-bordered" style="width:100%">
+                            <thead>
+                                <th>CDR</th>
+                                <th>Threshold</th>
+                            </thead>
+                            <tbody>
+                                {% for testing in query %}
+                                <tr">
+                                  <td>{{ testing.cdr_type }}</td>
+                                  <td>{{ testing.threshold }}</td>
+                                  </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" value="Go" class="btn btn-primary" id="custom_threshold" >Apply</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" value="Go" class="btn btn-primary" id="custom_threshold" >Apply</button>
             </div>
         </form>
         </div>

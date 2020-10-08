@@ -93,3 +93,15 @@ function update_colors(){
         $("#variance_clr").css("color", "black");
     }
 }
+
+
+
+
+$(document).ready(function() {
+    $("#threshold_table").each(function () {
+        var th=$(this).find('th')
+        var td=$(this).find('td')
+        $(th).addClass('custom-th');
+        $(td).addClass('custom-th');
+    });
+});

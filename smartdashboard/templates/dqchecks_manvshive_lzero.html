@@ -58,6 +58,24 @@
                     </div>
                     <input type="number" class="form-control custome-font-size" id="threshold" name="threshold">
                 </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-9">
+                        <table id="threshold_table" class="table table-bordered" style="width:100%">
+                            <thead>
+                                <th>CDR</th>
+                                <th>Threshold</th>
+                            </thead>
+                            <tbody>
+                                {% for testing in query %}
+                                <tr">
+                                  <td>{{ testing.cdr_type }}</td>
+                                  <td>{{ testing.threshold }}</td>
+                                  </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
