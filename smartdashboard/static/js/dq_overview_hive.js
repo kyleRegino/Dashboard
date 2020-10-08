@@ -209,6 +209,57 @@ function generate_table_hive(start_date,end_date) {
             column.data().unique().sort().each(function (d, j) {
                 select.append('<option value="' + d + '">' + d + '</option>')
             });
+        },
+        "createdRow": function (row, data, index) {
+            if (data.cdr == "vou") {
+                if (parseInt(data.variance.replace(",", "")) > vou_thresh) {
+                    $('td', row).eq(1).css('background-color', '#FFD54F');
+                }
+                else if (parseInt(data.variance.replace(",", "")) < -vou_thresh) {
+                    $('td', row).eq(4).css('background-color', '#E57373');
+                } 
+            }
+            else if (data.cdr == "com") {
+                if (parseInt(data.variance.replace(",", "")) > com_thresh) {
+                    $('td', row).eq(1).css('background-color', '#FFD54F');
+                }
+                else if (parseInt(data.variance.replace(",", "")) < -com_thresh) {
+                    $('td', row).eq(4).css('background-color', '#E57373');
+                }
+            }
+            else if (data.cdr == "first") {
+                if (parseInt(data.variance.replace(",", "")) > first_thresh) {
+                    $('td', row).eq(1).css('background-color', '#FFD54F');
+                }
+                else if (parseInt(data.variance.replace(",", "")) < -first_thresh) {
+                    $('td', row).eq(4).css('background-color', '#E57373');
+                }
+            }
+            else if (data.cdr == "adj") {
+                if (parseInt(data.variance.replace(",", "")) > adj_thresh) {
+                    $('td', row).eq(1).css('background-color', '#FFD54F');
+                }
+                else if (parseInt(data.variance.replace(",", "")) < -adj_thresh) {
+                    $('td', row).eq(4).css('background-color', '#E57373');
+                }
+            }
+            else if (data.cdr == "mon") {
+                if (parseInt(data.variance.replace(",", "")) > mon_thresh) {
+                    $('td', row).eq(1).css('background-color', '#FFD54F');
+                }
+                else if (parseInt(data.variance.replace(",", "")) < -mon_thresh) {
+                    $('td', row).eq(4).css('background-color', '#E57373');
+                }
+            }
+            else if (data.cdr == "cm") {
+                if (parseInt(data.variance.replace(",", "")) > cm_thresh) {
+                    $('td', row).eq(1).css('background-color', '#FFD54F');
+                }
+                else if (parseInt(data.variance.replace(",", "")) < -cm_thresh) {
+                    $('td', row).eq(4).css('background-color', '#E57373');
+                }
+            }
+            
         }
     });
 };

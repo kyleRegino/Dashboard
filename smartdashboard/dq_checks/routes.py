@@ -154,7 +154,6 @@ def dqchecks_hive_excel():
         else:
             insert_cdr(cdr_dict[l.cdr_type],dates.index(l[0]),l[2],l[3],l[4])
     
-    print(cdr_dict)
     #output in bytes
     output = io.BytesIO()
     #create WorkBook object
