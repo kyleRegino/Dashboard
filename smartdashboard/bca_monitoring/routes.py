@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for, jsonify, Response, Blueprint
 from smartdashboard.models import Job_BCA
-from sqlalchemy import and_
+from sqlalchemy import or_, and_
 from smartdashboard import db, bca_monitoring_table, bca_dq_prp, bca_dq_pcodes
 from datetime import date, datetime, timedelta
 from smartdashboard.utils import time_to_seconds, init_list
@@ -14,6 +14,66 @@ def bca_monitoring():
     bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
 
     return render_template('bca_monitoring.html', bca_query = bca_query)
+
+# @bca_blueprint.route('/bca_monitoring_search', methods=['GET', 'POST'])
+# def bca_monitoring_search():
+#     page = request.args.get('page', 1, type=int)
+
+#     global search, tag
+#     if request.method == 'POST' and 'tag' in request.form:
+#         tag = request.form["tag"]
+#         search = "%{}%".format(tag)
+
+#     search_string = Job_BCA.query.filter(or_(Job_BCA.RunDate.like(search), 
+#                                             Job_BCA.Dly_Prp_Acct.like(search), 
+#                                             Job_BCA.Dly_PCODES.like(search), 
+#                                             Job_BCA.UsageType_Total.like(search), 
+#                                             Job_BCA.UsageType_DataDeducts.like(search),
+#                                             Job_BCA.UsageType_SMSDeducts.like(search),
+#                                             Job_BCA.UsageType_VoiceDeducts.like(search),
+#                                             Job_BCA.UsageType_VasDeducts.like(search),
+#                                             Job_BCA.UsageType_Topup.like(search), 
+#                                             Job_BCA.UsageType_Expiration.like(search),
+#                                                     ))\
+#                                                         .order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
+#     search_next_num = url_for('bca_blueprint.bca_monitoring_search', page=search_string.next_num) \
+#         if search_string.has_next else None
+#     search_prev_num = url_for('bca_blueprint.bca_monitoring_search', page=search_string.prev_num) \
+#         if search_string.has_prev else None
+
+#     return render_template('bca_monitoring_search.html', bca_query=search_string, 
+#                                         tag=tag,
+#                                         search=search,
+#                                         next_num=search_next_num,
+#                                         prev_num=search_prev_num
+#                                         )   
+
+@bca_blueprint.route('/bca_monitoring_date', methods=['GET', 'POST'])
+def bca_monitoring_date():
+    page = request.args.get('page', 1, type=int)
+
+    global mindate, maxdate, minDate, maxDate
+    if request.method == 'POST' and 'start_date' in request.form or 'end_date' in request.form:
+        minDate = request.form["start_date"]
+        maxDate = request.form["end_date"]
+        mindate = "{}%".format(minDate)
+        maxdate = "{}%".format(maxDate)
+
+    search_string = Job_BCA.query.filter(and_(Job_BCA.RunDate >= mindate, Job_BCA.RunDate <= maxdate), 
+                                            # Job_BCA.RunDate.like(maxdate), 
+                                                    )\
+                                                        .order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
+    search_next_num = url_for('bca_blueprint.bca_monitoring_date', page=search_string.next_num) \
+        if search_string.has_next else None
+    search_prev_num = url_for('bca_blueprint.bca_monitoring_date', page=search_string.prev_num) \
+        if search_string.has_prev else None
+
+    return render_template('bca_monitoring_search.html', bca_query=search_string, 
+                                        minDate=minDate,
+                                        maxDate=maxDate,
+                                        next_num=search_next_num,
+                                        prev_num=search_prev_num)
+                                        
 
 @bca_blueprint.route('/get_bca_monitoring', methods=['GET','POST'])
 def get_bca_monitoring():
@@ -143,3 +203,34 @@ def bca_monitoring_lzero():
     bca_query = Job_BCA.query.order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
 
     return render_template('bca_monitoring_lzero.html', bca_query = bca_query)
+
+@bca_blueprint.route('/bca_monitoring_date_lzero', methods=['GET', 'POST'])
+def bca_monitoring_date_lzero():
+    page = request.args.get('page', 1, type=int)
+
+    global mindate, maxdate, minDate, maxDate
+    if request.method == 'POST' and 'start_date' in request.form or 'end_date' in request.form:
+        minDate = request.form["start_date"]
+        maxDate = request.form["end_date"]
+        mindate = "{}".format(minDate)
+        maxdate = "{}".format(maxDate)
+
+    # search_string = Job_BCA.query.filter(or_(Job_BCA.RunDate.like(mindate), 
+    #                                         Job_BCA.RunDate.like(maxdate), 
+    #                                                 ))\
+    #                                                     .order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
+
+    search_string = Job_BCA.query.filter(and_(Job_BCA.RunDate >= mindate, Job_BCA.RunDate <= maxdate), 
+                                            # Job_BCA.RunDate.like(maxdate), 
+                                                    )\
+                                                        .order_by(Job_BCA.RunDate.desc()).paginate(page=page, per_page=10)
+    search_next_num = url_for('bca_blueprint.bca_monitoring_date', page=search_string.next_num) \
+        if search_string.has_next else None
+    search_prev_num = url_for('bca_blueprint.bca_monitoring_date', page=search_string.prev_num) \
+        if search_string.has_prev else None
+
+    return render_template('bca_monitoring_search_lzero.html', bca_query=search_string, 
+                                        minDate=minDate,
+                                        maxDate=maxDate,
+                                        next_num=search_next_num,
+                                        prev_num=search_prev_num)

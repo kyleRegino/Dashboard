@@ -11,6 +11,7 @@
     </div>
 </div>
 
+
 <div class='row'>
     <div class="col-md-12">
         <div class="card shadow mb-4 card-border">
@@ -51,7 +52,7 @@
             <div class="col-sm-6">
             <h1 class="h3 text-gray-800">BCA JOBS</h1>
             </div>
-            <div class="col-sm-6 d-flex justify-content-end">
+            <!-- <div class="col-sm-6 d-flex justify-content-end">
             <div class="sort-wrapper d-flex justify-content-end">
                 <div class="dropdown ml-3 toolbar-item">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownexport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
@@ -62,7 +63,7 @@
                 </div>
                 </div>
             </div>
-            </div>
+            </div> --> 
         </div>
         </div>
 
@@ -70,33 +71,17 @@
 
             <div class="row">
                 <div class="col-md-7 date-1">
-                <form action="/dashboard" method="post" autocomplete="off"> 
+                <form action="/bca_monitoring_date_lzero" method="post" autocomplete="off"> 
+
                     Start Date:
-                    <input type="text" class="form-control" name="datetimepickermin" id="min" size="12" />
+                    <input class="form-control" type="text" name="start_date" id="min_table" value="{{ minDate }}" required>
                     End Date:
-                    <input type="text" class="form-control" name="datetimepickermax" id="max" size="12" />
-                    <input type="submit" id="search" value="Go" class="btn btn-primary " name=""/>
+                    <input class="form-control" type="text" name="end_date" id="max_table" value="{{ maxDate }}" required>
+                    <input type="submit" id="search" value="Submit" class="btn btn-primary " name=""/>
+                    <a class="btn btn-outline-primary" href="{{ url_for('bca_blueprint.bca_monitoring_lzero') }}">
+                        <i class="mdi mdi-home-outline"></i>Home
+                    </a>
                 </form>  
-                </div>
-                <div class="col-md-5 date-2 table_filter d-flex justify-content-end">
-                <form action="/dashboard" method="post" autocomplete="off"> 
-                    <div class="input-group justify-content-end">
-                    <input type="text" class="form-control" name="tag" id="tag" placeholder="Enter keyword" size="15">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-primary" type="submit" value="Search">Search</button>
-                        <!-- <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="sr-only">Toggle Dropdown</span>
-                        </button> -->
-                        <!-- <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Load all Jobs (Descending order)</a>
-                        <a class="dropdown-item" href="#">Load all Jobs (Ascending order)</a>
-                        </div> -->
-                        <button class="btn btn-outline-primary" href="{{ url_for('bca_blueprint.bca_monitoring') }}">
-                        <i class="mdi mdi-home-outline"></i>Home                            
-                        </button>
-                    </div>
-                    </div>
-                </form>                                 
                 </div>
             </div>
             
@@ -141,7 +126,7 @@
             <div class="row">
                 <div></div>
                 {% if bca_query.has_prev %}
-                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=bca_query.prev_num) }}">Previous</a></li>
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_lzero', page=bca_query.prev_num) }}">Previous</a></li>
                 {% else %}
                     <a class="btn disabled mb-4 btn-space" href="#">Previous</a></li>
                 {% endif %}
@@ -149,9 +134,9 @@
                 {% for page_num in bca_query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num %}
                     {% if bca_query.page == page_num %}
-                        <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                        <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_lzero', page=page_num)}}">{{ page_num }}</a>
                     {% else %}
-                        <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                        <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_lzero', page=page_num)}}">{{ page_num }}</a>
                     {% endif %}
                     {% else %}
                         ... 
@@ -159,7 +144,7 @@
                 {% endfor %}
 
                 {% if bca_query.has_next %}
-                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=bca_query.next_num) }}">Next</a></li>
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_lzero', page=bca_query.next_num) }}">Next</a></li>
                 {% else %}
                     <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
                 {% endif %}

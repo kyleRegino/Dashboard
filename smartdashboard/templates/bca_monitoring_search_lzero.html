@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_lzero.html' %}
 {% block content %}
 
 
@@ -63,7 +63,7 @@
                 </div>
                 </div>
             </div>
-            </div> --> 
+            </div> -->
         </div>
         </div>
 
@@ -78,7 +78,7 @@
                     End Date:
                     <input class="form-control" type="text" name="end_date" id="max_table" value="{{ maxDate }}" required>
                     <input type="submit" id="search" value="Submit" class="btn btn-primary " name=""/>
-                    <a class="btn btn-outline-primary" href="{{ url_for('bca_blueprint.bca_monitoring') }}">
+                    <a class="btn btn-outline-primary" href="{{ url_for('bca_blueprint.bca_monitoring_lzero') }}">
                         <i class="mdi mdi-home-outline"></i>Home
                     </a>
                 </form>  
@@ -126,7 +126,7 @@
             <div class="row">
                 <div></div>
                 {% if bca_query.has_prev %}
-                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=bca_query.prev_num) }}">Previous</a></li>
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_date_lzero', page=bca_query.prev_num) }}">Previous</a></li>
                 {% else %}
                     <a class="btn disabled mb-4 btn-space" href="#">Previous</a></li>
                 {% endif %}
@@ -134,9 +134,9 @@
                 {% for page_num in bca_query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num %}
                     {% if bca_query.page == page_num %}
-                        <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                        <a class="btn btn-outline-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_date_lzero', page=page_num)}}">{{ page_num }}</a>
                     {% else %}
-                        <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=page_num)}}">{{ page_num }}</a>
+                        <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_date_lzero', page=page_num)}}">{{ page_num }}</a>
                     {% endif %}
                     {% else %}
                         ... 
@@ -144,7 +144,7 @@
                 {% endfor %}
 
                 {% if bca_query.has_next %}
-                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring', page=bca_query.next_num) }}">Next</a></li>
+                    <a class="btn btn-info mb-4 btn-space" href="{{ url_for('bca_blueprint.bca_monitoring_date_lzero', page=bca_query.next_num) }}">Next</a></li>
                 {% else %}
                     <a class="btn disabled mb-4 btn-space" href="#">Next</a></li>
                 {% endif %}

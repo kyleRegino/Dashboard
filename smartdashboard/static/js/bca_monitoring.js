@@ -20,6 +20,26 @@ $('#max_date').datetimepicker({
     }
 });
 
+$('#min_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#max_table').val() ? jQuery('#max_table').val() : false
+        })
+    }
+});
+
+$('#max_table').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#min_table').val() ? jQuery('#min_table').val() : false
+        })
+    }
+});
+
 $("#bca_duration_form").submit(function (e) {
     e.preventDefault();
     var start_date = $("#min_date").val();
